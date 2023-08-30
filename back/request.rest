@@ -1,0 +1,128 @@
+POST http://localhost:3000/api/services
+Content-Type: application/json
+
+{
+    "name":"ah, esta funcionando",
+    "description":"Alguma descrição",
+    "status":"statuos"
+}
+
+###
+
+GET http://localhost:3000/api/services
+
+###
+
+GET http://localhost:3000/api/services/64ec7f48cc75ca6f78585768
+
+###
+
+DELETE http://localhost:3000/api/services/64ec7f48cc75ca6f78585761
+
+###
+
+PUT http://localhost:3000/api/services/64ec7fa0cc75ca6f78585763
+Content-Type: application/json
+
+{
+    "name":"TESTE ATUALIZAÇÃO",
+    "description":"Alguma descrição",
+    "status":"em encerramento"
+}
+
+### PARTY
+
+POST http://localhost:3000/api/parties
+Content-Type: application/json
+
+{
+    "title": "Ordem de serviço",
+    "solicitante": "dinah martins",
+    "setor": "produção",
+    "sala": "5",
+    "forno": "245",
+    "cabeceira": "A",
+    "status": "Aguardando atendimento",
+    "estadoatual": "manutenção",
+    "services": [
+        {
+            "name":"TESTE ATUALIZAÇÃO",
+            "description":"Alguma descrição",
+            "status":"em encerramento"
+        }
+    ],
+    "comments": [
+        {
+            "usuario":"Dinah Martins",
+            "description":"TESTE PUT"
+        }
+    ]    
+}
+
+###
+
+GET http://localhost:3000/api/parties
+
+###
+
+GET http://localhost:3000/api/parties/64ec9a7cef8ac6b44cb50e6b
+
+###
+
+DELETE http://localhost:3000/api/parties/64ec9997901d6a7a5def0821
+
+###
+
+PUT http://localhost:3000/api/parties/64ec9a7cef8ac6b44cb50e6b
+Content-Type: application/json
+
+{
+    "title": "Ordem de serviço",
+    "solicitante": "dinah martins",
+    "setor": "produção",
+    "sala": "5",
+    "forno": "245",
+    "cabeceira": "A",
+    "status": "Em andamento",
+    "estadoatual": "manutenção",
+    "services": [
+        {
+            "name":"TESTE ATUALIZAÇÃO 4848",
+            "description":"Alguma descrição",
+            "status":"em encerramento"
+        }
+    ]
+}
+
+
+### COMMENTS
+
+POST http://localhost:3000/api/comments
+Content-Type: application/json
+
+{
+    "usuario":"Dinah Martins",
+    "description":"Alguma descrição"
+}
+
+###
+
+GET http://localhost:3000/api/comments
+
+###
+
+GET http://localhost:3000/api/comments/64ece6b6fc21e92a9cdea725
+
+###
+
+DELETE http://localhost:3000/api/comments/64ece662fc21e92a9cdea71f
+
+###
+
+PUT http://localhost:3000/api/comments/64ece6b6fc21e92a9cdea725
+Content-Type: application/json
+
+{
+    "usuario":"Dinah Martins",
+    "description":"TESTE PUT"
+}
