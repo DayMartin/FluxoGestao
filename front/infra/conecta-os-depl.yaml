@@ -1,0 +1,18 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: conecta-os
+spec:
+  selector:
+    matchLabels:
+      app: conecta-os-depl
+  template:
+    metadata:
+      labels:
+        app: conecta-os-depl
+    spec:
+      containers:
+        - name: conecta-os
+          image: dinahdoria/osconecta
+          ports:
+            - containerPort: 3000
