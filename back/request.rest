@@ -30,9 +30,9 @@ Content-Type: application/json
     "status":"em encerramento"
 }
 
-### PARTY
+### ORDEM
 
-POST http://localhost:3000/api/parties
+POST http://localhost:3048/api/ordem
 Content-Type: application/json
 
 {
@@ -61,19 +61,19 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3000/api/parties
+GET http://localhost:3048/api/ordem
 
 ###
 
-GET http://localhost:3000/api/parties/64ec9a7cef8ac6b44cb50e6b
+GET http://localhost:3048/api/ordem/64f5b5ea38fa3424886f5ab9
 
 ###
 
-DELETE http://localhost:3000/api/parties/64ec9997901d6a7a5def0821
+DELETE http://localhost:3048/api/ordem/64f5b5ea38fa3424886f5ab9
 
 ###
 
-PUT http://localhost:3000/api/parties/64ec9a7cef8ac6b44cb50e6b
+PUT http://localhost:3048/api/ordem/64f5b5ea38fa3424886f5ab9
 Content-Type: application/json
 
 {
@@ -125,4 +125,42 @@ Content-Type: application/json
 {
     "usuario":"Dinah Martins",
     "description":"TESTE PUT"
+}
+
+### USERS
+
+POST http://localhost:3048/api/users
+Content-Type: application/json
+
+{
+    "name": "Dinah Martins",
+    "matricula":"60771aDA",
+    "setor":"fundição",
+    "supervisor":"Giovana Vitoria",
+    "turno":"noturno"
+}
+
+###
+
+GET http://localhost:3048/api/users
+
+###
+
+GET http://localhost:3048/api/users/64f5b36949f8c371b87ab492
+
+###
+
+DELETE http://localhost:3048/api/users/64f5b36949f8c371b87ab492
+
+###
+
+PUT http://localhost:3048/api/users/64f5b36949f8c371b87ab492
+Content-Type: application/json
+
+{
+    "name": "Dinah Martins",
+    "matricula":"60771aDA",
+    "setor":"fundição",
+    "supervisor":"Giovana Vitoria teste minha linda",
+    "turno":"noturno"
 }

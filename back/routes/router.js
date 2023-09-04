@@ -5,16 +5,22 @@ const servicesRouter = require("./service");
 
 router.use("/", servicesRouter);
 
-// Parties routes
+// Ordem routes
 
-const partyRouter = require("./parties");
+const ordemRouter = require("./ordem");
 
-router.use("/", partyRouter);
+router.use("/", ordemRouter);
 
 // comments routes
 
 const commentsRouter = require("./comments");
 
 router.use("/", commentsRouter);
+
+// users routes
+
+const usersRouter = require("./users");
+
+router.use("/", usersRouter);
 
 module.exports = router;

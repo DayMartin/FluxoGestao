@@ -1,10 +1,10 @@
-const PartyModel = require("../models/Party");
+const OrdemModel = require("../models/Ordem");
 
-const partyController = {
+const ordemController = {
     create: async (req, res) => {
         try {
 
-            const party = {
+            const ordem = {
                 title: req.body.title,
                 solicitante: req.body.solicitante,
                 setor: req.body.setor,
@@ -17,7 +17,7 @@ const partyController = {
                 comments: req.body.comments,
             }
 
-            const response = await PartyModel.create(party)
+            const response = await OrdemModel.create(ordem)
 
             res.status(201).json({response, msg: "Ordem de serviço criada com sucesso"});
             
@@ -27,9 +27,9 @@ const partyController = {
     },
     getAll: async (req, res) => {
         try {
-            const parties = await PartyModel.find();
+            const ordem = await OrdemModel.find();
 
-            res.json(parties);
+            res.json(ordem);
         } catch (error) {
             console.log(error); 
         }
@@ -37,14 +37,14 @@ const partyController = {
     get: async (req, res) => {
         try {
             const id = req.params.id;
-            const parties = await PartyModel.findById(id);
+            const ordem = await OrdemModel.findById(id);
 
-            if(!parties) {
+            if(!ordem) {
                 res.status(404).json({ msg: "Ordem de serviço não encontrada"});
                 return;
             } 
             
-            res.json(parties);
+            res.json(ordem);
  
         } catch (error) {
             console.log(error);
@@ -53,15 +53,15 @@ const partyController = {
     delete: async (req, res) => {
         try {
             const id = req.params.id;
-            const parties = await PartyModel.findById(id);
+            const ordem = await OrdemModel.findById(id);
 
-            if (!parties) {
-                res.status(404).json({ msg: "Serviço não encontrado. "});
+            if (!ordem) {
+                res.status(404).json({ msg: "Ordem de Serviço não encontrado. "});
                 return;
             }
 
-            const deletedParty = await PartyModel.findByIdAndDelete(id)
-            res.status(200).json({ deletedParty, msg: "Ordem de serviço excluída com sucesso"});
+            const deletedOrdem = await OrdemModel.findByIdAndDelete(id)
+            res.status(200).json({ deletedOrdem, msg: "Ordem de serviço excluída com sucesso"});
 
         } catch (error) {
             console.log(error);
@@ -70,7 +70,7 @@ const partyController = {
     update: async (req, res) => {
         const id = req.params.id;
 
-        const parties = {
+        const ordem = {
 
             title: req.body.title,
             solicitante: req.body.solicitante,
@@ -83,16 +83,16 @@ const partyController = {
             services: req.body.services,
         };
 
-        const updatedParty = await PartyModel.findByIdAndUpdate(id, parties);
+        const updatedOrdem = await OrdemModel.findByIdAndUpdate(id, ordem);
 
-        if (!updatedParty) {
+        if (!updatedOrdem) {
             res.status(404).json({ msg: "Ordem de serviço não encontrada. "});
             return;
         }
 
-        res.status(200).json({parties, msg: "Ordem de serviço atualizada com sucesso"});
+        res.status(200).json({ordem, msg: "Ordem de serviço atualizada com sucesso"});
     },
 
 };
 
-module.exports = partyController;
+module.exports = ordemController;

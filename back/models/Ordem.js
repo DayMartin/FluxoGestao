@@ -5,7 +5,7 @@ const { Schema } = mongoose
 const { serviceSchema } = require("./Service")
 const { commentsSchema } = require("./Comments")
 
-const partySchema = new Schema ({
+const ordemSchema = new Schema ({
     title: {
         type: String,
         require:true,
@@ -48,6 +48,6 @@ const partySchema = new Schema ({
   { timestamps: true }
 );
 
-const Party = mongoose.model("Party", partySchema);
+const Ordem = mongoose.model("Ordem", ordemSchema);
 
-module.exports = Party;
+module.exports = Ordem;
