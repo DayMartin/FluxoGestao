@@ -2,10 +2,14 @@ pipeline {
     agent any
 
     stages {
-        stage ('Build Image') {
+        stage('Build Image') {
             steps {
                 script {
-                    dockerapp = docker.build("dinahdoria/osconecta", '-f ./Dockerfile ./')
+                    def dockerfile = './Dockerfile' // Caminho para o Dockerfile
+                    def imageName = "dinahdoria/osconecta:v3" // Nome da imagem
+
+                    dockerapp = docker.build(imageName)
+                    dockerapp.dockerfile dockerfile
                 }
             }
         }
