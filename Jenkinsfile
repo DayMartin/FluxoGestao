@@ -5,7 +5,7 @@ pipeline {
         stage('Build Image') {
             steps {
                 script {
-                    dockerapp = docker.build("dinahdoria/osconecta:${env.BUILD_ID}", '-f ./Dockerfile ./')
+                    dockerapp = docker.build("dinahdoria/osconecta:${env.BUILD_ID}", '-f ./front/Dockerfile ./')
                 }
             }
         }
