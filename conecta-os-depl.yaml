@@ -13,6 +13,6 @@ spec:
     spec:
       containers:
         - name: conecta-os
-          image: dinahdoria/osconecta:v2
+          image: dinahdoria/osconecta
           ports:
             - containerPort: 3000
