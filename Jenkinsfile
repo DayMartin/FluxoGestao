@@ -20,5 +20,13 @@ pipeline {
                 }
             }
         }
+
+        stage ('Deploy Kubernetes') {
+            steps {
+                withKubeConfig([credentialsId: 'kubeconfig']) {
+                    sh 'kubectl apply -f ./conecta-os-depl.yaml'
+                }
+            }
+        }
     }
 }
