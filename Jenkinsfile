@@ -24,11 +24,9 @@ pipeline {
         stage ('Deploy Docker') {
             steps {
                 script {
-                     docker.image('dinahdoria/osconecta:latest').withRun('-p 3000:3000 --name osconectacont -d') { c ->
-                      
+                    dockerapp.run('-p 3000:3000 --name osconectacont')
                     }
                 }
             }
         }
     }
-}
