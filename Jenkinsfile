@@ -29,7 +29,7 @@ pipeline {
                         sh 'docker stop osconectacont'
                         sh 'docker rm osconectacont'
                     }
-                    dockerapp.run('-p 3000:3000 --name osconectacont --rm')
+                    dockerapp.run('-p 3000:3000 --name osconectacont')
                     }
                 }
             }
