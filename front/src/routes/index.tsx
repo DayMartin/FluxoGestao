@@ -1,6 +1,5 @@
 
 import { Routes, Route, Navigate } from 'react-router-dom';
-
 import { useDrawerContext } from '../shared/contexts';
 import { useEffect } from 'react';
 
