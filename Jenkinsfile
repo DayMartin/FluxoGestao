@@ -24,6 +24,11 @@ pipeline {
         stage ('Deploy Docker') {
             steps {
                 script {
+                    def existingContainer = sh(script: 'docker ps -aqf name=osconectacont', returnStatus: true)
+                    if (existingContainer == 0) {
+                        sh 'docker stop osconectacont'
+                        sh 'docker rm osconectacont'
+                    }
                     dockerapp.run('-p 3000:3000 --name osconectacont --rm')
                     }
                 }
