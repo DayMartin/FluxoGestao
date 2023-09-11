@@ -24,7 +24,7 @@ pipeline {
         stage ('Deploy Docker') {
             steps {
                 script {
-                    dockerapp.run('-p 3000:3000 --name osconectacont')
+                    dockerapp.run('-p 3000:3000 --name osconectacont --rm')
                     }
                 }
             }
