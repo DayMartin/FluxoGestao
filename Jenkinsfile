@@ -21,10 +21,12 @@ pipeline {
             }
         }
 
-        stage ('Deploy Kubernetes') {
+        stage ('Deploy Docker') {
             steps {
-                withKubeConfig([credentialsId: 'kubeconfig']) {
-                    sh 'kubectl apply -f ./deployment.yaml'
+                script {
+                     docker.image('dinahdoria/osconecta:latest').withRun('-p 3000:3000 --name osconectacont -d') { c ->
+                      
+                    }
                 }
             }
         }
