@@ -1,6 +1,6 @@
 import { Avatar, Box, Divider, Drawer, Icon, List, ListItemButton, ListItemIcon, ListItemText, useMediaQuery, useTheme } from '@mui/material';
 import PropTypes from 'prop-types'; // Importe o PropTypes
-import { useDrawerContext } from '../../contexts';
+import { useAppThemeContext, useDrawerContext } from '../../contexts';
 import React from 'react';
 import { useMatch, useNavigate, useResolvedPath } from 'react-router-dom';
 
@@ -39,6 +39,8 @@ export const MenuLateral: React.FC<IMenuLateralProps> = ({ children }) => {
 
   const {isDrawerOpen, toggleDrawerOpen, drawerOptions} = useDrawerContext();
 
+const { toggleTheme } = useAppThemeContext();
+
   return (
     <>
       <Drawer open={isDrawerOpen} variant={smDown ? 'temporary' : 'permanent'} onClose={toggleDrawerOpen}>
@@ -61,6 +63,18 @@ export const MenuLateral: React.FC<IMenuLateralProps> = ({ children }) => {
                   onClick={smDown ? toggleDrawerOpen : undefined}
               />
               ))}
+
+            </List>
+          </Box>
+
+          <Box>
+            <List component="nav">
+              <ListItemButton onClick={toggleTheme} >
+                <ListItemIcon>
+                  <Icon>dark_mode</Icon>
+                </ListItemIcon>  
+              <ListItemText primary="Alterar tema" />
+          </ListItemButton>
 
             </List>
           </Box>
