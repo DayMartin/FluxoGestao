@@ -27,7 +27,7 @@ export const FerramentasDeDetalhe: React.FC = () => {
                 variant='outlined'
                 color="primary"
                 disableElevation
-                startIcon={<Icon>save</Icon>}
+                startIcon={<Icon>home</Icon>}
                 >Salvar e Voltar </Button>  
 
             <Button
