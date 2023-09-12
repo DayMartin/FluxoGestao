@@ -22,7 +22,8 @@ export const BarraDeFerramentas: React.FC<IFerramentasDaListagemProps> = ({
     const theme = useTheme();
 
     return (
-        <Box height={theme.spacing(5)} 
+        <Box 
+            height={theme.spacing(5)} 
             marginX={1} 
             padding={1} 
             paddingX={2} 
@@ -49,7 +50,7 @@ export const BarraDeFerramentas: React.FC<IFerramentasDaListagemProps> = ({
                     color="primary"
                     disableElevation
                     onClick={aoClicarEmNovo}
-                    endIcon={<Icon>add</Icon>}
+                    startIcon={<Icon>add</Icon>}
                 >{textoBotaoNovo}</Button>
                 )}
             </Box>
