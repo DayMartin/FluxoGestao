@@ -1,27 +1,27 @@
-POST http://localhost:3000/api/services
+POST http://localhost:3048/api/services
 Content-Type: application/json
 
 {
     "name":"ah, esta funcionando",
     "description":"Alguma descrição",
-    "status":"statuos"
+    "status":"Ativo"
 }
 
 ###
 
-GET http://localhost:3000/api/services
+GET http://localhost:3048/api/services
 
 ###
 
-GET http://localhost:3000/api/services/64ec7f48cc75ca6f78585768
+GET http://localhost:3048/api/services/64ec7f48cc75ca6f78585768
 
 ###
 
-DELETE http://localhost:3000/api/services/64ec7f48cc75ca6f78585761
+DELETE http://localhost:3048/api/services/64ec7f48cc75ca6f78585761
 
 ###
 
-PUT http://localhost:3000/api/services/64ec7fa0cc75ca6f78585763
+PUT http://localhost:3048/api/services/64ec7fa0cc75ca6f78585763
 Content-Type: application/json
 
 {
@@ -97,7 +97,7 @@ Content-Type: application/json
 
 ### COMMENTS
 
-POST http://localhost:3000/api/comments
+POST http://localhost:3048/api/comments
 Content-Type: application/json
 
 {
@@ -107,19 +107,19 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3000/api/comments
+GET http://localhost:3048/api/comments
 
 ###
 
-GET http://localhost:3000/api/comments/64ece6b6fc21e92a9cdea725
+GET http://localhost:3048/api/comments/64ece6b6fc21e92a9cdea725
 
 ###
 
-DELETE http://localhost:3000/api/comments/64ece662fc21e92a9cdea71f
+DELETE http://localhost:3048/api/comments/64ece662fc21e92a9cdea71f
 
 ###
 
-PUT http://localhost:3000/api/comments/64ece6b6fc21e92a9cdea725
+PUT http://localhost:3048/api/comments/64ece6b6fc21e92a9cdea725
 Content-Type: application/json
 
 {
