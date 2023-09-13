@@ -150,7 +150,7 @@ GET http://localhost:3048/api/users/64f5b36949f8c371b87ab492
 
 ###
 
-DELETE http://localhost:3048/api/users/64f5b36949f8c371b87ab492
+DELETE http://localhost:3048/api/users/6501674063cfca1f845af57c
 
 ###
 

@@ -1,16 +1,15 @@
-import { FerramentasDeDetalhe } from '../../shared/components';
+import { FerramentasDeDetalhe, UserForm } from '../../shared/components';
 import { LayoutBaseDePagina } from '../../shared/layouts';
 
-export const Dashboard = () => {
+export const Users = () => {
     return (
         <LayoutBaseDePagina 
-        titulo='Página inicial' 
+        titulo='Usuário' 
         barraDeFerramentas={(
         <FerramentasDeDetalhe mostrarBotaoSalvarEFechar/>
         )}
-        
         > 
-
+        <UserForm/>
         </LayoutBaseDePagina>
       );
 

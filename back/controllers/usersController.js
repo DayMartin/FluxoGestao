@@ -1,22 +1,24 @@
 const { Users: UsersModel } = require("../models/Users");
+const { Users } = require("../models/Users");
 
 const usersController = {
-    create: async(req, res) => {
-        try {
-            const users = {
-                name: req.body.name,
-                matricula:req.body.matricula,
-                setor:req.body.setor,
-                supervisor:req.body.supervisor,
-                turno:req.body.turno
-            };
-            const response = await UsersModel.create(users);
-
-            res.status(201).json({ response, msg: "Usuário criado com sucesso"});
-
-        } catch (error) {
-            console.log(error);
-        }
+    create: async (req, res) => {
+      try {
+        const users = new Users({
+          name: req.body.name,
+          matricula: req.body.matricula,
+          setor: req.body.setor,
+          supervisor: req.body.supervisor,
+          turno: req.body.turno,
+        });
+  
+        const response = await users.save();
+  
+        res.status(201).json({ response, msg: "Usuário criado com sucesso" });
+      } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: "Erro interno do servidor" });
+      }
     },
     getAll: async (req, res) => {
         try {

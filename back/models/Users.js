@@ -3,30 +3,30 @@ const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
 const usersSchema = new Schema ({
+    
     name: {
         type: String,
-        require:true
-    },
-    matricula: {
+        required: true,
+      },
+      matricula: {
         type: String,
-        require:true,
-    },
-    setor: {
+        required: true,
+      },
+      setor: {
         type: String,
-        require:true,
-    },
-    supervisor: {
+        required: true,
+      },
+      supervisor: {
         type: String,
-        require:true,
-    },
-    turno: {
+        required: true,
+      },
+      turno: {
         type: String,
-        require:true,
-    },
-  },
-  { timestamps: true }
-);
-
+        required: true,
+      },
+    }, { timestamps: true }
+    );
+    
 const Users = mongoose.model("Users", usersSchema);
 
 module.exports = {
