@@ -1,1 +1,2 @@
-export * from './users/postService';
+export * from './users/PessoasService';
+export * from './Ordem/OrdemService';
