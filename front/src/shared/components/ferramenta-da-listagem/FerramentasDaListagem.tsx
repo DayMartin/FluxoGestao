@@ -43,8 +43,6 @@ export const BarraDeFerramentas: React.FC<IFerramentasDaListagemProps> = ({
                 />
             )}
 
-
-
             <Box flex={1} display={"flex"} justifyContent="end" >
                 {mostrarBotaoNovo && (
                 <Button
