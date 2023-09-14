@@ -10,15 +10,16 @@ const usersController = {
           setor: req.body.setor,
           supervisor: req.body.supervisor,
           turno: req.body.turno,
+          funcao: req.body.funcao,
         });
   
         const response = await users.save();
   
-        res.status(201).json({ response, msg: "Usuário criado com sucesso" });
-      } catch (error) {
+        res.status(201).json({ id: response._id, msg: "Usuário criado com sucesso" });
+        } catch (error) {
         console.error(error);
         res.status(500).json({ error: "Erro interno do servidor" });
-      }
+        }
     },
     getAll: async (req, res) => {
         try {
@@ -71,6 +72,7 @@ const usersController = {
             setor:req.body.setor,
             supervisor:req.body.supervisor,
             turno:req.body.turno,
+            funcao: req.body.funcao,
         };
 
         const updatedUsers = await UsersModel.findByIdAndUpdate(id, users);

@@ -24,6 +24,10 @@ const usersSchema = new Schema ({
         type: String,
         required: true,
       },
+      funcao: {
+        type: String,
+        required: true,
+      },
     }, { timestamps: true }
     );
     
