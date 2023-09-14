@@ -1,4 +1,4 @@
-import { FerramentasDeDetalhe, UserForm } from '../../shared/components';
+import { FerramentasDeDetalhe, UserForms } from '../../shared/components';
 import { LayoutBaseDePagina } from '../../shared/layouts';
 
 export const Users = () => {
@@ -9,7 +9,7 @@ export const Users = () => {
         <FerramentasDeDetalhe mostrarBotaoSalvarEFechar/>
         )}
         > 
-        <UserForm/>
+        <UserForms/>
         </LayoutBaseDePagina>
       );
 
