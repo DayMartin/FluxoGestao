@@ -21,7 +21,7 @@ export const OrdemListagem: React.FC = () => {
           console.log(result);
         }
       });
-    }, []);
+    }, [busca]);
 
     return (
         <LayoutBaseDePagina 
