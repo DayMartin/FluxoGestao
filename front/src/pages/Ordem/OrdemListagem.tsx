@@ -7,7 +7,7 @@ import { useDebounce } from '../../shared/hooks';
 
 export const OrdemListagem: React.FC = () => {
     const [searchParams, setSearchParams] = useSearchParams();
-    const { debounce } = useDebounce(2000);
+    const { debounce } = useDebounce();
 
     const busca = useMemo(() => {
       return searchParams.get('busca') || '';
