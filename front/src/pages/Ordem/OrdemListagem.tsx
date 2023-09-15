@@ -1,14 +1,27 @@
 import { useSearchParams } from 'react-router-dom';
 import { BarraDeFerramentas, OrdemForms } from '../../shared/components';
 import { LayoutBaseDePagina } from '../../shared/layouts';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
+import { OrdemService } from '../../shared/services/api';
 
 export const OrdemListagem: React.FC = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+    const [searchParams, setSearchParams] = useSearchParams();
 
-  const busca = useMemo(() => {
-    return searchParams.get('busca') || '';
-  }, [searchParams]);
+    const busca = useMemo(() => {
+      return searchParams.get('busca') || '';
+    }, [searchParams]);
+
+    useEffect(() => {
+
+      OrdemService.getAll(1, busca)
+      .then((result) => {
+        if (result instanceof Error) {
+          alert(result.message);
+        } else {
+          console.log(result);
+        }
+      });
+    }, []);
 
     return (
         <LayoutBaseDePagina 
@@ -19,7 +32,6 @@ export const OrdemListagem: React.FC = () => {
         textoBotaoNovo='Nova'
         textoDabusca={busca}
         aoMudarTextoDeBusca={texto => setSearchParams({busca: texto}, { replace: true})}
-        
         />
         </LayoutBaseDePagina>
       );

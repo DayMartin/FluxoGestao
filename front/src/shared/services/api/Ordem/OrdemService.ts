@@ -49,7 +49,7 @@ type TOrdemComTotalCount = {
 
 const getAll = async (page = 1, filter = ''): Promise<TOrdemComTotalCount | Error> => {
   try {
-    const urlRelativa = `${Environment.URL_BASE}/ordem`;
+    const urlRelativa = `${Environment.URL_BASE}/ordem/${filter}?page=${page}`;
 
     const { data } = await Api.get(urlRelativa);
 
