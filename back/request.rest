@@ -4,7 +4,13 @@ Content-Type: application/json
 {
     "name":"ah, esta funcionando",
     "description":"Alguma descrição",
-    "status":"Ativo"
+    "status":"Ativo",
+    "comments": [
+        {
+            "usuario":"Dinah Martins",
+            "description":"TESTE PUT"
+        }
+    ] 
 }
 
 ###

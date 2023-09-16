@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
 
+const { commentsSchema } = require("./Comments")
+
 const { Schema } = mongoose;
 
 const serviceSchema = new Schema ({
@@ -14,6 +16,9 @@ const serviceSchema = new Schema ({
     status: {
         type: String,
         require:true,
+    },
+    comments: {
+        type: [commentsSchema],
     },
   },
   { timestamps: true }
