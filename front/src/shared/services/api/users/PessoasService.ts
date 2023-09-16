@@ -5,9 +5,10 @@ export interface IListagemPessoa {
   name: string;
   matricula: string;
   setor: string;
-  supervisor: string;
   turno: string;
   funcao: string;
+  email: string;
+  senha: string;
 }
 
 export interface IDetalhePessoa {
@@ -15,9 +16,10 @@ export interface IDetalhePessoa {
   name: string;
   matricula: string;
   setor: string;
-  supervisor: string;
   turno: string;
   funcao: string;
+  email: string;
+  senha: string;
 }
 
 type TPessoasComTotalCount = {
@@ -27,7 +29,7 @@ type TPessoasComTotalCount = {
 
 const getAll = async (page = 1, filter = ''): Promise<TPessoasComTotalCount | Error> => {
   try {
-    const urlRelativa = `${Environment.URL_BASE}/users`;
+    const urlRelativa = `${Environment.URL_BASE}/users/${filter}?page=${page}`;
 
     const { data } = await Api.get(urlRelativa);
 

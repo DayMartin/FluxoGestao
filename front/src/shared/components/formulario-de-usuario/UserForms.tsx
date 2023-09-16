@@ -6,9 +6,10 @@ export const UserForms = () => {
   const [name, setName] = useState('');
   const [matricula, setMatricula] = useState('');
   const [setor, setSetor] = useState('');
-  const [supervisor, setSupervisor] = useState('');
   const [turno, setTurno] = useState('');
   const [funcao, setFuncao] = useState('');
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -17,9 +18,10 @@ export const UserForms = () => {
       name,
       matricula,
       setor,
-      supervisor,
       turno,
       funcao,
+      email,
+      senha,
     };
 
     try {
@@ -71,25 +73,33 @@ export const UserForms = () => {
 
         <TextField
           type="text"
-          name="supervisor"
-          placeholder="Supervisor do usuário"
-          onChange={(event) => setSupervisor(event.target.value)}
-          required
-        />
-
-        <TextField
-          type="text"
           name="turno"
           placeholder="Turno do usuário"
           onChange={(event) => setTurno(event.target.value)}
           required
         />
 
-<TextField
+        <TextField
           type="text"
           name="funcao"
           placeholder="Função do usuário"
           onChange={(event) => setFuncao(event.target.value)}
+          required
+        />
+
+        <TextField
+          type="email"
+          name="email"
+          placeholder="E-mail"
+          onChange={(event) => setEmail(event.target.value)}
+          required
+        />
+
+        <TextField
+          type="password"
+          name="password"
+          placeholder="Senha"
+          onChange={(event) => setSenha(event.target.value)}
           required
         />
 
