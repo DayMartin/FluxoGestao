@@ -6,10 +6,6 @@ const { serviceSchema } = require("./Service")
 const { commentsSchema } = require("./Comments")
 
 const ordemSchema = new Schema ({
-    title: {
-        type: String,
-        require:true,
-    },
     solicitante: {
         type: String,
         require:true,
@@ -34,15 +30,15 @@ const ordemSchema = new Schema ({
         type: String,
         require:true,
     },
-    estadoatual: {
-        type: String,
-        require:true,
-    },
     services: {
         type: [serviceSchema],
     },
     comments: {
         type: [commentsSchema],
+    },
+    urgencia: {
+        type: String,
+        require:true,
     },
   },
   { timestamps: true }

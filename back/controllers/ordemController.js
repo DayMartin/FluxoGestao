@@ -5,16 +5,15 @@ const ordemController = {
         try {
 
             const ordem = {
-                title: req.body.title,
                 solicitante: req.body.solicitante,
                 setor: req.body.setor,
                 sala: req.body.sala,
                 forno: req.body.forno,
                 cabeceira: req.body.cabeceira,
                 status: req.body.status,
-                estadoatual: req.body.estado_atual,
                 services: req.body.services,
                 comments: req.body.comments,
+                urgencia: req.body.urgencia,
             }
 
             const response = await OrdemModel.create(ordem)
@@ -71,16 +70,15 @@ const ordemController = {
         const id = req.params.id;
 
         const ordem = {
-
-            title: req.body.title,
             solicitante: req.body.solicitante,
             setor: req.body.setor,
             sala: req.body.sala,
             forno: req.body.forno,
             cabeceira: req.body.cabeceira,
             status: req.body.status,
-            estadoatual: req.body.estado_atual,
             services: req.body.services,
+            comments: req.body.comments,
+            urgencia: req.body.urgencia,
         };
 
         const updatedOrdem = await OrdemModel.findByIdAndUpdate(id, ordem);

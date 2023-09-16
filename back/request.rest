@@ -42,19 +42,23 @@ POST http://localhost:3048/api/ordem
 Content-Type: application/json
 
 {
-    "title": "Ordem de serviço",
     "solicitante": "dinah martins",
     "setor": "produção",
     "sala": "5",
     "forno": "245",
     "cabeceira": "A",
     "status": "Aguardando atendimento",
-    "estadoatual": "manutenção",
     "services": [
         {
             "name":"TESTE ATUALIZAÇÃO",
             "description":"Alguma descrição",
-            "status":"em encerramento"
+            "status":"em encerramento",
+            "comments": [
+                {
+                    "usuario":"Dinah Martins",
+                    "description":"TESTE PUT"
+                }
+            ]    
         }
     ],
     "comments": [
