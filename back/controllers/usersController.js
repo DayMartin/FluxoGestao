@@ -69,11 +69,12 @@ const usersController = {
 
         const users = {
             name: req.body.name,
-            matricula:req.body.matricula,
-            setor:req.body.setor,
-            supervisor:req.body.supervisor,
-            turno:req.body.turno,
+            matricula: req.body.matricula,
+            setor: req.body.setor,
+            turno: req.body.turno,
             funcao: req.body.funcao,
+            email: req.body.email,
+            senha: req.body.senha,
         };
 
         const updatedUsers = await UsersModel.findByIdAndUpdate(id, users);
