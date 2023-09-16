@@ -3,23 +3,26 @@ import React, { useState } from "react";
 import { OrdemService, IDetalheOrdem } from "../../services/api/Ordem/OrdemService";
 
 export interface IOrdemServiceData {
-  title: string;
   solicitante: string;
   setor: string;
   sala: number;
   forno: number;
   cabeceira: string;
   status: string;
-  estadoatual: string;
   services: {
     name: string;
     description: string;
     status: string;
+    comments: {
+      usuario: string;
+      description: string;
+    }[];
   }[];
   comments: {
     usuario: string;
     description: string;
   }[];
+  urgencia: string;
   
   // Add an index signature to allow indexing by string
   [key: string]: any;
@@ -27,19 +30,23 @@ export interface IOrdemServiceData {
 
 export const OrdemForms = () => {
   const [ordemData, setOrdemData] = useState<IOrdemServiceData>({
-    title: "",
     solicitante: "",
     setor: "",
     sala: NaN,
     forno: NaN,
     cabeceira: "",
     status: "",
-    estadoatual: "",
     services: [
       {
         name: "",
         description: "",
         status: "",
+        comments: [
+          {
+            usuario: "",
+            description: "",
+          },
+        ],
       },
     ],
     comments: [
@@ -48,6 +55,7 @@ export const OrdemForms = () => {
         description: "",
       },
     ],
+    urgencia: "",
   });
 
   const handleChange = (

@@ -2,44 +2,50 @@ import { Environment } from '../../../environment';
 import { Api } from '../axios-config';
 
 export interface IOrdemServiceData {
-  title: string;
   solicitante: string;
   setor: string;
   sala: number;
   forno: number;
   cabeceira: string;
   status: string;
-  estadoatual: string;
   services: {
     name: string;
     description: string;
     status: string;
+    comments: {
+      usuario: string;
+      description: string;
+    }[];
   }[];
   comments: {
     usuario: string;
     description: string;
   }[];
+  urgencia: string;
 }
 
 export interface IDetalheOrdem {
   id: string;
-  title: string;
   solicitante: string;
   setor: string;
   sala: number;
   forno: number;
   cabeceira: string;
   status: string;
-  estadoatual: string;
   services: {
     name: string;
     description: string;
     status: string;
+    comments: {
+      usuario: string;
+      description: string;
+    }[];
   }[];
   comments: {
     usuario: string;
     description: string;
   }[];
+  urgencia: string;
 }
 
 type TOrdemComTotalCount = {
