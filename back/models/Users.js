@@ -16,15 +16,19 @@ const usersSchema = new Schema ({
         type: String,
         required: true,
       },
-      supervisor: {
-        type: String,
-        required: true,
-      },
       turno: {
         type: String,
         required: true,
       },
       funcao: {
+        type: String,
+        required: true,
+      },
+      email: {
+        type: String,
+        required: true,
+      },
+      senha: {
         type: String,
         required: true,
       },

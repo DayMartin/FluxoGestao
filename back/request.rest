@@ -136,8 +136,10 @@ Content-Type: application/json
     "name": "Dinah Martins",
     "matricula":"60771aDA",
     "setor":"fundição",
-    "supervisor":"Giovana Vitoria",
-    "turno":"noturno"
+    "turno":"noturno",
+    "funcao":"mecanico",
+    "email":"dinah@hotmail.com",
+    "senha":"noturno"
 }
 
 ###
