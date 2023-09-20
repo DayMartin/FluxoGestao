@@ -36,8 +36,9 @@ const ordemController = {
         try {
             const ordens = await OrdemModel.find();
             const totalCount = await OrdemModel.countDocuments();
-    
-            res.json({ data: ordens, totalCount });
+            
+            res.setHeader('x-total-count', totalCount);
+            res.json(ordens);
         } catch (error) {
             console.log(error);
             res.status(500).json({ error: "Erro ao buscar ordens de serviço" });
