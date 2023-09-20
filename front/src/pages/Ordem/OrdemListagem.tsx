@@ -1,15 +1,18 @@
 import { useSearchParams } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 
-import { Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material';
+import { LinearProgress, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow } from '@mui/material';
 
-import { BarraDeFerramentas, OrdemForms } from '../../shared/components';
+
+import { Environment } from '../../shared/environment';
+import { BarraDeFerramentas } from '../../shared/components';
 import { LayoutBaseDePagina } from '../../shared/layouts';
 import { IOrdemServiceData, OrdemService, TOrdemComTotalCount } from '../../shared/services/api';
 import { useDebounce } from '../../shared/hooks';
 
 
 export const OrdemListagem: React.FC = () => {
+
     const [searchParams, setSearchParams] = useSearchParams();
     const { debounce } = useDebounce();
 
@@ -22,27 +25,54 @@ export const OrdemListagem: React.FC = () => {
     }, [searchParams]);
 
     useEffect(() => {
-
       setIsLoading(true);
-
+    
       debounce(() => {
-
-      OrdemService.getAll(1, busca)
-      .then((result: TOrdemComTotalCount | Error) => {
-        setIsLoading(false);
-
-        if (result instanceof Error) {
-          alert(result.message);
-        } else {
-          console.log('Dados recebidos:', result);
-
-          setTotalCount(result.totalCount);
-          setRows(result.data);
-        }
+        OrdemService.getAll(1, busca)
+          .then((result) => {
+            setIsLoading(false);
+    
+            if (result instanceof Error) {
+              alert(result.message);
+            } else {
+              console.log('Dados recebidos:', result);
+    
+              setTotalCount(result.totalCount);
+    
+              if (Array.isArray(result.data)) {
+                // Mapeamento dos dados recebidos para o formato IOrdemServiceData
+                const newData = result.data.map((item) => ({
+                  _id: item._id,
+                  ordemId: item.ordemId,
+                  solicitante: item.solicitante,
+                  setor: item.setor,
+                  sala: item.sala,
+                  forno: item.forno,
+                  cabeceira: item.cabeceira,
+                  status: item.status,
+                  services: item.services,
+                  comments: item.comments,
+                  urgencia: item.urgencia,
+                }));
+    
+                // LIMPAR A LISTA DE ROWS E ADICIONAR OS NOVOS DADOS
+                console.log('Limpando a lista');
+                setRows(newData);
+              } else if (typeof result.data === 'object') {
+                // SE result.data for um objeto, adicione apenas esse objeto à lista
+                console.log('Limpando a lista');
+                setRows([result.data]);
+              } else {
+                console.error('Dados recebidos não são um array:', result.data);
+                // LIMPAR A LISTA DE ROWS SE O RESULTADO NÃO FOR UM ARRAY OU OBJETO
+                console.log('Limpando a lista');
+                setRows([]);
+}
+            }
+          });
       });
-    });
     }, [busca]);
-
+  
     return (
         <LayoutBaseDePagina 
         titulo='Listagem de Ordem de serviços' 
@@ -69,8 +99,8 @@ export const OrdemListagem: React.FC = () => {
           </TableHead>
 
           <TableBody>
-            {rows && rows.map((row) => (
-              <TableRow key={row.ordemId}>
+          {rows.map((row, index) => (
+                <TableRow key={index}>
                 <TableCell>Ações</TableCell>
                 <TableCell>{row.ordemId}</TableCell>
                 <TableCell>{row.solicitante}</TableCell>
@@ -81,6 +111,22 @@ export const OrdemListagem: React.FC = () => {
               </TableRow>
             ))}
           </TableBody>
+
+          {totalCount === 0 && !isLoading && (
+            <caption>{Environment.LISTAGEM_VAZIA}</caption>
+          )}
+
+          <TableFooter>
+              <TableRow>
+                <TableCell colSpan={7}>
+                { isLoading && (
+                <LinearProgress variant='indeterminate'/>
+              )}
+                </TableCell>
+              </TableRow>
+          </TableFooter>    
+
+
         </Table>
       </TableContainer>
         </LayoutBaseDePagina>

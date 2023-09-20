@@ -2,7 +2,7 @@ import { Environment } from '../../../environment';
 import { Api } from '../axios-config';
 
 export interface IOrdemServiceData {
-  _id: string | number;
+  _id: string;
   ordemId: number;
   solicitante: string;
   setor: string;
@@ -28,7 +28,7 @@ export interface IOrdemServiceData {
 
 export interface IDetalheOrdem {
   ordemId: number;
-  _id: string | number;
+  _id: string;
   solicitante: string;
   setor: string;
   sala: number;
@@ -56,16 +56,18 @@ export type TOrdemComTotalCount = {
   totalCount: number;
 };
 
-const getAll = async (page = 1, filter = ''): Promise<TOrdemComTotalCount | Error> => {
+const getAll = async (page = 1, filter = '', ordemId = ''): Promise<TOrdemComTotalCount | Error> => {
   try {
-    const urlRelativa = `${Environment.URL_BASE}/ordem/${filter}?page=${page}`;
+    const urlRelativa = `${Environment.URL_BASE}/ordem/${filter}?page=${page}&ordemId=${ordemId}`;
 
-    const { data } = await Api.get(urlRelativa);
+    const { data, headers } = await Api.get(urlRelativa);
 
     if (data) {
-      return data;
+      return {
+        data,
+        totalCount: Number(headers['x-total-count'] || Environment.LIMITE_DE_LINHAS),
+      };
     }
-
     return new Error('Erro ao listar os registros.');
   } catch (error) {
     console.error(error);
@@ -73,7 +75,7 @@ const getAll = async (page = 1, filter = ''): Promise<TOrdemComTotalCount | Erro
   }
 };
 
-const getById = async (id: string | number): Promise<IDetalheOrdem | Error> => {
+const getById = async (id: string): Promise<IDetalheOrdem | Error> => {
   try {
     const { data } = await Api.get(`/ordem/${id}`);
 
@@ -88,7 +90,7 @@ const getById = async (id: string | number): Promise<IDetalheOrdem | Error> => {
   }
 };
 
-const create = async (dados: IOrdemServiceData): Promise<string | number> => {
+const create = async (dados: IOrdemServiceData): Promise<string> => {
   try {
     const { data } = await Api.post<IDetalheOrdem>('/ordem', dados);
 
@@ -103,7 +105,7 @@ const create = async (dados: IOrdemServiceData): Promise<string | number> => {
   }
 };
 
-const updateById = async (id: string | number, dados: IOrdemServiceData): Promise<void | Error> => {
+const updateById = async (id: string, dados: IOrdemServiceData): Promise<void | Error> => {
   try {
     await Api.put(`/ordem/${id}`, dados);
   } catch (error) {
@@ -112,7 +114,7 @@ const updateById = async (id: string | number, dados: IOrdemServiceData): Promis
   }
 };
 
-const deleteById = async (id: string | number): Promise<void | Error> => {
+const deleteById = async (id: string): Promise<void | Error> => {
   try {
     await Api.delete(`/ordem/${id}`);
   } catch (error) {

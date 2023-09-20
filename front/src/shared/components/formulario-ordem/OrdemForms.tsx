@@ -4,7 +4,7 @@ import { OrdemService, IDetalheOrdem } from "../../services/api/Ordem/OrdemServi
 
 export interface IOrdemServiceData {
   ordemId: number;
-  _id: string | number;
+  _id: string;
   solicitante: string;
   setor: string;
   sala: number;
@@ -33,7 +33,7 @@ export interface IOrdemServiceData {
 export const OrdemForms = () => {
   const [ordemData, setOrdemData] = useState<IOrdemServiceData>({
     ordemId: NaN, 
-    _id: NaN ,
+    _id: "" ,
     solicitante: "",
     setor: "",
     sala: NaN,
