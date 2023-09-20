@@ -34,13 +34,16 @@ const ordemController = {
     },
     getAll: async (req, res) => {
         try {
-            const ordem = await OrdemModel.find();
-
-            res.json(ordem);
+            const ordens = await OrdemModel.find();
+            const totalCount = await OrdemModel.countDocuments();
+    
+            res.json({ data: ordens, totalCount });
         } catch (error) {
-            console.log(error); 
+            console.log(error);
+            res.status(500).json({ error: "Erro ao buscar ordens de serviço" });
         }
     },
+    
     get: async (req, res) => {
         try {
             const idParam = req.params.id;
