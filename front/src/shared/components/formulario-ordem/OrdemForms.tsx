@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import { OrdemService, IDetalheOrdem } from "../../services/api/Ordem/OrdemService";
 
 export interface IOrdemServiceData {
+  ordemId: number;
+  _id: string | number;
   solicitante: string;
   setor: string;
   sala: number;
@@ -30,6 +32,8 @@ export interface IOrdemServiceData {
 
 export const OrdemForms = () => {
   const [ordemData, setOrdemData] = useState<IOrdemServiceData>({
+    ordemId: NaN, 
+    _id: NaN ,
     solicitante: "",
     setor: "",
     sala: NaN,

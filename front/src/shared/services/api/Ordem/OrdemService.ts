@@ -2,6 +2,8 @@ import { Environment } from '../../../environment';
 import { Api } from '../axios-config';
 
 export interface IOrdemServiceData {
+  _id: string | number;
+  ordemId: number;
   solicitante: string;
   setor: string;
   sala: number;
@@ -25,7 +27,8 @@ export interface IOrdemServiceData {
 }
 
 export interface IDetalheOrdem {
-  id: string | number;
+  ordemId: number;
+  _id: string | number;
   solicitante: string;
   setor: string;
   sala: number;
@@ -48,7 +51,7 @@ export interface IDetalheOrdem {
   urgencia: string;
 }
 
-type TOrdemComTotalCount = {
+export type TOrdemComTotalCount = {
   data: IDetalheOrdem[];
   totalCount: number;
 };
@@ -90,7 +93,7 @@ const create = async (dados: IOrdemServiceData): Promise<string | number> => {
     const { data } = await Api.post<IDetalheOrdem>('/ordem', dados);
 
     if (data) {
-      return data.id;
+      return data._id;
     }
 
     throw new Error('Erro ao criar o registro.');
