@@ -43,20 +43,28 @@ const ordemController = {
     },
     get: async (req, res) => {
         try {
-            const id = req.params.id;
-            const ordem = await OrdemModel.findById(id);
-
-            if(!ordem) {
-                res.status(404).json({ msg: "Ordem de serviço não encontrada"});
+            const idParam = req.params.id;
+            let ordem;
+    
+            if (isNaN(idParam)) {
+                // Se o parâmetro não for um número, busca pelo ID gerado pelo MongoDB
+                ordem = await OrdemModel.findById(idParam);
+            } else {
+                // Se o parâmetro for um número, busca pelo ID personalizado
+                ordem = await OrdemModel.findOne({ ordemId: parseInt(idParam) });
+            }
+    
+            if (!ordem) {
+                res.status(404).json({ msg: "Ordem de serviço não encontrada" });
                 return;
             } 
-            
+    
             res.json(ordem);
- 
         } catch (error) {
             console.log(error);
         }
     },
+    
     delete: async (req, res) => {
         try {
             const id = req.params.id;
