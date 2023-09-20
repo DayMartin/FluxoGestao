@@ -1,10 +1,18 @@
 const OrdemModel = require("../models/Ordem");
+const IdCounter = require("../models/IdCounter");
 
 const ordemController = {
     create: async (req, res) => {
         try {
 
+            const idCounter = await IdCounter.findOneAndUpdate(
+                { model: "Ordem", field: "ordemId" },
+                { $inc: { count: 1 } },
+                { upsert: true, new: true }
+              );
+
             const ordem = {
+                ordemId: idCounter.count,
                 solicitante: req.body.solicitante,
                 setor: req.body.setor,
                 sala: req.body.sala,

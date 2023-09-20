@@ -6,6 +6,11 @@ const { serviceSchema } = require("./Service")
 const { commentsSchema } = require("./Comments")
 
 const ordemSchema = new Schema ({
+
+    ordemId: {
+        type: Number,
+        require:false,
+    },
     solicitante: {
         type: String,
         require:true,

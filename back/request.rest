@@ -79,7 +79,7 @@ GET http://localhost:3048/api/ordem/64f5b5ea38fa3424886f5ab9
 
 ###
 
-DELETE http://localhost:3048/api/ordem/64f5b5ea38fa3424886f5ab9
+DELETE http://localhost:3048/api/ordem/650a7fe2dc4ef4dbffb2d119
 
 ###
 
