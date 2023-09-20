@@ -25,7 +25,7 @@ export interface IOrdemServiceData {
 }
 
 export interface IDetalheOrdem {
-  id: string;
+  id: string | number;
   solicitante: string;
   setor: string;
   sala: number;
@@ -70,7 +70,7 @@ const getAll = async (page = 1, filter = ''): Promise<TOrdemComTotalCount | Erro
   }
 };
 
-const getById = async (id: string): Promise<IDetalheOrdem | Error> => {
+const getById = async (id: string | number): Promise<IDetalheOrdem | Error> => {
   try {
     const { data } = await Api.get(`/ordem/${id}`);
 
@@ -85,7 +85,7 @@ const getById = async (id: string): Promise<IDetalheOrdem | Error> => {
   }
 };
 
-const create = async (dados: IOrdemServiceData): Promise<string | Error> => {
+const create = async (dados: IOrdemServiceData): Promise<string | number> => {
   try {
     const { data } = await Api.post<IDetalheOrdem>('/ordem', dados);
 
@@ -93,14 +93,14 @@ const create = async (dados: IOrdemServiceData): Promise<string | Error> => {
       return data.id;
     }
 
-    return new Error('Erro ao criar o registro.');
+    throw new Error('Erro ao criar o registro.');
   } catch (error) {
     console.error(error);
-    return new Error((error as { message: string }).message || 'Erro ao criar o registro.');
+    throw new Error((error as { message: string }).message || 'Erro ao criar o registro.');
   }
 };
 
-const updateById = async (id: string, dados: IOrdemServiceData): Promise<void | Error> => {
+const updateById = async (id: string | number, dados: IOrdemServiceData): Promise<void | Error> => {
   try {
     await Api.put(`/ordem/${id}`, dados);
   } catch (error) {
@@ -109,7 +109,7 @@ const updateById = async (id: string, dados: IOrdemServiceData): Promise<void | 
   }
 };
 
-const deleteById = async (id: string): Promise<void | Error> => {
+const deleteById = async (id: string | number): Promise<void | Error> => {
   try {
     await Api.delete(`/ordem/${id}`);
   } catch (error) {
