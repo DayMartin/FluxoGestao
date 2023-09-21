@@ -24,10 +24,9 @@ export const OrdemListagem: React.FC = () => {
       return searchParams.get('busca') || '';
     }, [searchParams]);
 
-
 useEffect(() => {
   setIsLoading(true);
-
+  
   debounce(() => {
     OrdemService.getAll(1, busca)
       .then((result) => {
@@ -74,6 +73,7 @@ useEffect(() => {
       .catch((error) => {
         setIsLoading(false);
       });
+
   });
 }, [busca]);
     return (
