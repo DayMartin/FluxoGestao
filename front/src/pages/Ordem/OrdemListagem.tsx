@@ -20,58 +20,81 @@ export const OrdemListagem: React.FC = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [totalCount, setTotalCount] = useState(0);
 
+    const [shouldClearList, setShouldClearList] = useState(false);
+
+
     const busca = useMemo(() => {
       return searchParams.get('busca') || '';
     }, [searchParams]);
 
-    useEffect(() => {
-      setIsLoading(true);
-    
-      debounce(() => {
-        OrdemService.getAll(1, busca)
-          .then((result) => {
-            setIsLoading(false);
-    
-            if (result instanceof Error) {
-              alert(result.message);
-            } else {
-              console.log('Dados recebidos:', result);
-    
-              setTotalCount(result.totalCount);
-    
-              if (Array.isArray(result.data)) {
-                // Mapeamento dos dados recebidos para o formato IOrdemServiceData
-                const newData = result.data.map((item) => ({
-                  _id: item._id,
-                  ordemId: item.ordemId,
-                  solicitante: item.solicitante,
-                  setor: item.setor,
-                  sala: item.sala,
-                  forno: item.forno,
-                  cabeceira: item.cabeceira,
-                  status: item.status,
-                  services: item.services,
-                  comments: item.comments,
-                  urgencia: item.urgencia,
-                }));
-    
-                // LIMPAR A LISTA DE ROWS E ADICIONAR OS NOVOS DADOS
-                console.log('Limpando a lista');
-                setRows(newData);
-              } else if (typeof result.data === 'object') {
-                // SE result.data for um objeto, adicione apenas esse objeto à lista
-                console.log('Limpando a lista');
-                setRows([result.data]);
-              } else {
-                console.error('Dados recebidos não são um array:', result.data);
-                // LIMPAR A LISTA DE ROWS SE O RESULTADO NÃO FOR UM ARRAY OU OBJETO
-                console.log('Limpando a lista');
-                setRows([]);
-}
-            }
-          });
+// ... (código anterior)
+
+// ... (código anterior)
+
+useEffect(() => {
+  setIsLoading(true);
+
+  debounce(() => {
+    OrdemService.getAll(1, busca)
+      .then((result) => {
+        setIsLoading(false);
+
+        if (result instanceof Error) {
+          console.error('Erro na chamada da API:', result);
+          alert(result.message);
+          // Limpe a lista aqui se ocorrer um erro
+          setRows([]);
+        } else {
+          console.log('Dados recebidos:', result);
+
+          setTotalCount(result.totalCount);
+
+          if (Array.isArray(result.data)) {
+            // Mapeamento dos dados recebidos para o formato IOrdemServiceData
+            const newData = result.data.map((item) => ({
+              _id: item._id,
+              ordemId: item.ordemId,
+              solicitante: item.solicitante,
+              setor: item.setor,
+              sala: item.sala,
+              forno: item.forno,
+              cabeceira: item.cabeceira,
+              status: item.status,
+              services: item.services,
+              comments: item.comments,
+              urgencia: item.urgencia,
+            }));
+
+            // Se houver dados, atualize a lista
+            setRows(newData);
+          } else if (typeof result.data === 'object') {
+            // SE result.data for um objeto, adicione apenas esse objeto à lista
+            setRows([result.data]);
+          } else {
+            console.error('Dados recebidos não são um array:', result.data);
+            // LIMPAR A LISTA DE ROWS SE O RESULTADO NÃO FOR UM ARRAY OU OBJETO
+            setRows([]);
+            setTotalCount(0); // Define a contagem como zero
+
+            // Exibir mensagem ao usuário informando que a busca não retornou resultados
+            alert('Nenhum resultado encontrado. Você pode tentar novamente.');
+
+            // Como alternativa, você pode exibir uma mensagem na interface de usuário para permitir que o usuário atualize manualmente a página.
+          }
+        }
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        console.error('Erro na chamada da API:', error);
+
+        // Lidar com outros erros da chamada da API aqui, se necessário
       });
-    }, [busca]);
+  });
+}, [busca]);
+
+// ... (código posterior)
+
+    
   
     return (
         <LayoutBaseDePagina 
@@ -99,22 +122,24 @@ export const OrdemListagem: React.FC = () => {
           </TableHead>
 
           <TableBody>
-          {rows.map((row, index) => (
-                <TableRow key={index}>
-                <TableCell>Ações</TableCell>
-                <TableCell>{row.ordemId}</TableCell>
-                <TableCell>{row.solicitante}</TableCell>
-                <TableCell>{row.sala}</TableCell>
-                <TableCell>{row.forno}</TableCell>
-                <TableCell>{row.cabeceira}</TableCell>
-                <TableCell>{row.status}</TableCell>
+            {totalCount === 0 && !isLoading ? (
+              <TableRow>
+                <TableCell colSpan={7}>Nenhum resultado encontrado.</TableCell>
               </TableRow>
-            ))}
+            ) : (
+              rows.map((row, index) => (
+                <TableRow key={index}>
+                  <TableCell>Ações</TableCell>
+                  <TableCell>{row.ordemId}</TableCell>
+                  <TableCell>{row.solicitante}</TableCell>
+                  <TableCell>{row.sala}</TableCell>
+                  <TableCell>{row.forno}</TableCell>
+                  <TableCell>{row.cabeceira}</TableCell>
+                  <TableCell>{row.status}</TableCell>
+                </TableRow>
+              ))
+            )}
           </TableBody>
-
-          {totalCount === 0 && !isLoading && (
-            <caption>{Environment.LISTAGEM_VAZIA}</caption>
-          )}
 
           <TableFooter>
               <TableRow>
