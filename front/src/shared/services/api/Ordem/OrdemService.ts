@@ -70,7 +70,6 @@ const getAll = async (page = 1, filter = '', ordemId = ''): Promise<TOrdemComTot
     }
     return new Error('Erro ao listar os registros.');
   } catch (error) {
-    console.error(error);
     return new Error((error as { message: string }).message || 'Erro ao listar os registros.');
   }
 };

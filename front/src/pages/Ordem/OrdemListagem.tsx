@@ -19,17 +19,11 @@ export const OrdemListagem: React.FC = () => {
     const [rows, setRows] = useState<IOrdemServiceData[]>([]);
     const [isLoading, setIsLoading] = useState(true);
     const [totalCount, setTotalCount] = useState(0);
-
-    const [shouldClearList, setShouldClearList] = useState(false);
-
-
+    
     const busca = useMemo(() => {
       return searchParams.get('busca') || '';
     }, [searchParams]);
 
-// ... (código anterior)
-
-// ... (código anterior)
 
 useEffect(() => {
   setIsLoading(true);
@@ -40,7 +34,6 @@ useEffect(() => {
         setIsLoading(false);
 
         if (result instanceof Error) {
-          console.error('Erro na chamada da API:', result);
           alert(result.message);
           // Limpe a lista aqui se ocorrer um erro
           setRows([]);
@@ -74,28 +67,15 @@ useEffect(() => {
             console.error('Dados recebidos não são um array:', result.data);
             // LIMPAR A LISTA DE ROWS SE O RESULTADO NÃO FOR UM ARRAY OU OBJETO
             setRows([]);
-            setTotalCount(0); // Define a contagem como zero
-
-            // Exibir mensagem ao usuário informando que a busca não retornou resultados
-            alert('Nenhum resultado encontrado. Você pode tentar novamente.');
-
-            // Como alternativa, você pode exibir uma mensagem na interface de usuário para permitir que o usuário atualize manualmente a página.
+            setTotalCount(0);
           }
         }
       })
       .catch((error) => {
         setIsLoading(false);
-        console.error('Erro na chamada da API:', error);
-
-        // Lidar com outros erros da chamada da API aqui, se necessário
       });
   });
 }, [busca]);
-
-// ... (código posterior)
-
-    
-  
     return (
         <LayoutBaseDePagina 
         titulo='Listagem de Ordem de serviços' 
