@@ -75,7 +75,7 @@ export interface IApiResponse {
 
 const getAll = async (page = 1, filter = '', ordemId = ''): Promise<IApiResponse | Error> => {
   try {
-    const urlRelativa = `http://localhost:3048/api/ordem?page=${page}&limit=5&filter=${filter}&ordemId=${ordemId}`;
+    const urlRelativa = `${Environment.URL_BASE}/ordem?page=${page}&limit=5&filter=${filter}&ordemId=${ordemId}`;
         const { data } = await Api.get<IApiResponse>(urlRelativa);
 
     if (data) {
