@@ -78,24 +78,31 @@ export const OrdemListagem: React.FC = () => {
 
           <TableBody>
           {isLoading ? (
-          <TableRow>
-          </TableRow>
-        ) : (
-          rows.map(row => (
-            <TableRow key={row.ordemId}>
-              <TableCell>Ações</TableCell>
-              <TableCell>{row.ordemId}</TableCell>
-              <TableCell>{row.solicitante}</TableCell>
-              <TableCell>{row.sala}</TableCell>
-              <TableCell>{row.forno}</TableCell>
-              <TableCell>{row.cabeceira}</TableCell>
-              <TableCell>{row.status}</TableCell>
-            </TableRow>
-          ))
-        )}
+              <TableRow>
+              </TableRow>
+            ) : (
+              rows.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={7}>
+                    {Environment.LISTAGEM_VAZIA}
+                  </TableCell>
+                </TableRow>
+              ) : (
+                rows.map(row => (
+                  <TableRow key={row.ordemId}>
+                    <TableCell>Ações</TableCell>
+                    <TableCell>{row.ordemId}</TableCell>
+                    <TableCell>{row.solicitante}</TableCell>
+                    <TableCell>{row.sala}</TableCell>
+                    <TableCell>{row.forno}</TableCell>
+                    <TableCell>{row.cabeceira}</TableCell>
+                    <TableCell>{row.status}</TableCell>
+                  </TableRow>
+                ))
+              )
+            )}
 
         </TableBody>
-
           <TableFooter>
             <TableRow>
               <TableCell colSpan={7}>
