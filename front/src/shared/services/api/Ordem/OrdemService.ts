@@ -1,6 +1,8 @@
 import { Environment } from '../../../environment';
 import { Api } from '../axios-config';
 
+
+
 export interface IOrdemServiceData {
   _id: string;
   ordemId: number;
@@ -26,6 +28,8 @@ export interface IOrdemServiceData {
   urgencia: string;
 }
 
+
+
 export interface IDetalheOrdem {
   ordemId: number;
   _id: string;
@@ -49,6 +53,7 @@ export interface IDetalheOrdem {
     description: string;
   }[];
   urgencia: string;
+  
 }
 
 export type TOrdemComTotalCount = {
@@ -56,27 +61,37 @@ export type TOrdemComTotalCount = {
   totalCount: number;
 };
 
-const getAll = async (page = 1, filter = '', ordemId = ''): Promise<TOrdemComTotalCount | Error> => {
-  try {
-    const urlRelativa = `${Environment.URL_BASE}/ordem/${filter}?page=${page}&ordemId=${ordemId}`;
 
-    const { data, headers } = await Api.get(urlRelativa);
+export interface IApiResponse {
+  ordem: IOrdemServiceData[]; 
+  pagination: {
+    totalOrdem: number;
+    pageCount: number;
+    next?: { page: number };
+    prev?: { page: number };
+  };
+}
+
+
+const getAll = async (page = 1, filter = '', ordemId = ''): Promise<IApiResponse | Error> => {
+  try {
+    const urlRelativa = `http://localhost:3048/api/ordem?page=${page}&limit=5&filter=${filter}&ordemId=${ordemId}`;
+        const { data } = await Api.get<IApiResponse>(urlRelativa);
 
     if (data) {
-      return {
-        data,
-        totalCount: Number(headers['x-total-count'] || Environment.LIMITE_DE_LINHAS),
-      };
+      return data; 
     }
+
     return new Error('Erro ao listar os registros.');
   } catch (error) {
     return new Error((error as { message: string }).message || 'Erro ao listar os registros.');
   }
 };
 
-const getById = async (id: string): Promise<IDetalheOrdem | Error> => {
+
+const getById = async (ordemId: string): Promise<IDetalheOrdem | Error> => {
   try {
-    const { data } = await Api.get(`/ordem/${id}`);
+    const { data } = await Api.get(`/ordem/${ordemId}`);
 
     if (data) {
       return data;
