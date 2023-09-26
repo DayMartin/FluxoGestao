@@ -40,12 +40,9 @@ const ordemController = {
         const skip = (page - 1) * limit;
     
         const filter = req.query.filter || '';
-    
-        // Ajuste para buscar o ordemId usando o filtro
-        const query = OrdemModel.find();
+            const query = OrdemModel.find();
     
         if (filter) {
-          // Use o filtro para buscar o ordemId
           query.where({ ordemId: parseInt(filter) });
         }
     
@@ -102,27 +99,23 @@ const ordemController = {
       get: async (req, res) => {
         try {
             const idParam = req.params.id;
-            const busca = req.query.busca; // Adicione a busca por ID
+            const busca = req.query.busca; 
             
             let ordem;
     
             if (isNaN(idParam) && !busca) {
-                // Se o parâmetro não for um número e não houver busca, retorna um erro
                 res.status(400).json({ msg: "Parâmetro de busca inválido" });
                 return;
             } 
     
             if (isNaN(idParam) && busca) {
-                // Se o parâmetro não for um número, mas houver busca, busca por outros campos
                 ordem = await OrdemModel.findOne({ 
                     $or: [
-                        { solicitante: { $regex: new RegExp(busca, "i") } }, // Busca por solicitante (case-insensitive)
-                        { setor: { $regex: new RegExp(busca, "i") } }, // Busca por setor (case-insensitive)
-                        // Adicione outros campos que deseja buscar aqui
+                        { solicitante: { $regex: new RegExp(busca, "i") } }, 
+                        { setor: { $regex: new RegExp(busca, "i") } }, 
                     ]
                 });
             } else {
-                // Se o parâmetro for um número, busca pelo ID personalizado
                 ordem = await OrdemModel.findOne({ ordemId: parseInt(idParam) });
             }
     

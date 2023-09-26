@@ -73,13 +73,13 @@ export interface IApiResponse {
 }
 
 
-const getAll = async (page = 1, filter = '', ordemId = ''): Promise<IApiResponse | Error> => {
+const getAll = async (options: { page?: number; limit?: number; filter?: string; ordemId?: string }): Promise<IApiResponse | Error> => {
   try {
-    const urlRelativa = `${Environment.URL_BASE}/ordem?page=${page}&limit=5&filter=${filter}&ordemId=${ordemId}`;
-        const { data } = await Api.get<IApiResponse>(urlRelativa);
+    const urlRelativa = `${Environment.URL_BASE}/ordem?page=${options.page || 1}&limit=${options.limit || Environment.LIMITE_DE_LINHAS}&filter=${options.filter || ''}&ordemId=${options.ordemId || ''}`;
+    const { data } = await Api.get<IApiResponse>(urlRelativa);
 
     if (data) {
-      return data; 
+      return data;
     }
 
     return new Error('Erro ao listar os registros.');
