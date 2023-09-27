@@ -1,6 +1,3 @@
-def dockerappFrontend
-def dockerappBackend
-
 pipeline {
     agent any
     environment {
@@ -11,16 +8,11 @@ pipeline {
     stages {
         stage('SonarQube Analysis') {
             steps {
-                node {
-                stage('SCM') {
-                    checkout scm
-                }
-                stage('SonarQube Analysis') {
+                script {
                     def scannerHome = tool 'SonarScanner';
-                    withSonarQubeEnv() {
-                    sh "${scannerHome}/bin/sonar-scanner"
+                    withSonarQubeEnv('tizzateste') {
+                        sh "${scannerHome}/bin/sonar-scanner"
                     }
-                }
                 }
             }
         }
