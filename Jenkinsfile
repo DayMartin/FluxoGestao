@@ -48,11 +48,21 @@ pipeline {
                 script {
                     def workspacePath = pwd()
 
-                    // FRONT Container
+                    def existingFrontendContainer = sh(script: 'docker ps -aqf name=osconectacont-frontend', returnStatus: true)
+                    if (existingFrontendContainer == 0) {
+                        sh 'docker stop osconectacont-frontend'
+                        sh 'docker rm osconectacont-frontend'
+                    }
                     def frontendContainer = docker.image("734852411649.dkr.ecr.us-east-1.amazonaws.com/front:${env.BUILD_ID}".toLowerCase()).run("-p 3000:3000 --name osconectacont-frontend")
 
-                    // BACKEND Container
+                   
+                    def existingBackendContainer = sh(script: 'docker ps -aqf name=osconectacont-backend', returnStatus: true)
+                    if (existingBackendContainer == 0) {
+                        sh 'docker stop osconectacont-backend'
+                        sh 'docker rm osconectacont-backend'
+                    } 
                     def backendContainer = docker.image("734852411649.dkr.ecr.us-east-1.amazonaws.com/testestizza:${env.BUILD_ID}".toLowerCase()).run("-p 3048:3048 --name osconectacont-backend")
+                    
                 }
             }
         }
