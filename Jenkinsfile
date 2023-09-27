@@ -12,13 +12,15 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 node {
-                    stage('SCM') {
-                        checkout scm
-                    }
+                stage('SCM') {
+                    checkout scm
+                }
+                stage('SonarQube Analysis') {
                     def scannerHome = tool 'SonarScanner';
                     withSonarQubeEnv() {
-                        sh "${scannerHome}/bin/sonar-scanner"
+                    sh "${scannerHome}/bin/sonar-scanner"
                     }
+                }
                 }
             }
         }
@@ -44,7 +46,7 @@ pipeline {
         stage('Push images to ECR') {
             steps {
                 script {
-                    withAWS(credentials: 'senha-senha', region: 'us-east-1') {
+                    withAWS(credentials: 'AKIA2WGE56EA7MPKXHNO', region: 'us-east-1') {
                         dockerappBackend.push('latest')
                         dockerappBackend.push("${env.BUILD_ID}")
 
