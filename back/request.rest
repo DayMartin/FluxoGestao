@@ -71,7 +71,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3048/api/ordem?page=1&limit=5&filter=17
+GET http://34.207.114.122:3048/api/ordem?page=1&limit=5&filter=17
 
 
 ###
