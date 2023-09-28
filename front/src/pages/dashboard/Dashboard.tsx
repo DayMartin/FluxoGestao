@@ -4,7 +4,7 @@ import { LayoutBaseDePagina } from '../../shared/layouts';
 export const Dashboard = () => {
     return (
         <LayoutBaseDePagina 
-        titulo='Página inicial' 
+        titulo='Página inicials' 
         barraDeFerramentas={(
           <FerramentasDeDetalhe mostrarBotaoSalvarEFechar/>
           )}
