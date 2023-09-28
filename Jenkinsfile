@@ -15,18 +15,23 @@ pipeline {
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    def scannerHome = tool 'SonarScanner'
-                    withSonarQubeEnv('Sonar-Server') {
-                        sh """${scannerHome}/bin/sonar-scanner \
-                            -D sonar.projectVersion=1.0-SNAPSHOT \
-                            -D sonar.login=admin \
-                            -D sonar.password=Piquoku6 \
-                            -D sonar.projectBaseDir=/var/lib/jenkins/workspace/Pipeline-Os-testes/ \
-                            -D sonar.projectKey=tizzateste \
-                            -D sonar.sourceEncoding=UTF-8 \
-                            -D sonar.language=java \
-                            -D sonar.sources=back/,front/
-                            -D sonar.host.url=http://18.209.65.230:9000/"""
+                        def scannerHome = tool 'SonarScanner'
+                        withSonarQubeEnv('Sonar-Server') {
+                        // Defina as propriedades do SonarQube em SONAR_SCANNER_OPTS
+                        def sonarScannerOpts = "-Dsonar.projectVersion=1.0-SNAPSHOT " +
+                                       "-Dsonar.login=admin " +
+                                       "-Dsonar.password=Piquoku6 " +
+                                       "-Dsonar.projectBaseDir=/var/lib/jenkins/workspace/Pipeline-Os-testes/ " +
+                                       "-Dsonar.projectKey=tizzateste " +
+                                       "-Dsonar.sourceEncoding=UTF-8 " +
+                                       "-Dsonar.language=java " +
+                                       "-Dsonar.sources=back/,front/ " +
+                                       "-Dsonar.tests=conecta/src/test " +
+                                       "-Dsonar.host.url=http://18.209.65.230:9000/"
+                        env.SONAR_SCANNER_OPTS = sonarScannerOpts
+                
+                        // Execute o comando SonarQube
+                        sh """${scannerHome}/bin/sonar-scanner"""
                     }
                 }
             }
