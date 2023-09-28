@@ -41,23 +41,6 @@ pipeline {
             }
         }
 
-        // Restante da sua pipeline continua aqui...
-
-    }
-}
-
-Neste exemplo, o estágio 'SonarQube Analysis' foi adicionado ao início da pipeline. Isso garantirá que a análise do SonarQube seja executada antes de qualquer outra etapa da sua pipeline Jenkins. Certifique-se de ajustar os caminhos e configurações específicas do SonarQube de acordo com as necessidades do seu projeto.
-
-
-        stage('Authenticate with ECR') {
-            steps {
-                script {
-                    def ecrAuth = sh(script: "aws ecr get-login-password --region ${AWS_DEFAULT_REGION}", returnStdout: true).trim()
-                    sh "docker login -u AWS -p ${ecrAuth} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
-                }
-            }
-        }
-
         stage('Build Images') {
             steps {
                 script {
