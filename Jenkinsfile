@@ -24,8 +24,8 @@ pipeline {
                             -D sonar.projectBaseDir=/var/lib/jenkins/workspace/Pipeline-Os-testes/ \
                             -D sonar.projectKey=tizzateste \
                             -D sonar.sourceEncoding=UTF-8 \
+                            -D sonar.language=java \
                             -D sonar.sources=back/,front/
-                            -D sonar.sources=front/ \
                             -D sonar.host.url=http://18.209.65.230:9000/"""
                     }
                 }
@@ -68,20 +68,19 @@ pipeline {
             steps {
                 script {
                     def workspacePath = pwd()
-                    /*
+
                     def existingFrontendContainer = sh(script: 'docker ps -aqf name=osconectacont-frontend', returnStatus: true)
                     if (existingFrontendContainer == 0) {
                         sh 'docker stop osconectacont-frontend'
                         sh 'docker rm osconectacont-frontend'
-                    } */
+                    }
                     def frontendContainer = docker.image("734852411649.dkr.ecr.us-east-1.amazonaws.com/front:${env.BUILD_ID}".toLowerCase()).run("-p 3000:3000 --name osconectacont-frontend")
 
-                    /*
                     def existingBackendContainer = sh(script: 'docker ps -aqf name=osconectacont-backend', returnStatus: true)
                     if (existingBackendContainer == 0) {
                         sh 'docker stop osconectacont-backend'
                         sh 'docker rm osconectacont-backend'
-                    } */
+                    } 
                     def backendContainer = docker.image("734852411649.dkr.ecr.us-east-1.amazonaws.com/testestizza:${env.BUILD_ID}".toLowerCase()).run("-p 3048:3048 --name osconectacont-backend")
                 }
             }
