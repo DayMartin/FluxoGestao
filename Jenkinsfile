@@ -6,16 +6,48 @@ pipeline {
     }
 
     stages {
+
+        stage('clonning from GIT'){
+        checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/DayMartin/conecta.git']])
+        }
+
         stage('SonarQube Analysis') {
             steps {
                 script {
-                    def scannerHome = tool 'SonarScanner';
-                    withSonarQubeEnv('Sonar-Token') {
-                        sh "${scannerHome}/bin/sonar-scanner"
+                    def scannerHome = tool 'SonarScanner'
+                    withSonarQubeEnv('Sonar-Server') {
+                        sh """${scannerHome}/bin/sonar-scanner \
+                            -D sonar.projectVersion=1.0-SNAPSHOT \
+                            -D sonar.login=admin \
+                            -D sonar.password=Piquoku6 \
+                            -D sonar.projectBaseDir=/var/lib/jenkins/workspace/Pipeline-Os-testes/ \
+                            -D sonar.projectKey=tizzateste \
+                            -D sonar.sourceEncoding=UTF-8 \
+                            -D sonar.language=java \
+                            -D sonar.sources=conecta/back,conecta/front \
+                            -D sonar.tests=conecta/src/test \
+                            -D sonar.host.url=http://18.209.65.230:9000/"""
                     }
                 }
             }
         }
+
+        stage('Authenticate with ECR') {
+            steps {
+                script {
+                    def ecrAuth = sh(script: "aws ecr get-login-password --region ${AWS_DEFAULT_REGION}", returnStdout: true).trim()
+                    sh "docker login -u AWS -p ${ecrAuth} ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+                }
+            }
+        }
+
+        // Restante da sua pipeline continua aqui...
+
+    }
+}
+
+Neste exemplo, o estágio 'SonarQube Analysis' foi adicionado ao início da pipeline. Isso garantirá que a análise do SonarQube seja executada antes de qualquer outra etapa da sua pipeline Jenkins. Certifique-se de ajustar os caminhos e configurações específicas do SonarQube de acordo com as necessidades do seu projeto.
+
 
         stage('Authenticate with ECR') {
             steps {
