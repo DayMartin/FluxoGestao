@@ -4,33 +4,26 @@ const { Schema } = mongoose;
 
 const usersSchema = new Schema ({
     
-    name: {
+      name: {
         type: String,
-        required: true,
       },
       matricula: {
         type: String,
-        required: true,
       },
       setor: {
         type: String,
-        required: true,
       },
       turno: {
         type: String,
-        required: true,
       },
       funcao: {
         type: String,
-        required: true,
       },
       email: {
         type: String,
-        required: true,
       },
       senha: {
         type: String,
-        required: true,
       },
     }, { timestamps: true }
     );

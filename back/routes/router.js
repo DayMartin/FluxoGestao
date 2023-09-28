@@ -24,3 +24,20 @@ const usersRouter = require("./users");
 router.use("/", usersRouter);
 
 module.exports = router;
+
+
+// auth routes
+
+const authRouter = require("./auth");
+
+router.use("/", authRouter);
+
+module.exports = router;
+
+// auth routes
+
+const usersPrivateRouter = require("./usersPrivate");
+
+router.use("/", usersPrivateRouter);
+
+module.exports = router;

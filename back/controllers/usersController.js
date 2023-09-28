@@ -1,27 +1,60 @@
 const { Users: UsersModel } = require("../models/Users");
 const { Users } = require("../models/Users");
 
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcrypt");
+
 const usersController = {
     create: async (req, res) => {
-      try {
-        const users = new Users({
-          name: req.body.name,
-          matricula: req.body.matricula,
-          setor: req.body.setor,
-          turno: req.body.turno,
-          funcao: req.body.funcao,
-          email: req.body.email,
-          senha: req.body.senha,
-        });
-  
-        const response = await users.save();
-  
-        res.status(201).json({ id: response._id, msg: "Usuário criado com sucesso" });
-        } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: "Erro interno do servidor" });
-        }
-    },
+        try {
+            const { name, email, senha, matricula, setor, funcao } = req.body;
+    
+            // validations
+            if (!name) {
+                return res.status(422).json({ msg: "O nome é obrigatório!" });
+            }
+            if (!matricula) {
+                return res.status(422).json({ msg: "A matricula é obrigatória!" });
+            }
+            if (!setor) {
+                return res.status(422).json({ msg: "O setor é obrigatório!" });
+            }
+            if (!funcao) {
+                return res.status(422).json({ msg: "A função é obrigatória!" });
+            }
+            if (!email) {
+                return res.status(422).json({ msg: "O email é obrigatório!" });
+            }
+            if (!senha) {
+                return res.status(422).json({ msg: "A senha é obrigatória!" });
+            }
+            // check if user exists
+            const usersExists = await Users.findOne({ email });
+            if (usersExists) {
+                return res.status(422).json({ msg: "Por favor, utilize outro e-mail!" });
+            }
+
+              // create password
+            const salt = await bcrypt.genSalt(12);
+            const passwordHash = await bcrypt.hash(senha, salt);
+
+            const users = new Users({
+              name,
+              matricula,
+              setor,
+              turno: req.body.turno,
+              funcao,
+              email,
+              senha: passwordHash,
+            });
+
+            const response = await users.save();
+            res.status(201).json({ id: response._id, msg: "Usuário criado com sucesso" });
+          } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: "Erro interno do servidor" });
+          }
+        },
     getAll: async (req, res) => {
         try {
             const users = await UsersModel.find();
