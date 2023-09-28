@@ -1,14 +1,15 @@
 pipeline {
     agent any
     environment {
-        AWS_ACCOUNT_ID = '734852411649'  
-        AWS_DEFAULT_REGION = 'us-east-1' 
+        AWS_ACCOUNT_ID = '734852411649'
+        AWS_DEFAULT_REGION = 'us-east-1'
     }
 
     stages {
-
-        stage('clonning from GIT'){
-        checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/DayMartin/conecta.git']])
+        stage('Cloning from GIT') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/DayMartin/conecta.git']]])
+            }
         }
 
         stage('SonarQube Analysis') {
