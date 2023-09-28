@@ -25,7 +25,7 @@ pipeline {
                             -D sonar.projectKey=tizzateste \
                             -D sonar.sourceEncoding=UTF-8 \
                             -D sonar.language=java \
-                            -D sonar.sources=back/ \
+                            -D sonar.sources=*/ \
                             -D sonar.host.url=http://18.209.65.230:9000/"""
                     }
                 }
