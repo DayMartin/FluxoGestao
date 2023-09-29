@@ -26,7 +26,7 @@ pipeline {
                             -D sonar.sourceEncoding=UTF-8 \
                             -D sonar.language=java \
                             -D sonar.sources=back/,front/ \
-                            -D sonar.host.url=http://18.209.65.230:9000/"""
+                            -D sonar.host.url=http://52.71.23.116:9000/"""
                     }
                 }
             }
