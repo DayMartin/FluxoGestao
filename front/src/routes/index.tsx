@@ -18,6 +18,7 @@ export const AppRoutes = () => {
         label: 'Página inicial',
       },
 
+      /*
       {
         icon: 'people',
         path: "/user",
@@ -28,7 +29,7 @@ export const AppRoutes = () => {
         icon: 'article',
         path: "/ordem",
         label: 'Formulário de serviço',
-      },
+      }, */
 
       {
         icon: 'assignment',
@@ -36,11 +37,12 @@ export const AppRoutes = () => {
         label: 'Listagem de serviços',
       },
 
+      /*
       {
         icon: 'assignment',
         path: "/usersListagem",
         label: 'Listagem de Usuarios',
-      },
+      }, */
       
     ]);
   }, []);

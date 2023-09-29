@@ -6,6 +6,7 @@ app.use(cors());
 
 app.use(express.json());
 
+
 // DB Connection
 
 const conn = require("./db/conn");
