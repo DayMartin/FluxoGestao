@@ -1,6 +1,8 @@
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import {
+  Icon,
+  IconButton,
   LinearProgress,
   Pagination,
   Paper,
@@ -22,6 +24,7 @@ import { useDebounce } from '../../shared/hooks';
 export const OrdemListagem: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { debounce } = useDebounce();
+  const navigate = useNavigate();
 
   const [rows, setRows] = useState<IApiResponse['ordem']>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -68,26 +71,51 @@ export const OrdemListagem: React.FC = () => {
     setCurrentPage(newPage);
   };
 
+
+  const handleDelete = (id: string) => {
+    if (confirm('Realmente deseja apagar?')) {
+      OrdemService.deleteById(id)
+        .then(result => {
+          if (result instanceof Error) {
+            alert(result.message);
+          } else {
+            setRows(oldRows => [
+              ...oldRows.filter(oldRow => oldRow._id !== id),
+            ]);
+            alert('Registro apagado com sucesso!');
+          }
+        });
+    }
+  };
+
   return (
-    <LayoutBaseDePagina titulo='Listagem de Ordem de serviços'>
+    <LayoutBaseDePagina titulo='Listagem de Ordem de serviços'
+    
+    
+    >
       <BarraDeFerramentas
         mostrarInputBusca
         textoBotaoNovo='Nova'
         textoDabusca={busca}
         aoMudarTextoDeBusca={texto => setSearchParams({ busca: texto }, { replace: true })}
+        aoClicarEmNovo={() => navigate('/ordemDetalhe/detalhe/nova')}
       />
+
+
+      
 
       <TableContainer component={Paper} variant="outlined" sx={{ m: 1, width: 'auto' }}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Ações</TableCell>
+              
               <TableCell>Id</TableCell>
               <TableCell>Solicitante</TableCell>
               <TableCell>Sala</TableCell>
               <TableCell>Forno</TableCell>
               <TableCell>Cabeceira</TableCell>
               <TableCell>Status</TableCell>
+              <TableCell width={100}>Ações</TableCell>
             </TableRow>
           </TableHead>
 
@@ -108,7 +136,6 @@ export const OrdemListagem: React.FC = () => {
               ) : (
                 rows.map(row => (
                   <TableRow key={row.ordemId}>
-                    <TableCell>Ações</TableCell>
 
                     <TableCell>{row.ordemId}</TableCell>
                     <TableCell>{row.solicitante}</TableCell>
@@ -116,6 +143,14 @@ export const OrdemListagem: React.FC = () => {
                     <TableCell>{row.forno}</TableCell>
                     <TableCell>{row.cabeceira}</TableCell>
                     <TableCell>{row.status}</TableCell>
+                    <TableCell>
+                    <IconButton size="small" onClick={() => handleDelete(row._id)}>
+                    <Icon>delete</Icon>
+                  </IconButton>
+                  <IconButton size="small" onClick={() => navigate(`/ordemDetalhe/detalhe/${row._id}`)}>
+                    <Icon>edit</Icon>
+                  </IconButton>
+                    </TableCell>
                   </TableRow>
                 ))
               )

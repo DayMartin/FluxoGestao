@@ -4,7 +4,7 @@ import { useDrawerContext } from '../shared/contexts';
 import { useEffect } from 'react';
 
 import {
-  Dashboard, Ordem, PessoasListagem, Users, OrdemListagem
+  Dashboard, Ordem, PessoasListagem, Users, OrdemListagem, OrdemDetalhe
 } from '../pages';
 
 export const AppRoutes = () => {
@@ -50,10 +50,15 @@ export const AppRoutes = () => {
   return (
     <Routes>
     <Route path="/pagina-inicial" element={<Dashboard />} />
+
     <Route path="/user" element={<Users />} />
-    <Route path="/ordem" element={<Ordem />} />
-    <Route path="/ordemListagem" element={<OrdemListagem />} />
     <Route path="/usersListagem" element={<PessoasListagem />} />
+
+
+    <Route path="/ordemListagem" element={<OrdemListagem />} />
+    <Route path="/ordemDetalhe/detalhe/:_id" element={<OrdemDetalhe/>} />
+
+
 
       <Route path="*" element={<Navigate to="/pagina-inicial" />} />
     </Routes>
