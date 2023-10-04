@@ -25,15 +25,15 @@ export interface IOrdemServiceData {
     description: string;
   }[];
   urgencia: string;
-  
+
   // Add an index signature to allow indexing by string
   [key: string]: any;
 }
 
 export const OrdemForms = () => {
   const [ordemData, setOrdemData] = useState<IOrdemServiceData>({
-    ordemId: NaN, 
-    _id: "" ,
+    ordemId: NaN,
+    _id: "",
     solicitante: "",
     setor: "",
     sala: NaN,
@@ -77,6 +77,26 @@ export const OrdemForms = () => {
     }
   };
 
+  const handleAddService = () => {
+    // Crie um novo serviço vazio e adicione-o à lista de serviços
+    const newService = {
+      name: "",
+      description: "",
+      status: "",
+      comments: [
+        {
+          usuario: "",
+          description: "",
+        },
+      ],
+    };
+
+    setOrdemData((prevState) => ({
+      ...prevState,
+      services: [...prevState.services, newService],
+    }));
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -93,22 +113,26 @@ export const OrdemForms = () => {
 
   return (
     <Box
-      height={theme.spacing(60)}
       marginX={1}
       padding={1}
-      paddingX={2}
+      paddingX={8}
       display={"flex"}
-      gap={1}
+      gap={2}
       alignItems={"center"}
       component={Paper}
+
     >
       <form onSubmit={handleSubmit}>
+        <h4> Informações gerais </h4>
+
         <TextField
           type="text"
           name="title"
           placeholder="Título"
           onChange={(event) => handleChange(event, "title")}
           required
+          margin="normal"
+          style={{ marginRight: '16px' }}
         />
 
         <TextField
@@ -117,6 +141,8 @@ export const OrdemForms = () => {
           placeholder="Solicitante"
           onChange={(event) => handleChange(event, "solicitante")}
           required
+          margin="normal"
+          style={{ marginRight: '16px' }}
         />
 
         <TextField
@@ -125,6 +151,8 @@ export const OrdemForms = () => {
           placeholder="setor"
           onChange={(event) => handleChange(event, "setor")}
           required
+          margin="normal"
+          style={{ marginRight: '16px' }}
         />
 
         <TextField
@@ -133,7 +161,10 @@ export const OrdemForms = () => {
           placeholder="sala"
           onChange={(event) => handleChange(event, "sala")}
           required
+          margin="normal"
+          style={{ marginRight: '16px' }}
         />
+        <br/>
 
         <TextField
           type="number"
@@ -141,6 +172,8 @@ export const OrdemForms = () => {
           placeholder="forno"
           onChange={(event) => handleChange(event, "forno")}
           required
+          margin="normal"
+          style={{ marginRight: '16px' }}
         />
 
         <TextField
@@ -149,6 +182,8 @@ export const OrdemForms = () => {
           placeholder="cabeceira"
           onChange={(event) => handleChange(event, "cabeceira")}
           required
+          margin="normal"
+          style={{ marginRight: '16px' }}
         />
 
         <TextField
@@ -157,6 +192,8 @@ export const OrdemForms = () => {
           placeholder="status"
           onChange={(event) => handleChange(event, "status")}
           required
+          margin="normal"
+          style={{ marginRight: '16px' }}
         />
 
         <TextField
@@ -165,11 +202,12 @@ export const OrdemForms = () => {
           placeholder="estadoatual"
           onChange={(event) => handleChange(event, "estadoatual")}
           required
+          margin="normal"
+          style={{ marginRight: '16px' }}
         />
 
-        {/* Add similar text fields for other fields in IOrdemServiceData */}
-        
-        {/* Services and Comments */}
+        <h4> Serviços a serem realizados </h4>
+        {/* Services e Comments */}
         {ordemData.services.map((service, index) => (
           <div key={`service-${index}`}>
             <TextField
@@ -178,6 +216,8 @@ export const OrdemForms = () => {
               placeholder="Nome do serviço"
               onChange={(event) => handleChange(event, "services", index)}
               required
+              margin="normal"
+              style={{ marginRight: '16px' }}
             />
             <TextField
               type="text"
@@ -185,6 +225,8 @@ export const OrdemForms = () => {
               placeholder="Descrição do serviço"
               onChange={(event) => handleChange(event, "services", index)}
               required
+              margin="normal"
+              style={{ marginRight: '16px' }}
             />
             <TextField
               type="text"
@@ -192,18 +234,27 @@ export const OrdemForms = () => {
               placeholder="Status do serviço"
               onChange={(event) => handleChange(event, "services", index)}
               required
+              margin="normal"
+              style={{ marginRight: '16px' }}
             />
           </div>
         ))}
+            {/* Botão para adicionar novo serviço */}
+            <Button onClick={handleAddService}>Adicionar Novo Serviço</Button>
 
+
+        {/* Comentários */}
         {ordemData.comments.map((comment, index) => (
           <div key={`comment-${index}`}>
+            <h4> Comentário </h4>
             <TextField
               type="text"
               name="usuario"
               placeholder="Usuário do comentário"
               onChange={(event) => handleChange(event, "comments", index)}
               required
+              margin="normal"
+              style={{ marginRight: '16px' }}
             />
             <TextField
               type="text"
@@ -211,6 +262,8 @@ export const OrdemForms = () => {
               placeholder="Descrição do comentário"
               onChange={(event) => handleChange(event, "comments", index)}
               required
+              margin="normal"
+              style={{ marginRight: '16px' }}
             />
           </div>
         ))}

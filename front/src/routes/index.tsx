@@ -24,12 +24,12 @@ export const AppRoutes = () => {
         path: "/user",
         label: 'Usuário',
       },
-
+      */
       {
         icon: 'article',
         path: "/ordem",
         label: 'Formulário de serviço',
-      }, */
+      }, 
 
       {
         icon: 'assignment',
@@ -54,7 +54,7 @@ export const AppRoutes = () => {
     <Route path="/user" element={<Users />} />
     <Route path="/usersListagem" element={<PessoasListagem />} />
 
-
+    <Route path="/ordem" element={<Ordem/>} />
     <Route path="/ordemListagem" element={<OrdemListagem />} />
     <Route path="/ordemDetalhe/detalhe/:_id" element={<OrdemDetalhe/>} />
 

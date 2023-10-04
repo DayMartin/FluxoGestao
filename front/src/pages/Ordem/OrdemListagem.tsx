@@ -90,8 +90,7 @@ export const OrdemListagem: React.FC = () => {
 
   return (
     <LayoutBaseDePagina titulo='Listagem de Ordem de serviços'
-    
-    
+
     >
       <BarraDeFerramentas
         mostrarInputBusca
