@@ -2,6 +2,67 @@ import { Box, Button, Paper, TextField, useTheme } from "@mui/material";
 import React, { useState } from "react";
 import { OrdemService, IDetalheOrdem } from "../../services/api/Ordem/OrdemService";
 
+
+import { outlinedInputClasses } from '@mui/material/OutlinedInput';
+
+import { createTheme, ThemeProvider, Theme } from '@mui/material/styles';
+
+const customTheme = (outerTheme: Theme) =>
+  createTheme({
+    palette: {
+      mode: outerTheme.palette.mode,
+    },
+    components: {
+      MuiTextField: {
+        styleOverrides: {
+          root: {
+            '--TextField-brandBorderColor': '#E0E3E7',
+            '--TextField-brandBorderHoverColor': '#B2BAC2',
+            '--TextField-brandBorderFocusedColor': '#6F7E8C',
+            '& label.Mui-focused': {
+              color: 'var(--TextField-brandBorderFocusedColor)',
+            },
+          },
+        },
+      },
+      MuiOutlinedInput: {
+        styleOverrides: {
+          notchedOutline: {
+            borderColor: 'var(--TextField-brandBorderColor)',
+          },
+          root: {
+            [`&:hover .${outlinedInputClasses.notchedOutline}`]: {
+              borderColor: 'var(--TextField-brandBorderHoverColor)',
+            },
+            [`&.Mui-focused .${outlinedInputClasses.notchedOutline}`]: {
+              borderColor: 'var(--TextField-brandBorderFocusedColor)',
+            },
+          },
+        },
+      },
+      MuiFilledInput: {
+        styleOverrides: {
+          root: {
+            '&:before, &:after': {
+              borderBottom: '2px solid var(--TextField-brandBorderColor)',
+            },
+          },
+        },
+      },
+      MuiInput: {
+        styleOverrides: {
+          root: {
+            '&:before': {
+              borderBottom: '2px solid var(--TextField-brandBorderColor)',
+            },
+
+          },
+        },
+      },
+    },
+  });
+
+
 export interface IOrdemServiceData {
   ordemId: number;
   _id: string;
@@ -110,6 +171,7 @@ export const OrdemForms = () => {
   };
 
   const theme = useTheme();
+  const outerTheme = useTheme();
 
   return (
     <Box
@@ -125,117 +187,111 @@ export const OrdemForms = () => {
       <form onSubmit={handleSubmit}>
         <h4> Informações gerais </h4>
 
-        <TextField
+        <ThemeProvider theme={customTheme(outerTheme)}>
+
+        <TextField label="Titulo" 
           type="text"
           name="title"
-          placeholder="Título"
-          onChange={(event) => handleChange(event, "title")}
           required
           margin="normal"
-          style={{ marginRight: '16px' }}
+          style={{ marginRight: '40px' }}
+          onChange={(event) => handleChange(event, "title")}
         />
-
-        <TextField
+          <TextField label="Solicitante" 
           type="text"
           name="title"
-          placeholder="Solicitante"
           onChange={(event) => handleChange(event, "solicitante")}
           required
           margin="normal"
-          style={{ marginRight: '16px' }}
+          style={{ marginRight: '40px' }}
         />
 
-        <TextField
+        <TextField label="Setor" 
           type="text"
           name="title"
-          placeholder="setor"
           onChange={(event) => handleChange(event, "setor")}
           required
           margin="normal"
-          style={{ marginRight: '16px' }}
+          style={{ marginRight: '40px' }}
         />
 
-        <TextField
+        <TextField label="Sala" 
           type="number"
           name="title"
-          placeholder="sala"
           onChange={(event) => handleChange(event, "sala")}
           required
           margin="normal"
-          style={{ marginRight: '16px' }}
+          style={{ marginRight: '40px' }}
         />
         <br/>
 
-        <TextField
+        <TextField label="Forno" 
           type="number"
           name="title"
-          placeholder="forno"
           onChange={(event) => handleChange(event, "forno")}
           required
           margin="normal"
-          style={{ marginRight: '16px' }}
+          style={{ marginRight: '40px' }}
         />
 
-        <TextField
+        <TextField label="Cabeceira" 
           type="text"
           name="title"
-          placeholder="cabeceira"
           onChange={(event) => handleChange(event, "cabeceira")}
           required
           margin="normal"
-          style={{ marginRight: '16px' }}
+          style={{ marginRight: '40px' }}
         />
 
-        <TextField
+        <TextField label="Status" 
           type="text"
           name="title"
-          placeholder="status"
           onChange={(event) => handleChange(event, "status")}
           required
           margin="normal"
-          style={{ marginRight: '16px' }}
+          style={{ marginRight: '40px' }}
         />
 
-        <TextField
+        <TextField label="Setor atual" 
           type="text"
           name="title"
-          placeholder="estadoatual"
           onChange={(event) => handleChange(event, "estadoatual")}
           required
           margin="normal"
-          style={{ marginRight: '16px' }}
+          style={{ marginRight: '40px' }}
         />
+
+     
 
         <h4> Serviços a serem realizados </h4>
         {/* Services e Comments */}
         {ordemData.services.map((service, index) => (
           <div key={`service-${index}`}>
-            <TextField
+
+            
+            <TextField label="Serviço" 
               type="text"
               name="name"
-              placeholder="Nome do serviço"
               onChange={(event) => handleChange(event, "services", index)}
               required
               margin="normal"
-              style={{ marginRight: '16px' }}
+              style={{ marginRight: '40px' }}
             />
-            <TextField
+            <TextField label="Descrição do serviço" 
               type="text"
               name="description"
-              placeholder="Descrição do serviço"
               onChange={(event) => handleChange(event, "services", index)}
               required
               margin="normal"
-              style={{ marginRight: '16px' }}
+              style={{ marginRight: '40px' }}
             />
-            <TextField
+            <TextField label="Status do serviço" 
               type="text"
               name="status"
-              placeholder="Status do serviço"
               onChange={(event) => handleChange(event, "services", index)}
               required
               margin="normal"
-              style={{ marginRight: '16px' }}
+              style={{ marginRight: '40px' }}
             />
           </div>
         ))}
@@ -247,28 +303,28 @@ export const OrdemForms = () => {
         {ordemData.comments.map((comment, index) => (
           <div key={`comment-${index}`}>
             <h4> Comentário </h4>
-            <TextField
+
+            <TextField label="Usuário do comentário"
               type="text"
               name="usuario"
-              placeholder="Usuário do comentário"
               onChange={(event) => handleChange(event, "comments", index)}
               required
               margin="normal"
-              style={{ marginRight: '16px' }}
+              style={{ marginRight: '40px' }}
             />
-            <TextField
+            <TextField label="Descrição do comentário"
               type="text"
               name="description"
-              placeholder="Descrição do comentário"
               onChange={(event) => handleChange(event, "comments", index)}
               required
               margin="normal"
-              style={{ marginRight: '16px' }}
+              style={{ marginRight: '40px' }}
             />
           </div>
         ))}
 
         <Button type="submit">Cadastrar ordem de serviço</Button>
+        </ThemeProvider>
       </form>
     </Box>
   );
