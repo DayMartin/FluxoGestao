@@ -97,7 +97,7 @@ export const OrdemListagem: React.FC = () => {
         textoBotaoNovo='Nova'
         textoDabusca={busca}
         aoMudarTextoDeBusca={texto => setSearchParams({ busca: texto }, { replace: true })}
-        aoClicarEmNovo={() => navigate('/ordemDetalhe/detalhe/nova')}
+        aoClicarEmNovo={() => navigate('/ordem')}
       />
 
 
