@@ -215,7 +215,7 @@ export const OrdemForms = () => {
           style={{ marginRight: '40px' }}
         />
 
-        <TextField label="Sala" 
+        <TextField label="Sall" 
           type="number"
           name="title"
           onChange={(event) => handleChange(event, "sala")}
@@ -225,7 +225,7 @@ export const OrdemForms = () => {
         />
         <br/>
 
-        <TextField label="Forno" 
+        <TextField label="For" 
           type="number"
           name="title"
           onChange={(event) => handleChange(event, "forno")}
@@ -234,7 +234,7 @@ export const OrdemForms = () => {
           style={{ marginRight: '40px' }}
         />
 
-        <TextField label="Cabeceira" 
+        <TextField label="Cab" 
           type="text"
           name="title"
           onChange={(event) => handleChange(event, "cabeceira")}

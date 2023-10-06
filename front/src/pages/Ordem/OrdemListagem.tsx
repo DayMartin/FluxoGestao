@@ -110,9 +110,9 @@ export const OrdemListagem: React.FC = () => {
               
               <TableCell>Id</TableCell>
               <TableCell>Solicitante</TableCell>
-              <TableCell>Sala</TableCell>
-              <TableCell>Forno</TableCell>
-              <TableCell>Cabeceira</TableCell>
+              <TableCell>SAL</TableCell>
+              <TableCell>For</TableCell>
+              <TableCell>Cab</TableCell>
               <TableCell>Status</TableCell>
               <TableCell width={100}>Ações</TableCell>
             </TableRow>
