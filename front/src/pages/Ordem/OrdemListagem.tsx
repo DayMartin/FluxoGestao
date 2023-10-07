@@ -100,9 +100,6 @@ export const OrdemListagem: React.FC = () => {
         aoClicarEmNovo={() => navigate('/ordem')}
       />
 
-
-      
-
       <TableContainer component={Paper} variant="outlined" sx={{ m: 1, width: 'auto' }}>
         <Table>
           <TableHead>
