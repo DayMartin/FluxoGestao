@@ -18,13 +18,13 @@ export const AppRoutes = () => {
         label: 'Página inicial',
       },
 
-      /*
+      
       {
         icon: 'people',
         path: "/user",
         label: 'Usuário',
       },
-      */
+      
       {
         icon: 'article',
         path: "/ordem",

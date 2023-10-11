@@ -29,7 +29,7 @@ type TPessoasComTotalCount = {
 
 const getAll = async (page = 1, filter = ''): Promise<TPessoasComTotalCount | Error> => {
   try {
-    const urlRelativa = `${Environment.URL_BASE}/users/${filter}?page=${page}`;
+    const urlRelativa = `${Environment.URL_BASE}/auth/register/${filter}?page=${page}`;
 
     const { data } = await Api.get(urlRelativa);
 
@@ -46,7 +46,7 @@ const getAll = async (page = 1, filter = ''): Promise<TPessoasComTotalCount | Er
 
 const getById = async (id: string): Promise<IDetalhePessoa | Error> => {
   try {
-    const { data } = await Api.get(`/users/${id}`); 
+    const { data } = await Api.get(`/auth/register/${id}`); 
 
     if (data) {
       return data;
@@ -61,7 +61,7 @@ const getById = async (id: string): Promise<IDetalhePessoa | Error> => {
 
 const create = async (dados: Omit<IDetalhePessoa, 'id'>): Promise<string | Error> => {
   try {
-    const { data } = await Api.post<IDetalhePessoa>('/users', dados); 
+    const { data } = await Api.post<IDetalhePessoa>('/auth/register', dados); 
 
     if (data) {
       return data.id;
@@ -76,7 +76,7 @@ const create = async (dados: Omit<IDetalhePessoa, 'id'>): Promise<string | Error
 
 const updateById = async (id: string, dados: IDetalhePessoa): Promise<void | Error> => {
   try {
-    await Api.put(`/users/${id}`, dados);
+    await Api.put(`/auth/register/${id}`, dados);
   } catch (error) {
     console.error(error);
     return new Error((error as { message: string }).message || 'Erro ao atualizar o registro.');
@@ -85,7 +85,7 @@ const updateById = async (id: string, dados: IDetalhePessoa): Promise<void | Err
 
 const deleteById = async (id: string): Promise<void | Error> => {
   try {
-    await Api.delete(`/users/${id}`); 
+    await Api.delete(`/auth/register/${id}`); 
   } catch (error) {
     console.error(error);
     return new Error((error as { message: string }).message || 'Erro ao apagar o registro.');
