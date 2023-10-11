@@ -1,6 +1,7 @@
 import { Box, Button, Paper, TextField, useTheme } from "@mui/material";
 import React, { useState } from "react";
 import { OrdemService, IDetalheOrdem } from "../../services/api/Ordem/OrdemService";
+import { PessoasService } from "../../services/api/users/PessoasService";
 
 
 import { outlinedInputClasses } from '@mui/material/OutlinedInput';
@@ -37,25 +38,6 @@ const customTheme = (outerTheme: Theme) =>
             [`&.Mui-focused .${outlinedInputClasses.notchedOutline}`]: {
               borderColor: 'var(--TextField-brandBorderFocusedColor)',
             },
-          },
-        },
-      },
-      MuiFilledInput: {
-        styleOverrides: {
-          root: {
-            '&:before, &:after': {
-              borderBottom: '2px solid var(--TextField-brandBorderColor)',
-            },
-          },
-        },
-      },
-      MuiInput: {
-        styleOverrides: {
-          root: {
-            '&:before': {
-              borderBottom: '2px solid var(--TextField-brandBorderColor)',
-            },
-
           },
         },
       },
@@ -185,19 +167,9 @@ export const OrdemForms = () => {
 
     >
       <form onSubmit={handleSubmit}>
-        <h4> Informações gerais </h4>
+        <h4> Informações </h4>
 
-        <ThemeProvider theme={customTheme(outerTheme)}>
-
-        <TextField label="Titulo" 
-          type="text"
-          name="title"
-          required
-          margin="normal"
-          style={{ marginRight: '40px' }}
-          onChange={(event) => handleChange(event, "title")}
-        />
-          <TextField label="Solicitante" 
+        <TextField label="Solicitante" 
           type="text"
           name="title"
           onChange={(event) => handleChange(event, "solicitante")}
@@ -205,8 +177,7 @@ export const OrdemForms = () => {
           margin="normal"
           style={{ marginRight: '40px' }}
         />
-
-        <TextField label="Setor" 
+        <TextField label="Setor atual" 
           type="text"
           name="title"
           onChange={(event) => handleChange(event, "setor")}
@@ -214,6 +185,19 @@ export const OrdemForms = () => {
           margin="normal"
           style={{ marginRight: '40px' }}
         />
+
+        <TextField label="Status" 
+          type="text"
+          name="title"
+          onChange={(event) => handleChange(event, "status")}
+          required
+          margin="normal"
+          style={{ marginRight: '40px' }}
+        />
+
+        <h4> Informações gerais </h4>
+
+        <ThemeProvider theme={customTheme(outerTheme)}>
 
         <TextField label="Sall" 
           type="number"
@@ -223,7 +207,6 @@ export const OrdemForms = () => {
           margin="normal"
           style={{ marginRight: '40px' }}
         />
-        <br/>
 
         <TextField label="For" 
           type="number"
@@ -243,25 +226,17 @@ export const OrdemForms = () => {
           style={{ marginRight: '40px' }}
         />
 
-        <TextField label="Status" 
+        <br/>
+
+        <TextField label="Urgência" 
           type="text"
           name="title"
-          onChange={(event) => handleChange(event, "status")}
+          onChange={(event) => handleChange(event, "urgencia")}
           required
           margin="normal"
           style={{ marginRight: '40px' }}
         />
 
-        <TextField label="Setor atual" 
-          type="text"
-          name="title"
-          onChange={(event) => handleChange(event, "estadoatual")}
-          required
-          margin="normal"
-          style={{ marginRight: '40px' }}
-        />
-
-     
 
         <h4> Serviços a serem realizados </h4>
         {/* Services e Comments */}
@@ -298,8 +273,9 @@ export const OrdemForms = () => {
             {/* Botão para adicionar novo serviço */}
             <Button onClick={handleAddService}>Adicionar Novo Serviço</Button>
 
-
+        
         {/* Comentários */}
+        { /* 
         {ordemData.comments.map((comment, index) => (
           <div key={`comment-${index}`}>
             <h4> Comentário </h4>
@@ -321,7 +297,7 @@ export const OrdemForms = () => {
               style={{ marginRight: '40px' }}
             />
           </div>
-        ))}
+        ))} */}
 
         <Button type="submit">Cadastrar ordem de serviço</Button>
         </ThemeProvider>
