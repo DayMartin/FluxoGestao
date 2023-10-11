@@ -167,6 +167,7 @@ export const OrdemForms = () => {
 
     >
       <form onSubmit={handleSubmit}>
+      <ThemeProvider theme={customTheme(outerTheme)}>
         <h4> Informações </h4>
 
         <TextField label="Solicitante" 
@@ -196,8 +197,6 @@ export const OrdemForms = () => {
         />
 
         <h4> Informações gerais </h4>
-
-        <ThemeProvider theme={customTheme(outerTheme)}>
 
         <TextField label="Sall" 
           type="number"
