@@ -4,6 +4,8 @@ import { AppThemeProvider, AuthProvider, DrawerProvider } from './shared/context
 import { AppRoutes } from './routes';
 import { Login, MenuLateral } from './shared/components';
 
+import {Home} from './pages/Home/Home'
+
 export const App = () => {
   return (
 
@@ -11,7 +13,6 @@ export const App = () => {
     <AppThemeProvider>
 
       <Login>
-
       <DrawerProvider>
         <BrowserRouter>
           <MenuLateral>

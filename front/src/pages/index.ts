@@ -4,3 +4,4 @@ export * from './users/ListagemUsers';
 export * from './Ordem/Ordem';
 export * from './Ordem/OrdemListagem';
 export * from './Ordem/OrdemDetalhe';
+export * from './Home/Home';

@@ -43,6 +43,17 @@ export const MenuLateral: React.FC<IMenuLateralProps> = ({ children }) => {
   const { toggleTheme } = useAppThemeContext();
   const { logout } = useAuthContext();
 
+    // Verifique se a rota atual é a página Home
+    const isHomePage = location.pathname === '/home';
+
+    if (isHomePage) {
+      return (
+        <Box height="100vh" marginLeft={smDown ? 0 : theme.spacing(28)}>
+          {children}
+        </Box>
+      );
+    }
+
   return (
     <>
       <Drawer open={isDrawerOpen} variant={smDown ? 'temporary' : 'permanent'} onClose={toggleDrawerOpen}>
