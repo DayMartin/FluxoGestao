@@ -9,6 +9,7 @@ export interface IListagemPessoa {
   funcao: string;
   email: string;
   senha: string;
+  situacao: string;
 }
 
 export interface IDetalhePessoa {
@@ -20,6 +21,7 @@ export interface IDetalhePessoa {
   funcao: string;
   email: string;
   senha: string;
+  situacao: string;
 }
 
 type TPessoasComTotalCount = {

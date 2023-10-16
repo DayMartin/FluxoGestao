@@ -10,6 +10,7 @@ export const UserForms = () => {
   const [funcao, setFuncao] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [situacao, setSituacao] = useState('');
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -22,6 +23,7 @@ export const UserForms = () => {
       funcao,
       email,
       senha,
+      situacao,
     };
 
     try {
