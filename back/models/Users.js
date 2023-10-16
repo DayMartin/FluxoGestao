@@ -25,6 +25,9 @@ const usersSchema = new Schema ({
       senha: {
         type: String,
       },
+      situacao: {
+        type: String,
+      },
     }, { timestamps: true }
     );
     

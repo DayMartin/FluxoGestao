@@ -159,8 +159,9 @@ Content-Type: application/json
     "setor":"fundição",
     "turno":"manha",
     "funcao":"mecanico",
-    "email":"dinah-dd2424@hotmail.com",
-    "senha":"outrasenha"
+    "email":"dinah-dd2428@hotmail.com",
+    "senha":"outrasenha",
+    "situacao":"pendente"
 }
 
 ###
@@ -180,7 +181,7 @@ GET http://localhost:3048/api/auth/register
 
 ###
 
-GET http://localhost:3048/api/auth/register/65152c0691424bd69f668434
+GET http://localhost:3048/api/auth/register/65152ba591424bd69f66842a
 
 ###
 
@@ -188,13 +189,9 @@ DELETE http://localhost:3048/api/auth/register/6515173f5f29a1158301beda
 
 ###
 
-PUT http://localhost:3048/api/users/64f5b36949f8c371b87ab492
+PUT http://localhost:3048/api/auth/register/65269b711bd52ea7016b8005
 Content-Type: application/json
 
 {
-    "name": "Dinah Martins",
-    "matricula":"60771aDA",
-    "setor":"fundição",
-    "supervisor":"Giovana Vitoria teste minha linda",
-    "turno":"noturno"
+    "situacao":"pendente"
 }

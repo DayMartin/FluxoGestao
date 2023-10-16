@@ -46,6 +46,7 @@ const usersController = {
               funcao,
               email,
               senha: passwordHash,
+              situacao: req.body.situacao,
             });
 
             const response = await users.save();
@@ -108,6 +109,7 @@ const usersController = {
             funcao: req.body.funcao,
             email: req.body.email,
             senha: req.body.senha,
+            situacao: req.body.situacao,
         };
 
         const updatedUsers = await UsersModel.findByIdAndUpdate(id, users);
