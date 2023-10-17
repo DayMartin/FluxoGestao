@@ -1,9 +1,34 @@
+import React from 'react';
+import Button from '@mui/material/Button';
+
 export const Home = () => {
-    return (
-        <div>
-            <button>
-                Serviços
-            </button>
-        </div>
-      );
+  const handleButtonClick = () => {
+    window.location.href = 'http://localhost:3000/pagina-inicial';
+  };
+
+  return (
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        height: '100vh',
+        flexWrap: 'wrap',
+      }}
+    >
+      <Button onClick={handleButtonClick} variant="contained" color="primary" style={{ width: '200px', height:'80px', margin: '10px' }}>
+        Serviços
+      </Button>
+      <Button variant="contained" color="primary" style={{ width: '200px', height:'80px', margin: '10px' }}>
+        Funcionários
+      </Button>
+      <Button variant="contained" color="primary" style={{ width: '200px', height:'80px', margin: '10px' }}>
+        Relatórios
+      </Button>
+      <Button variant="contained" color="primary" style={{ width: '200px', height:'80px', margin: '10px' }}>
+        Perfil
+      </Button>
+    </div>
+  );
 };
