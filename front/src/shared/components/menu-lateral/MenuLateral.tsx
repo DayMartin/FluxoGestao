@@ -43,12 +43,16 @@ export const MenuLateral: React.FC<IMenuLateralProps> = ({ children }) => {
   const { toggleTheme } = useAppThemeContext();
   const { logout } = useAuthContext();
 
+  const handleButtonClick = () => {
+    window.location.href = 'http://localhost:3000/home';
+  };
+
     // Verifique se a rota atual é a página Home
     const isHomePage = location.pathname === '/home';
 
     if (isHomePage) {
       return (
-        <Box height="100vh" marginLeft={smDown ? 0 : theme.spacing(28)}>
+        <Box height="100vh" marginLeft={smDown ? 0 : theme.spacing(0)}>
           {children}
         </Box>
       );
@@ -83,6 +87,13 @@ export const MenuLateral: React.FC<IMenuLateralProps> = ({ children }) => {
           </Box>
 
           <Box>
+          <ListItemButton onClick={handleButtonClick}>
+                <ListItemIcon>
+                  <Icon>back</Icon>
+                </ListItemIcon>
+                <ListItemText primary="Voltar" />
+              </ListItemButton>
+              
             <List component="nav">
               <ListItemButton onClick={toggleTheme}>
                 <ListItemIcon>
@@ -97,6 +108,8 @@ export const MenuLateral: React.FC<IMenuLateralProps> = ({ children }) => {
                 </ListItemIcon>
                 <ListItemText primary="Sair" />
               </ListItemButton>
+
+
             </List>
           </Box>
         </Box>
