@@ -30,83 +30,94 @@ export const UserForms = () => {
       const userId = await PessoasService.create(userData);
       console.log(`User created with ID: ${userId}`);
       event.currentTarget?.reset();
-    } catch (error) { 
+    } catch (error) {
       console.error("Erro ao criar usuário", (error as Error).message);
     }
   };
-  
+
   const theme = useTheme();
 
   return (
     <Box
-      height={theme.spacing(60)}
-      marginX={1}
-      padding={1}
-      paddingX={2}
-      display={"flex"}
-      gap={1}
-      alignItems={"center"}
-      component={Paper}
+      width='100vw'
+      height='100vh'
+      display='flex'
+      alignItems='center'
+      justifyContent='center'
     >
-      <form onSubmit={handleSubmit}>
-        <TextField
-          type="text"
-          name="nome"
-          placeholder="Nome do usuário"
-          onChange={(event) => setName(event.target.value)}
-          required
-        />
+      <Paper
+        elevation={3}
+        style={{
+          padding: theme.spacing(2),
+          width: '250px',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: theme.spacing(1),
+          alignItems: 'center',
+        }}
+      >
+        <form onSubmit={handleSubmit}>
+          <TextField
+            type="text"
+            name="nome"
+            label="Nome do usuário"
+            onChange={(event) => setName(event.target.value)}
+            required
+          />
 
-        <TextField
-          type="text"
-          name="matricula"
-          placeholder="Matricula do usuário"
-          onChange={(event) => setMatricula(event.target.value)}
-          required
-        />
+          <TextField
+            type="text"
+            name="matricula"
+            label="Matricula do usuário"
+            onChange={(event) => setMatricula(event.target.value)}
+            required
+          />
 
-        <TextField
-          type="text"
-          name="setor"
-          placeholder="Setor do usuário"
-          onChange={(event) => setSetor(event.target.value)}
-          required
-        />
+          <TextField
+            type="text"
+            name="setor"
+            label="Setor do usuário"
+            onChange={(event) => setSetor(event.target.value)}
+            required
+          />
 
-        <TextField
-          type="text"
-          name="turno"
-          placeholder="Turno do usuário"
-          onChange={(event) => setTurno(event.target.value)}
-          required
-        />
+          <TextField
+            type="text"
+            name="turno"
+            label="Turno do usuário"
+            onChange={(event) => setTurno(event.target.value)}
+            required
+          />
 
-        <TextField
-          type="text"
-          name="funcao"
-          placeholder="Função do usuário"
-          onChange={(event) => setFuncao(event.target.value)}
-          required
-        />
+          <TextField
+            type="text"
+            name="funcao"
+            label="Função do usuário"
+            onChange={(event) => setFuncao(event.target.value)}
+            required
+          />
 
-        <TextField
-          type="email"
-          name="email"
-          placeholder="E-mail"
-          onChange={(event) => setEmail(event.target.value)}
-          required
-        />
+          <TextField
+            type="email"
+            name="email"
+            label="E-mail"
+            onChange={(event) => setEmail(event.target.value)}
+            required
+          />
 
-        <TextField
-          type="password"
-          name="password"
-          placeholder="Senha"
-          onChange={(event) => setSenha(event.target.value)}
-          required
-        />
+          <TextField
+            type="password"
+            name="password"
+            label="Senha"
+            onChange={(event) => setSenha(event.target.value)}
+            required
+          />
 
-        <Button type="submit">Cadastrar usuário</Button>
-      </form>
+          <Button variant="contained" type="submit">
+            Cadastrar usuário
+          </Button>
+        </form>
+      </Paper>
     </Box>
   );
 };

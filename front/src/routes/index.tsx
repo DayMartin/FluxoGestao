@@ -6,6 +6,7 @@ import { useEffect } from 'react';
 import {
   Home, Dashboard, Ordem, PessoasListagem, Users, OrdemListagem, OrdemDetalhe
 } from '../pages';
+import { UserCadastro, UserForms } from '../shared/components';
 
 export const AppRoutes = () => {
   const { setDrawerOptions } = useDrawerContext();
@@ -58,6 +59,7 @@ export const AppRoutes = () => {
     <Route path="/ordemListagem" element={<OrdemListagem />} />
     <Route path="/ordemDetalhe/detalhe/:_id" element={<OrdemDetalhe/>} />
     <Route path="/home" element={<Home />} />
+    <Route path="/cadastrarUser" element={<UserForms/>} />
 
 
     <Route path="*" element={<Navigate to="/pagina-inicial" />} />

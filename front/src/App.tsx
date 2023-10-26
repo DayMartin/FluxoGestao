@@ -2,14 +2,13 @@ import { BrowserRouter } from 'react-router-dom';
 
 import { AppThemeProvider, AuthProvider, DrawerProvider } from './shared/contexts';
 import { AppRoutes } from './routes';
-import { Login, MenuLateral } from './shared/components';
+import { Login, MenuLateral, UserForms } from './shared/components';
 
 export const App = () => {
   return (
 
     <AuthProvider>
     <AppThemeProvider>
-
       <Login>
       <DrawerProvider>
         <BrowserRouter>
@@ -18,7 +17,6 @@ export const App = () => {
           </MenuLateral>
         </BrowserRouter>
       </DrawerProvider>
-      
       </Login>
 
     </AppThemeProvider>
