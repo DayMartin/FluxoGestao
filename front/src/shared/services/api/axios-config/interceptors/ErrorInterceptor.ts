@@ -17,7 +17,7 @@ export const errorInterceptor = (error: AxiosError) => {
 
   if (error.response?.status === 404) {
     // Trate o erro 404 aqui
-    console.error("Erro 404:", error.response.data);
+    alert("E-mail ou senha incorretos'");
     // Retorne uma promessa rejeitada com uma mensagem personalizada
     return Promise.reject(new Error('Erro 404: Não encontrado no banco de dados.'));
   }

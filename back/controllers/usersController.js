@@ -65,6 +65,7 @@ const usersController = {
             console.log(error); 
         }
     },
+
     get: async (req, res) => {
         try {
             const id = req.params.id;
@@ -81,6 +82,28 @@ const usersController = {
             console.log(error);
         }
     },
+    getByEmail: async (req, res) => {
+        try {
+          const email = req.query.email;
+      
+          if (email) {
+            const user = await UsersModel.findOne({ email });
+      
+            if (!user) {
+              res.status(404).json({ msg: "Usuário não encontrado" });
+            } else {
+              res.json(user);
+            }
+          } else {
+            res.status(400).json({ msg: "É necessário fornecer um email válido" });
+          }
+        } catch (error) {
+          console.error(error);
+          res.status(500).json({ msg: "Erro no servidor" });
+        }
+      },
+      
+
     delete: async (req, res) => {
         try {
             const id = req.params.id;

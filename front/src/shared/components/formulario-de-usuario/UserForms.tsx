@@ -136,13 +136,18 @@ export const UserForms = () => {
             onChange={(event) => setSenha(event.target.value)}
             required
           />
-          <Button variant="contained" type="submit">
+          <Button
+            variant="contained"
+            type="submit"
+            style={{ marginTop:'10px' , marginRight: '10px' }} // Adicione o marginLeft desejado
+          >
             Cadastrar-se
           </Button>
 
           <Button
-            variant='contained'
+            variant="contained"
             onClick={handleLoginClick}
+            style={{ marginTop:'10px' , marginRight: '10px' }} // Adicione o marginLeft desejado
           >
             Login
           </Button>

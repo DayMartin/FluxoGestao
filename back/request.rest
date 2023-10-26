@@ -181,7 +181,11 @@ GET http://localhost:3048/api/auth/register
 
 ###
 
-GET http://localhost:3048/api/auth/register/65152ba591424bd69f66842a
+GET http://localhost:3048/api/auth/register/652db8f363b65d751471cfd4
+
+###
+
+GET http://localhost:3048/api/auth/register/email?email=giovana@gmail.com
 
 ###
 

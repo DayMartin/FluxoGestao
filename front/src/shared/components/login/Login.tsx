@@ -96,6 +96,7 @@ export const Login: React.FC<ILoginProps> = ({ children }) => {
           {showUserForm ? null : ( // Renderizar botões apenas se showUserForm for falso
             <Box width="100%" display="flex" justifyContent="center">
               <Button
+                style={{ marginRight: '10px' }}
                 variant="contained"
                 disabled={isLoading}
                 onClick={handleSubmit}

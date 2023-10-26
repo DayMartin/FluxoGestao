@@ -61,6 +61,21 @@ const getById = async (id: string): Promise<IDetalhePessoa | Error> => {
   }
 };
 
+const getByEmail = async (email: string): Promise<IDetalhePessoa | Error> => {
+  try {
+    const { data } = await Api.get(`/auth/register/email?email=${email}`); 
+
+    if (data) {
+      return data;
+    }
+
+    return new Error('Erro ao consultar o registro.');
+  } catch (error) {
+    console.error(error);
+    return new Error((error as { message: string }).message || 'Erro ao consultar o registro.');
+  }
+};
+
 const create = async (dados: Omit<IDetalhePessoa, 'id'>): Promise<string> => {
   try {
     const { data } = await Api.post<IDetalhePessoa>('/auth/register', dados);
@@ -99,4 +114,5 @@ export const PessoasService = {
   getById,
   updateById,
   deleteById,
+  getByEmail,
 };
