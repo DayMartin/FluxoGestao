@@ -73,6 +73,10 @@ Content-Type: application/json
 
 GET http://localhost:3048/api/ordem?page=1&limit=5&filter=17
 
+###
+
+GET http://localhost:3048/api/ordem
+
 
 ###
 
@@ -81,7 +85,7 @@ GET http://localhost:3048/api/ordem?page=1&limit=5&ordemId=17
 
 ###
 
-GET http://localhost:3048/api/ordem/15
+GET http://localhost:3048/api/ordem/650bf08d45619a86a151623e
 
 ###
 

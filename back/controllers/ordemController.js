@@ -96,39 +96,43 @@ const ordemController = {
       }
     },
     
-      get: async (req, res) => {
-        try {
-            const idParam = req.params.id;
-            const busca = req.query.busca; 
-            
-            let ordem;
+    get: async (req, res) => {
+      try {
+        const idParam = req.params.id;
+        const busca = req.query.busca; 
+        
+        let ordem;
     
-            if (isNaN(idParam) && !busca) {
-                res.status(400).json({ msg: "Parâmetro de busca inválido" });
-                return;
-            } 
-    
-            if (isNaN(idParam) && busca) {
-                ordem = await OrdemModel.findOne({ 
-                    $or: [
-                        { solicitante: { $regex: new RegExp(busca, "i") } }, 
-                        { setor: { $regex: new RegExp(busca, "i") } }, 
-                    ]
-                });
-            } else {
-                ordem = await OrdemModel.findOne({ ordemId: parseInt(idParam) });
-            }
-    
-            if (!ordem) {
-                res.status(404).json({ msg: "Ordem de serviço não encontrada" });
-                return;
-            } 
-    
-            res.json(ordem);
-        } catch (error) {
-            console.log(error);
+        if (busca) {
+          ordem = await OrdemModel.findOne({
+            $or: [
+              { solicitante: { $regex: new RegExp(busca, "i") } }, 
+              { setor: { $regex: new RegExp(busca, "i") } },
+              { _id: busca }, // Busca por _id
+              { ordemId: parseInt(busca) }, // Converta busca para número inteiro e busque por ordemId
+            ]
+          });
+        } else {
+          if (!isNaN(idParam)) {
+            // Se idParam for um número, busca por ordemId
+            ordem = await OrdemModel.findOne({ ordemId: parseInt(idParam) });
+          } else {
+            // Caso contrário, busca por _id
+            ordem = await OrdemModel.findOne({ _id: idParam });
+          }
         }
+    
+        if (!ordem) {
+          res.status(404).json({ msg: "Ordem de serviço não encontrada" });
+          return;
+        } 
+    
+        res.json(ordem);
+      } catch (error) {
+        console.log(error);
+      }
     },
+    
     
     
     delete: async (req, res) => {
