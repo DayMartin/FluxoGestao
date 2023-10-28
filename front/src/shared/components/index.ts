@@ -4,3 +4,4 @@ export * from './ferramenta-da-listagem/FerramentasDaListagem';
 export * from './formulario-de-usuario/UserForms';
 export * from './formulario-ordem/OrdemForms';
 export * from './login/Login'
+export * from './formulario-ordem/DetalheOrdem'
