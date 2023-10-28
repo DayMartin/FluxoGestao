@@ -89,9 +89,13 @@ const getAll = async (options: { page?: number; limit?: number; filter?: string;
 };
 
 
-const getById = async (ordemId: string): Promise<IDetalheOrdem | Error> => {
+const getById = async (identifier: string): Promise<IDetalheOrdem | Error> => {
   try {
-    const { data } = await Api.get(`/ordem/${ordemId}`);
+    const url = isMongoId(identifier)
+      ? `/ordem/${identifier}` // Se for um ID do MongoDB, busque por _id
+      : `/ordem?busca=${identifier}`; // Caso contrário, busque por ordemId
+
+    const { data } = await Api.get(url);
 
     if (data) {
       return data;
@@ -103,6 +107,10 @@ const getById = async (ordemId: string): Promise<IDetalheOrdem | Error> => {
     return new Error((error as { message: string }).message || 'Erro ao consultar o registro.');
   }
 };
+
+// Função para verificar se uma string é um ID do MongoDB
+const isMongoId = (str: string) => /^[0-9a-fA-F]{24}$/.test(str);
+
 
 const create = async (dados: IOrdemServiceData): Promise<string> => {
   try {
