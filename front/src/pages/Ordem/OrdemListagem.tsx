@@ -20,6 +20,34 @@ import { BarraDeFerramentas } from '../../shared/components';
 import { LayoutBaseDePagina } from '../../shared/layouts';
 import { OrdemService, IApiResponse } from '../../shared/services/api';
 import { useDebounce } from '../../shared/hooks';
+import DetalhesOrdemPopup from '../../shared/components/formulario-ordem/DetalheOrdem';
+
+
+export interface IDetalheOrdem {
+  _id: string;
+  ordemId: number;
+  solicitante: string;
+  setor: string;
+  sala: number;
+  forno: number;
+  cabeceira: string;
+  status: string;
+  services: {
+    name: string;
+    description: string;
+    status: string;
+    comments: {
+      usuario: string;
+      description: string;
+    }[];
+  }[];
+  comments: {
+    usuario: string;
+    description: string;
+  }[];
+  urgencia: string;
+}
+
 
 export const OrdemListagem: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -30,6 +58,8 @@ export const OrdemListagem: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [totalOrdem, setTotalOrdem] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showDetalhesPopup, setShowDetalhesPopup] = useState(false);
+  const [selectedOrdem, setSelectedOrdem] = useState<IDetalheOrdem | null>(null);
 
   const limit = Environment.LIMITE_DE_LINHAS.toString();
 
@@ -86,6 +116,15 @@ export const OrdemListagem: React.FC = () => {
           }
         });
     }
+  };
+
+  const handleOpenDetalhesPopup = (ordem: IDetalheOrdem) => {
+    setSelectedOrdem(ordem);
+    setShowDetalhesPopup(true);
+  };  
+
+  const handleCloseDetalhesPopup = () => {
+    setShowDetalhesPopup(false);
   };
 
   return (
@@ -148,6 +187,10 @@ export const OrdemListagem: React.FC = () => {
                   <IconButton size="small" onClick={() => navigate(`/ordemDetalhe/detalhe/${row._id}`)}>
                     <Icon>edit</Icon>
                   </IconButton>
+                  <IconButton size="small" onClick={() => handleOpenDetalhesPopup(row)}>
+  <Icon>search</Icon>
+</IconButton>
+
                     </TableCell>
                   </TableRow>
                 ))
@@ -170,6 +213,10 @@ export const OrdemListagem: React.FC = () => {
           </TableFooter>
         </Table>
       </TableContainer>
+      {showDetalhesPopup && selectedOrdem && (
+      <DetalhesOrdemPopup ordemId={selectedOrdem._id} onClose={handleCloseDetalhesPopup} />
+    )}
+
     </LayoutBaseDePagina>
   );
 };
