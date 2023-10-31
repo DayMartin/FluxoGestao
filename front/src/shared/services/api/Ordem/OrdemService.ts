@@ -16,10 +16,6 @@ export interface IOrdemServiceData {
     name: string;
     description: string;
     status: string;
-    comments: {
-      usuario: string;
-      description: string;
-    }[];
   }[];
   comments: {
     usuario: string;
@@ -43,16 +39,13 @@ export interface IDetalheOrdem {
     name: string;
     description: string;
     status: string;
-    comments: {
-      usuario: string;
-      description: string;
-    }[];
   }[];
   comments: {
     usuario: string;
     description: string;
   }[];
   urgencia: string;
+  createdAt: string;
   
 }
 
