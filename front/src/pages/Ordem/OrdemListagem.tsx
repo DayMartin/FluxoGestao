@@ -13,7 +13,11 @@ import {
   TableFooter,
   TableHead,
   TableRow,
+  Dialog,
+  Box,
 } from '@mui/material';
+
+import { styled } from '@mui/material/styles';
 
 import { Environment } from '../../shared/environment';
 import { BarraDeFerramentas } from '../../shared/components';
@@ -21,7 +25,6 @@ import { LayoutBaseDePagina } from '../../shared/layouts';
 import { OrdemService, IApiResponse } from '../../shared/services/api';
 import { useDebounce } from '../../shared/hooks';
 import DetalhesOrdemPopup from '../../shared/components/formulario-ordem/DetalheOrdem';
-
 
 export interface IDetalheOrdem {
   _id: string;
@@ -36,10 +39,6 @@ export interface IDetalheOrdem {
     name: string;
     description: string;
     status: string;
-    comments: {
-      usuario: string;
-      description: string;
-    }[];
   }[];
   comments: {
     usuario: string;
@@ -58,10 +57,19 @@ export const OrdemListagem: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [totalOrdem, setTotalOrdem] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
-  const [showDetalhesPopup, setShowDetalhesPopup] = useState(false);
   const [selectedOrdem, setSelectedOrdem] = useState<IDetalheOrdem | null>(null);
+  const [showDetalhesDialog, setShowDetalhesDialog] = useState(false);
 
   const limit = Environment.LIMITE_DE_LINHAS.toString();
+
+  const CustomDialog = styled(Dialog)(({ theme }) => ({
+    width: '800px',
+    height: '700px',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%', // Ajuste de largura para telas menores
+    },
+  }));
+  
 
   const busca = useMemo(() => {
     return searchParams.get('busca') || '';
@@ -118,13 +126,13 @@ export const OrdemListagem: React.FC = () => {
     }
   };
 
-  const handleOpenDetalhesPopup = (ordem: IDetalheOrdem) => {
+  const handleOpenDetalhesDialog = (ordem: IDetalheOrdem) => {
     setSelectedOrdem(ordem);
-    setShowDetalhesPopup(true);
+    setShowDetalhesDialog(true); 
   };  
 
-  const handleCloseDetalhesPopup = () => {
-    setShowDetalhesPopup(false);
+  const handleCloseDetalhesDialog = () => {
+    setShowDetalhesDialog(false); 
   };
 
   return (
@@ -151,21 +159,21 @@ export const OrdemListagem: React.FC = () => {
               <TableCell>Cab</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Urgencia</TableCell>
-              <TableCell width={100}>Ações</TableCell>
+              <TableCell width={130}>Ações</TableCell>
             </TableRow>
           </TableHead>
 
           <TableBody>
             {isLoading ? (
               <TableRow>
-                <TableCell colSpan={7}>
+                <TableCell colSpan={10}>
                   <LinearProgress variant='indeterminate' />
                 </TableCell>
               </TableRow>
             ) : (
               rows.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7}>
+                  <TableCell colSpan={10}>
                     {Environment.LISTAGEM_VAZIA}
                   </TableCell>
                 </TableRow>
@@ -183,15 +191,14 @@ export const OrdemListagem: React.FC = () => {
                     <TableCell>
                     <IconButton size="small" onClick={() => handleDelete(row._id)}>
                     <Icon>delete</Icon>
-                  </IconButton>
-                  <IconButton size="small" onClick={() => navigate(`/ordemDetalhe/detalhe/${row._id}`)}>
-                    <Icon>edit</Icon>
-                  </IconButton>
-                  <IconButton size="small" onClick={() => handleOpenDetalhesPopup(row)}>
-  <Icon>search</Icon>
-</IconButton>
-
-                    </TableCell>
+                    </IconButton>
+                    <IconButton size="small" onClick={() => navigate(`/ordemDetalhe/detalhe/${row._id}`)}>
+                      <Icon>edit</Icon>
+                    </IconButton>
+                    <IconButton size="small" onClick={() => handleOpenDetalhesDialog(row)}>
+                      <Icon>search</Icon>
+                    </IconButton>
+                      </TableCell>
                   </TableRow>
                 ))
               )
@@ -213,10 +220,16 @@ export const OrdemListagem: React.FC = () => {
           </TableFooter>
         </Table>
       </TableContainer>
-      {showDetalhesPopup && selectedOrdem && (
-      <DetalhesOrdemPopup ordemId={selectedOrdem._id} onClose={handleCloseDetalhesPopup} />
-    )}
+      < Dialog 
+      maxWidth="sm"
+      open={showDetalhesDialog} 
+      onClose={handleCloseDetalhesDialog} 
+      >
 
+        {showDetalhesDialog && selectedOrdem &&  (
+          <DetalhesOrdemPopup ordemId={selectedOrdem._id} onClose={handleCloseDetalhesDialog} />
+        )}
+      </Dialog>  
     </LayoutBaseDePagina>
   );
 };
