@@ -52,13 +52,8 @@ Content-Type: application/json
         {
             "name":"TESTE ATUALIZAÇÃO",
             "description":"Alguma descrição",
-            "status":"em encerramento",
-            "comments": [
-                {
-                    "usuario":"Dinah Martins",
-                    "description":"TESTE PUT"
-                }
-            ]    
+            "status":"em encerramento"
+
         }
     ],
     "comments": [

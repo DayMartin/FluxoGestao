@@ -17,9 +17,6 @@ const serviceSchema = new Schema ({
         type: String,
         require:true,
     },
-    comments: {
-        type: [commentsSchema],
-    },
   },
   { timestamps: true }
 );
