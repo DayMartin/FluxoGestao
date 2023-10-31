@@ -47,7 +47,10 @@ require("dotenv").config();
             secret
           );
   
-          res.status(200).json({ msg: 'Autenticação realizada com sucesso!', token });
+          res.status(200).json({ 
+            token,
+            user
+           });
         } catch (error) {
           res.status(500).json({ msg: error });
         }

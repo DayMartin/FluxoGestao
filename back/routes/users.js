@@ -1,12 +1,12 @@
 const router = require("express").Router();
 
-const usersController = require("../controllers/usersController");
+const usersController = require("../controllers/permissionsController");
 
 router
-    .route("/auth/register")
+    .route("/permissions")
     .post((req, res) => usersController.create(req, res));
 
-router.route("/auth/register").get((req, res) => usersController.getAll(req, res));
+router.route("/permissions").get((req, res) => usersController.getAll(req, res));
 
 router.route("/auth/register/email").get((req, res) => usersController.getByEmail(req, res));
 

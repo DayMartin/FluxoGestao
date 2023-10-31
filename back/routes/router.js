@@ -41,3 +41,11 @@ const usersPrivateRouter = require("./usersPrivate");
 router.use("/", usersPrivateRouter);
 
 module.exports = router;
+
+// permissions routes
+
+const permissionsRouter = require("./permissions");
+
+router.use("/", permissionsRouter);
+
+module.exports = router;

@@ -145,7 +145,7 @@ Content-Type: application/json
 ### USERS
 
 
-GET http://localhost:3048/api/usersPrivate/6505749aeb2d6721657d3639
+GET http://localhost:3048/api/usersPrivate/653c81c24ae88d9c03b2f40e
 
 ###
 
@@ -170,7 +170,7 @@ Content-Type: application/json
 
 {
 
-    "email":"dinah-dd2424@hotmail.com",
+    "email":"dinah-doria@gmail.com",
     "senha":"outrasenha"
 }
 
@@ -197,4 +197,39 @@ Content-Type: application/json
 
 {
     "situacao":"pendente"
+}
+
+
+### PERMISSIONS
+
+
+GET http://localhost:3048/api/permissions
+
+###
+
+POST http://localhost:3048/api/permissions
+Content-Type: application/json
+
+{
+    "name": "dinah doria",
+    "description":"teste"
+}
+
+
+###
+
+GET http://localhost:3048/api/permissions/65411be70fd140b09afdf67b
+
+###
+
+DELETE http://localhost:3048/api/permissions/65411be70fd140b09afdf67b
+
+###
+
+PUT http://localhost:3048/api/permissions/65411be70fd140b09afdf67b
+Content-Type: application/json
+
+{
+    "name": "dinah doria",
+    "description":"teste48"
 }
