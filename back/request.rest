@@ -170,7 +170,7 @@ Content-Type: application/json
 
 {
 
-    "email":"dinah-doria@gmail.com",
+    "email":"dinah-doria@gmail.co",
     "senha":"outrasenha"
 }
 
@@ -180,7 +180,7 @@ GET http://localhost:3048/api/auth/register
 
 ###
 
-GET http://localhost:3048/api/auth/register/652db8f363b65d751471cfd4
+GET http://localhost:3048/api/auth/register/653c81c24ae88d9c03b2f40e
 
 ###
 
@@ -188,7 +188,7 @@ GET http://localhost:3048/api/auth/register/email?email=giovana@gmail.com
 
 ###
 
-DELETE http://localhost:3048/api/auth/register/6515173f5f29a1158301beda
+DELETE http://localhost:3048/api/auth/register/653c81c24ae88d9c03b2f40e
 
 ###
 
