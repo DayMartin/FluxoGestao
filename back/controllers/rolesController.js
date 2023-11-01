@@ -3,6 +3,7 @@ const { Roles } = require("../models/Roles");
 const { Permissions: PermissionsModel } = require("../models/Permissions");
 const { Permissions } = require("../models/Permissions");
 
+const RolePermission = require("../models/RolePermission");
 
 const rolesController = {
     create: async (req, res) => {
@@ -22,19 +23,34 @@ const rolesController = {
                 return res.status(422).json({ msg: "Roles já cadastrada" });
             }
 
-            // Verifique se as permissões existem e coloque o documento de permissão no array
-            const existsPermissions = await Permissions.findById(permissions);
-            if (!existsPermissions) {
-                return res.status(422).json({ msg: "Permissão não encontrada" });
+            const rolePermissions = []; // Array para armazenar permissões
+
+            // Verifique se as permissões existem e adicione os documentos de permissão ao array
+            for (const permissionId of permissions) {
+                const existsPermission = await Permissions.findById(permissionId);
+                if (!existsPermission) {
+                    return res.status(422).json({ msg: `Permissão não encontrada: ${permissionId}` });
+                }
+                rolePermissions.push(existsPermission._id);
             }
 
             const roles = new Roles({
               name,
               description,
-              permissions: [existsPermissions],
+              permissions: rolePermissions, 
             });
 
             const response = await roles.save();
+            
+            // Crie as relações na coleção "role_permissions" (uma para cada permissão)
+            for (const permissionId of permissions) {
+                const rolePermission = new RolePermission({
+                    role_id: response._id,
+                    permission_id: permissionId,
+                });
+                await rolePermission.save();
+            }
+
             res.status(201).json({ id: response._id, msg: "Role criada com sucesso" });
           } catch (error) {
             console.error(error);
@@ -95,6 +111,7 @@ const rolesController = {
         const roles = {
             name: req.body.name,
             description: req.body.description,
+            
         };
 
         const updatedRoles = await RolesModel.findByIdAndUpdate(id, roles);

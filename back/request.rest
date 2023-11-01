@@ -211,8 +211,8 @@ POST http://localhost:3048/api/permissions
 Content-Type: application/json
 
 {
-    "name": "delete_ordem",
-    "description":"Delete ordem de serviço"
+    "name": "visualizar",
+    "description":"Visualizar ordem de serviço"
 }
 
 
@@ -222,16 +222,16 @@ GET http://localhost:3048/api/permissions/65411be70fd140b09afdf67b
 
 ###
 
-DELETE http://localhost:3048/api/permissions/65411c360fd140b09afdf683
+DELETE http://localhost:3048/api/permissions/6542b13215291d042073a66e
 
 ###
 
-PUT http://localhost:3048/api/permissions/6542a32f905103efbf3cefa4
+PUT http://localhost:3048/api/permissions/6542b717853d69df1a04b929
 Content-Type: application/json
 
 {
     "name": "deletar_ordem",
-    "description":"Permissão para deletar ordens de serviço"
+    "description":"Permissão para deletar ordem de serviço"
 }
 
 
@@ -245,10 +245,13 @@ POST http://localhost:3048/api/roles
 Content-Type: application/json
 
 {
-    "name": "ROLE_ADMIN",
-    "description":"Administrator",
+    "name": "ROLE_SUPERVISOR",                                
+    "description":"Supervisor",
     "permissions":[
-        "6542a32f905103efbf3cefa4"
+        "6542a32f905103efbf3cefa4",
+        "6542b717853d69df1a04b929",
+        "6542b72e853d69df1a04b92c",
+        "6542b774853d69df1a04b933"
     ]
 }
 
@@ -258,7 +261,7 @@ GET http://localhost:3048/api/roles/6542a71e1749c35a3c77ebff
 
 ###
 
-DELETE http://localhost:3048/api/roles/6542a4d76acba8a785c1e548
+DELETE http://localhost:3048/api/roles/6542b4c89281d343613ce517
 
 ###
 
