@@ -49,3 +49,11 @@ const permissionsRouter = require("./permissions");
 router.use("/", permissionsRouter);
 
 module.exports = router;
+
+// roles routes
+
+const rolesRouter = require("./roles");
+
+router.use("/", rolesRouter);
+
+module.exports = router;

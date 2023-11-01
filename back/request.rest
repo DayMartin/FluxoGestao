@@ -211,8 +211,8 @@ POST http://localhost:3048/api/permissions
 Content-Type: application/json
 
 {
-    "name": "dinah doria",
-    "description":"teste"
+    "name": "delete_ordem",
+    "description":"Delete ordem de serviço"
 }
 
 
@@ -222,14 +222,50 @@ GET http://localhost:3048/api/permissions/65411be70fd140b09afdf67b
 
 ###
 
-DELETE http://localhost:3048/api/permissions/65411be70fd140b09afdf67b
+DELETE http://localhost:3048/api/permissions/65411c360fd140b09afdf683
 
 ###
 
-PUT http://localhost:3048/api/permissions/65411be70fd140b09afdf67b
+PUT http://localhost:3048/api/permissions/6542a32f905103efbf3cefa4
 Content-Type: application/json
 
 {
-    "name": "dinah doria",
+    "name": "deletar_ordem",
+    "description":"Permissão para deletar ordens de serviço"
+}
+
+
+### ROLES
+
+GET http://localhost:3048/api/roles
+
+###
+
+POST http://localhost:3048/api/roles
+Content-Type: application/json
+
+{
+    "name": "ROLE_ADMIN",
+    "description":"Administrator",
+    "permissions":[
+        "6542a32f905103efbf3cefa4"
+    ]
+}
+
+###
+
+GET http://localhost:3048/api/roles/6542a71e1749c35a3c77ebff
+
+###
+
+DELETE http://localhost:3048/api/roles/6542a4d76acba8a785c1e548
+
+###
+
+PUT http://localhost:3048/api/roles/65429f981ced92200c4364a4
+Content-Type: application/json
+
+{
+    "name": "role",
     "description":"teste48"
 }
