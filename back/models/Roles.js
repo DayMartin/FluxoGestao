@@ -1,3 +1,4 @@
+// Definição do modelo Roles
 const mongoose = require("mongoose");
 const { Schema } = mongoose;
 
@@ -6,7 +7,7 @@ const rolesSchema = new Schema({
   description: String,
   permissions: [{
     type: Schema.Types.ObjectId,
-    ref: 'Permissions'  // Referência à coleção de Permissões
+    ref: 'Permissions'
   }]
 }, { timestamps: true });
 

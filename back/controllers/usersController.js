@@ -1,13 +1,16 @@
 const { Users: UsersModel } = require("../models/Users");
 const { Users } = require("../models/Users");
 
+const { Roles: RolesModel } = require("../models/Roles");
+const { Roles } = require("../models/Roles");
+
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
 const usersController = {
     create: async (req, res) => {
         try {
-            const { name, email, senha, matricula, setor, funcao } = req.body;
+            const { name, email, senha, matricula, setor, funcao, roles } = req.body;
     
             // validations
             if (!name) {
@@ -28,6 +31,7 @@ const usersController = {
             if (!senha) {
                 return res.status(422).json({ msg: "A senha é obrigatória!" });
             }
+
             // check if user exists
             const usersExists = await Users.findOne({ email });
             if (usersExists) {
@@ -38,6 +42,17 @@ const usersController = {
             const salt = await bcrypt.genSalt(12);
             const passwordHash = await bcrypt.hash(senha, salt);
 
+            const userRoles = []; // Array para armazenar roles
+
+            // Verifique se as roles existem e adicione os documentos de roles ao array
+            for (const roleId of roles) {
+                const existsRole = await RolesModel.findById(roleId);
+                if (!existsRole) {
+                    return res.status(422).json({ msg: `Role não encontrada: ${roleId}` });
+                }
+                userRoles.push(existsRole._id);
+            }
+
             const users = new Users({
               name,
               matricula,
@@ -47,7 +62,9 @@ const usersController = {
               email,
               senha: passwordHash,
               situacao: req.body.situacao,
+              roles: [userRoles], 
             });
+
 
             const response = await users.save();
             res.status(201).json({ id: response._id, msg: "Usuário criado com sucesso" });
@@ -58,7 +75,8 @@ const usersController = {
         },
     getAll: async (req, res) => {
         try {
-            const users = await UsersModel.find();
+            //const users = await UsersModel.find();
+         const users = await UsersModel.find().populate('roles');
 
             res.json(users);
         } catch (error) {
@@ -69,7 +87,8 @@ const usersController = {
     get: async (req, res) => {
         try {
             const id = req.params.id;
-            const users = await UsersModel.findById(id);
+            //const users = await UsersModel.findById(id);
+            const users = await UsersModel.findById(id).populate('roles');
 
             if(!users) {
                 res.status(404).json({ msg: "Usuário não encontrado"});
@@ -133,6 +152,7 @@ const usersController = {
             email: req.body.email,
             senha: req.body.senha,
             situacao: req.body.situacao,
+            roles: req.body.roles,
         };
 
         const updatedUsers = await UsersModel.findByIdAndUpdate(id, users);

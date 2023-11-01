@@ -160,7 +160,10 @@ Content-Type: application/json
     "funcao":"mecanico",
     "email":"dinah-dd2428@hotmail.com",
     "senha":"outrasenha",
-    "situacao":"pendente"
+    "situacao":"pendente",
+    "roles":[
+        "6542b936853d69df1a04b944"
+    ]
 }
 
 ###
@@ -180,7 +183,7 @@ GET http://localhost:3048/api/auth/register
 
 ###
 
-GET http://localhost:3048/api/auth/register/653c81c24ae88d9c03b2f40e
+GET http://localhost:3048/api/auth/register/6542c4ed6b0a4d51b96072f9
 
 ###
 

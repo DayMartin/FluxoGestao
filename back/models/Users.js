@@ -28,6 +28,10 @@ const usersSchema = new Schema ({
       situacao: {
         type: String,
       },
+      roles: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Roles'  // Referência à coleção de Roles
+      }]
     }, { timestamps: true }
     );
     
