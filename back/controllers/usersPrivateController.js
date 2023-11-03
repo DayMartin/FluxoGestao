@@ -48,12 +48,14 @@ function checkToken(req, res, next) {
     try {
         const secret = process.env.SECRET;
 
-        jwt.verify(token, secret);
+        const decodedToken = jwt.verify(token, secret);
+        req.user = decodedToken; // Isso configurará o usuário a partir do token
 
         next();
     } catch (err) {
         res.status(400).json({ msg: "O Token é inválido!" });
     }
 }
+
 
 module.exports = usersPrivateController;

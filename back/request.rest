@@ -161,9 +161,8 @@ Content-Type: application/json
     "email":"dinah-dd2428@hotmail.com",
     "senha":"outrasenha",
     "situacao":"pendente",
-    "roles":[
-        "6542b936853d69df1a04b944"
-    ]
+    "roles": "admin"
+    
 }
 
 ###
@@ -173,7 +172,7 @@ Content-Type: application/json
 
 {
 
-    "email":"dinah-doria@gmail.co",
+    "email":"dinah-dd2428@hotmail.com",
     "senha":"outrasenha"
 }
 
@@ -183,7 +182,7 @@ GET http://localhost:3048/api/auth/register
 
 ###
 
-GET http://localhost:3048/api/auth/register/6542c4ed6b0a4d51b96072f9
+GET http://localhost:3048/api/auth/register/654436f2f1da38c005c61dce
 
 ###
 
@@ -191,87 +190,24 @@ GET http://localhost:3048/api/auth/register/email?email=giovana@gmail.com
 
 ###
 
-DELETE http://localhost:3048/api/auth/register/653c81c24ae88d9c03b2f40e
+DELETE http://localhost:3048/api/auth/register/654436f2f1da38c005c61dce
 
 ###
 
-PUT http://localhost:3048/api/auth/register/65269b711bd52ea7016b8005
+PUT http://localhost:3048/api/auth/register/654435d92234e0e63f8182ba
 Content-Type: application/json
 
 {
-    "situacao":"pendente"
+
+    "name": "dinah doria",
+    "matricula":"1234",
+    "setor":"fundição",
+    "turno":"manha",
+    "funcao":"mecanico",
+    "email":"dinah-dd2428@hotmail.com",
+    "senha":"outrasenha",
+    "situacao":"pendente",
+    "roles": "admin"
+    
 }
 
-
-### PERMISSIONS
-
-
-GET http://localhost:3048/api/permissions
-
-###
-
-POST http://localhost:3048/api/permissions
-Content-Type: application/json
-
-{
-    "name": "visualizar",
-    "description":"Visualizar ordem de serviço"
-}
-
-
-###
-
-GET http://localhost:3048/api/permissions/65411be70fd140b09afdf67b
-
-###
-
-DELETE http://localhost:3048/api/permissions/6542b13215291d042073a66e
-
-###
-
-PUT http://localhost:3048/api/permissions/6542b717853d69df1a04b929
-Content-Type: application/json
-
-{
-    "name": "deletar_ordem",
-    "description":"Permissão para deletar ordem de serviço"
-}
-
-
-### ROLES
-
-GET http://localhost:3048/api/roles
-
-###
-
-POST http://localhost:3048/api/roles
-Content-Type: application/json
-
-{
-    "name": "ROLE_SUPERVISOR",                                
-    "description":"Supervisor",
-    "permissions":[
-        "6542a32f905103efbf3cefa4",
-        "6542b717853d69df1a04b929",
-        "6542b72e853d69df1a04b92c",
-        "6542b774853d69df1a04b933"
-    ]
-}
-
-###
-
-GET http://localhost:3048/api/roles/6542a71e1749c35a3c77ebff
-
-###
-
-DELETE http://localhost:3048/api/roles/6542b4c89281d343613ce517
-
-###
-
-PUT http://localhost:3048/api/roles/65429f981ced92200c4364a4
-Content-Type: application/json
-
-{
-    "name": "role",
-    "description":"teste48"
-}

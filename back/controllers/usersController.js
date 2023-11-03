@@ -1,9 +1,6 @@
 const { Users: UsersModel } = require("../models/Users");
 const { Users } = require("../models/Users");
 
-const { Roles: RolesModel } = require("../models/Roles");
-const { Roles } = require("../models/Roles");
-
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
@@ -42,17 +39,6 @@ const usersController = {
             const salt = await bcrypt.genSalt(12);
             const passwordHash = await bcrypt.hash(senha, salt);
 
-            const userRoles = []; // Array para armazenar roles
-
-            // Verifique se as roles existem e adicione os documentos de roles ao array
-            for (const roleId of roles) {
-                const existsRole = await RolesModel.findById(roleId);
-                if (!existsRole) {
-                    return res.status(422).json({ msg: `Role não encontrada: ${roleId}` });
-                }
-                userRoles.push(existsRole._id);
-            }
-
             const users = new Users({
               name,
               matricula,
@@ -62,7 +48,7 @@ const usersController = {
               email,
               senha: passwordHash,
               situacao: req.body.situacao,
-              roles: [userRoles], 
+              roles: req.body.roles, 
             });
 
 

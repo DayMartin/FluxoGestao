@@ -43,6 +43,7 @@ require("dotenv").config();
           const token = jwt.sign(
             {
               id: user._id,
+              roles: user.roles,
             },
             secret
           );
