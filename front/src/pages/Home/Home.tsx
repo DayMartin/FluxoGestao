@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '@mui/material/Button';
+import PermissionComponent from '../../shared/components/AuthComponent/AuthComponent';
 
 export const Home = () => {
   const handleButtonClick = () => {
@@ -21,15 +22,18 @@ export const Home = () => {
       <Button onClick={handleButtonClick} variant="contained" color="primary" style={{ width: '200px', height:'80px', margin: '10px' }}>
         Serviços
       </Button>
+      <PermissionComponent requiredRoles="admin">
       <Button variant="contained" color="primary" style={{ width: '200px', height:'80px', margin: '10px' }}>
         Funcionários
       </Button>
+      </PermissionComponent>
       <Button variant="contained" color="primary" style={{ width: '200px', height:'80px', margin: '10px' }}>
         Relatórios
       </Button>
       <Button variant="contained" color="primary" style={{ width: '200px', height:'80px', margin: '10px' }}>
         Perfil
       </Button>
+            
     </div>
   );
 };

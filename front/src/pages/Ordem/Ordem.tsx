@@ -1,4 +1,5 @@
 import { FerramentasDeDetalhe, OrdemForms } from '../../shared/components';
+import PermissionComponent from '../../shared/components/AuthComponent/AuthComponent';
 import { LayoutBaseDePagina } from '../../shared/layouts';
 
 export const Ordem = () => {
@@ -9,7 +10,9 @@ export const Ordem = () => {
         <FerramentasDeDetalhe mostrarBotaoSalvarEFechar/>
         )}
         > 
-        <OrdemForms/>
+        <PermissionComponent requiredRoles={['admin']}>
+          <OrdemForms />
+        </PermissionComponent>
         </LayoutBaseDePagina>
       );
 

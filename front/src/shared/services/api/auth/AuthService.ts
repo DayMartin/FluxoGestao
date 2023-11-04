@@ -1,15 +1,16 @@
 import { Api } from '../axios-config';
 
 interface IAuth {
-  token: string; // Alterar para 'token' em vez de 'accessToken'
+  token: string; 
+  role: string;
 }
 
 const auth = async (email: string, senha: string): Promise<IAuth | Error> => {
   try {
-    const { data } = await Api.post('/auth/login', { email, senha }); // Remova a chave 'data'
+    const { data } = await Api.post('/auth/login', { email, senha }); 
 
     if (data && data.token) { // Verifique se 'token' está presente na resposta
-      return { token: data.token }; // Retorna a resposta com 'token'
+      return { token: data.token, role: data.role }; // Retorna a resposta com 'token'
     }
 
     return new Error('Erro no login.');
