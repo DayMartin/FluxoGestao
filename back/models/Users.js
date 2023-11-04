@@ -29,7 +29,7 @@ const usersSchema = new Schema ({
         type: String,
       },
       roles: {
-        type: String,
+        type: [String], // Define roles como uma matriz de strings
       }
     }, { timestamps: true }
     );
