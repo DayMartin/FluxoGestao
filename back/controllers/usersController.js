@@ -48,7 +48,7 @@ const usersController = {
               email,
               senha: passwordHash,
               situacao: req.body.situacao,
-              roles: rolesArray
+              roles: [roles]
             });
 
 

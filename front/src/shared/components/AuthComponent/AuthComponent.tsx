@@ -11,7 +11,6 @@ const PermissionComponent: React.FC<PermissionComponentProps> = ({ requiredRoles
 
   useEffect(() => {
     const storedRoles = localStorage.getItem('APP_ACCESS_ROLES');
-    console.log('Conteúdo do localStorage (APP_ACCESS_ROLES):', storedRoles);
 
     if (storedRoles) {
       try {
@@ -21,7 +20,6 @@ const PermissionComponent: React.FC<PermissionComponentProps> = ({ requiredRoles
         }
       } catch (error) {
         console.error('Erro ao analisar as roles do localStorage:', error);
-        console.log('Conteúdo do localStorage:', storedRoles);
       }
     }
 

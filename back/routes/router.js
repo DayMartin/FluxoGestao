@@ -41,3 +41,12 @@ const usersPrivateRouter = require("./usersPrivate");
 router.use("/", usersPrivateRouter);
 
 module.exports = router;
+
+
+// auth routes
+
+const usersrolesRouter = require("./roles");
+
+router.use("/", usersrolesRouter);
+
+module.exports = router;

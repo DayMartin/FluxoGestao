@@ -22,7 +22,7 @@ export const Home = () => {
       <Button onClick={handleButtonClick} variant="contained" color="primary" style={{ width: '200px', height:'80px', margin: '10px' }}>
         Serviços
       </Button>
-      <PermissionComponent requiredRoles="admin">
+      <PermissionComponent requiredRoles="6545bc08c05adf0df42e48d2">
       <Button variant="contained" color="primary" style={{ width: '200px', height:'80px', margin: '10px' }}>
         Funcionários
       </Button>

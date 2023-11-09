@@ -28,9 +28,13 @@ const usersSchema = new Schema ({
       situacao: {
         type: String,
       },
-      roles: {
+      roles: [{
+        type: Schema.Types.ObjectId,
+        ref: 'UsersRoles' 
+      }]
+      /*roles: {
         type: [String], // Define roles como uma matriz de strings
-      }
+      }*/
     }, { timestamps: true }
     );
     

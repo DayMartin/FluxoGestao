@@ -158,10 +158,10 @@ Content-Type: application/json
     "setor":"fundição",
     "turno":"manha",
     "funcao":"mecanico",
-    "email":"dinah-dd2428@hotmail.com",
+    "email":"dinah@gmail.com",
     "senha":"outrasenha",
     "situacao":"pendente",
-    "roles": "admin"
+    "roles": "654d537089323f636a75a2fd"
     
 }
 
@@ -190,7 +190,7 @@ GET http://localhost:3048/api/auth/register/email?email=giovana@gmail.com
 
 ###
 
-DELETE http://localhost:3048/api/auth/register/654436f2f1da38c005c61dce
+DELETE http://localhost:3048/api/auth/register/65459fad1942da3d10827a4d
 
 ###
 
@@ -211,3 +211,41 @@ Content-Type: application/json
     
 }
 
+
+### ROLES
+
+POST http://localhost:3048/api/usersroles
+Content-Type: application/json
+
+{
+    "name": "user",
+    "description": "usuário"
+    
+}
+
+###
+
+GET http://localhost:3048/api/usersroles
+
+###
+
+DELETE http://localhost:3048/api/usersroles/6545bbc2c05adf0df42e48cb
+
+###
+
+PUT http://localhost:3048/api/usersroles/654435d92234e0e63f8182ba
+Content-Type: application/json
+
+{
+
+    "name": "dinah doria",
+    "matricula":"1234",
+    "setor":"fundição",
+    "turno":"manha",
+    "funcao":"mecanico",
+    "email":"dinah-dd2428@hotmail.com",
+    "senha":"outrasenha",
+    "situacao":"pendente",
+    "roles": "admin"
+    
+}
