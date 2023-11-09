@@ -10,7 +10,7 @@ export const Ordem = () => {
         <FerramentasDeDetalhe mostrarBotaoSalvarEFechar/>
         )}
         > 
-        <PermissionComponent requiredRoles={['admin']}>
+        <PermissionComponent requiredRoles={['6545bc08c05adf0df42e48d2']}>
           <OrdemForms />
         </PermissionComponent>
         </LayoutBaseDePagina>
