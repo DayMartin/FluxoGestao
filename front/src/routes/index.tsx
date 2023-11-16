@@ -6,30 +6,25 @@ import { useEffect } from 'react';
 import {
   Home, Dashboard, Ordem, PessoasListagem, Users, OrdemListagem, OrdemDetalhe
 } from '../pages';
+import { UserForms } from '../shared/components';
 
 export const AppRoutes = () => {
   const { setDrawerOptions } = useDrawerContext();
 
   useEffect(() => {
     setDrawerOptions([
-      {
-        icon: 'home',
-        path: "/pagina-inicial",
-        label: 'Página inicial',
-      },
+      // {
+      //   icon: 'home',
+      //   path: "/pagina-inicial",
+      //   label: 'Página inicial',
+      // },
 
       
-      {
-        icon: 'people',
-        path: "/user",
-        label: 'Usuário',
-      },
-      
-      {
-        icon: 'article',
-        path: "/ordem",
-        label: 'Formulário de serviço',
-      }, 
+      // {
+      //   icon: 'people',
+      //   path: "/user",
+      //   label: 'Usuário',
+      // },
 
       {
         icon: 'assignment',
@@ -53,6 +48,7 @@ export const AppRoutes = () => {
 
     <Route path="/user" element={<Users />} />
     <Route path="/usersListagem" element={<PessoasListagem />} />
+    <Route path="/userperfil" element={<UserForms />} />
 
     <Route path="/ordem" element={<Ordem/>} />
     <Route path="/ordemListagem" element={<OrdemListagem />} />
