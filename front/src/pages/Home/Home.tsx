@@ -4,7 +4,10 @@ import PermissionComponent from '../../shared/components/AuthComponent/AuthCompo
 
 export const Home = () => {
   const handleButtonClick = () => {
-    window.location.href = 'http://localhost:3000/pagina-inicial';
+    window.location.href = 'http://localhost:3000/ordemListagem'; };
+
+  const handleButtonClick1 = () => {
+    window.location.href = 'http://localhost:3000/userperfil'; 
   };
 
   return (
@@ -30,7 +33,7 @@ export const Home = () => {
       <Button variant="contained" color="primary" style={{ width: '200px', height:'80px', margin: '10px' }}>
         Relatórios
       </Button>
-      <Button variant="contained" color="primary" style={{ width: '200px', height:'80px', margin: '10px' }}>
+      <Button onClick={handleButtonClick1} variant="contained" color="primary" style={{ width: '200px', height:'80px', margin: '10px' }}>
         Perfil
       </Button>
             
