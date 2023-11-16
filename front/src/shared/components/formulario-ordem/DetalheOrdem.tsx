@@ -5,6 +5,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
   const [ordemData, setOrdemData] = useState<IDetalheOrdem | null>(null);
   const [showDadosGerais, setShowDadosGerais] = useState(true);
   const [showServicos, setShowServicos] = useState(false);
+  const [showComentarios, setShowComentarios] = useState(false);
   const [botaoClicado, setBotaoClicado] = useState('');
 
   useEffect(() => {
@@ -30,12 +31,20 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
     if (botao === 'dadosGerais') {
       setShowDadosGerais(true);
       setShowServicos(false);
+      setShowComentarios(false);
       setBotaoClicado('dadosGerais');
     } else if (botao === 'servicos') {
       setShowDadosGerais(false);
       setShowServicos(true);
+      setShowComentarios(false);
       setBotaoClicado('servicos');
+    }  else if (botao === 'comentarios') {
+      setShowDadosGerais(false);
+      setShowServicos(false);
+      setShowComentarios(true);
+      setBotaoClicado('comentarios');
     }
+    
   };
 
   return (
@@ -54,6 +63,12 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
           onClick={() => handleButtonClick('servicos')}
         >
           Serviços
+        </button>
+        <button
+          className={`botao-detalhes-os ${botaoClicado === 'comentarios' ? 'botao-clicado' : ''}`}
+          onClick={() => handleButtonClick('comentarios')}
+        >
+          Comentários
         </button>
           </div>
           {showDadosGerais && (
@@ -79,6 +94,11 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                 <div className = "campos-detalhes-os"> 
                 <h5 >Urgência</h5>
                 <p> {ordemData.urgencia}</p>
+                </div>
+
+                <div className = "campos-detalhes-os"> 
+                <h5 >Setor Atual </h5>
+                <p> {ordemData.setor}</p>
                 </div>
 
                 <div className = "campos-detalhes-os"> 
@@ -128,6 +148,24 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                     </li>
                   ))}
                 </ul>
+              </div>
+            </div>
+          )}
+          {showComentarios && (
+            <div className="div-interna-detalhes-os">
+              <div className="div-detalhes-os">
+                <h4>Comentários</h4>
+                <ul>
+                  {ordemData.comments.map((comments, index) => (
+                    <li key={index}>
+                      <p>Usuário: {comments.usuario}</p>
+                      <p>Descrição: {comments.description}</p>
+                    </li>
+                  ))}
+                </ul>
+                <br></br>
+                <textarea></textarea>
+                <button>Adicionar novo comentário</button>
               </div>
             </div>
           )}
