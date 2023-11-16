@@ -89,9 +89,9 @@ export const MenuLateral: React.FC<IMenuLateralProps> = ({ children }) => {
           <Box>
           <ListItemButton onClick={handleButtonClick}>
                 <ListItemIcon>
-                  <Icon>back</Icon>
+                  <Icon>home</Icon>
                 </ListItemIcon>
-                <ListItemText primary="Voltar" />
+                <ListItemText primary="Página Inicial" />
               </ListItemButton>
               
             <List component="nav">
