@@ -39,6 +39,7 @@ export interface IDetalheOrdem {
     name: string;
     description: string;
     status: string;
+    _id:string;
   }[];
   comments: {
     usuario: string;
@@ -120,9 +121,9 @@ const create = async (dados: IOrdemServiceData): Promise<string> => {
   }
 };
 
-const updateById = async (id: string, dados: IOrdemServiceData): Promise<void | Error> => {
+const updateById = async (_id: string, dados: IOrdemServiceData): Promise<void | Error> => {
   try {
-    await Api.put(`/ordem/${id}`, dados);
+    await Api.put(`/ordem/${_id}`, dados);
   } catch (error) {
     console.error(error);
     return new Error((error as { message: string }).message || 'Erro ao atualizar o registro.');

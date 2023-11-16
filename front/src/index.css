@@ -14,7 +14,7 @@ code {
 
 .div-externa-ordem-listagem {
   width: 900px;
-  height: 700px;
+  height: 1200;
   box-sizing: border-box;
   margin: 15px 0px 15px 0px;
 }
@@ -50,6 +50,7 @@ code {
   padding: 10px;
   box-sizing: border-box;
   width: 100%;
+  height: 560px;
 }
 
 .titulos-detalhes-os {
@@ -122,6 +123,7 @@ h5 {
 
   .div-detalhes-os {
     width: 100%; /* Faça a largura ocupar 100% da tela em dispositivos móveis */
+    height: 500px;
   }
 }
 
