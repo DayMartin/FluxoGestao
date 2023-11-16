@@ -159,6 +159,7 @@ export const OrdemListagem: React.FC = () => {
               <TableCell>Cab</TableCell>
               <TableCell>Status</TableCell>
               <TableCell>Urgencia</TableCell>
+              <TableCell>Setor Atual</TableCell>
               <TableCell width={130}>Ações</TableCell>
             </TableRow>
           </TableHead>
@@ -188,6 +189,7 @@ export const OrdemListagem: React.FC = () => {
                     <TableCell>{row.cabeceira}</TableCell>
                     <TableCell>{row.status}</TableCell>
                     <TableCell>{row.urgencia}</TableCell>
+                    <TableCell>{row.setor}</TableCell>
                     <TableCell>
                     <IconButton size="small" onClick={() => handleDelete(row._id)}>
                     <Icon>delete</Icon>
