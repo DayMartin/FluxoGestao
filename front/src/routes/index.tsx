@@ -54,36 +54,58 @@ export const AppRoutes = () => {
       }
     }, []);
   
-    // Função para determinar as opções de menu com base nas roles do usuário
     const getMenuOptions = () => {
-      if (userRoles.includes('6545bc08c05adf0df42e48d2')) {
-        return [
-          // ...opções adicionais para essa role
+      const menuOptions = [];
+    
+      if (userRoles.includes('6557a82b0aac2bc3ce21c604')) {
+        menuOptions.push(
           {
             icon: 'assignment',
             path: "/ordemprod",
-            label: 'Ordem Prod',
+            label: 'Work Prod',
           },
-        ];
-      } else if (userRoles.includes('654d537089323f636a75a2fd')) {
-        return [
-          // ...opções adicionais para essa role
           {
             icon: 'assignment',
             path: "/ordemMec",
-            label: 'Ordem Mec',
-          },
-        ];
-      }
-      // Caso contrário, retorne as opções padrão
-      return [
+            label: 'Work Mec',
+          }
+        );
+      } else if (userRoles.includes('654d537089323f636a75a2fd')) {
+        menuOptions.push(
+          {
+          icon: 'assignment',
+          path: "/ordemMec",
+          label: 'Work Mec',
+        },
         {
           icon: 'assignment',
-          path: "/ordemListagem",
-          label: 'Listagem de serviços',
-        },
-      ];
+          path: "/ordemprod",
+          label: 'Work Prod',
+        }
+        );
+      } else if (userRoles.includes('6557a3e40aac2bc3ce21c5ea')) {
+        menuOptions.push({
+          icon: 'assignment',
+          path: "/ordemMec",
+          label: 'Work Mec',
+        });
+      } else if (userRoles.includes('6557a3830aac2bc3ce21c5e6')) {
+        menuOptions.push({
+          icon: 'assignment',
+          path: "/ordemprod",
+          label: 'Work Prod',
+        });
+      } else {
+        menuOptions.push({
+          icon: 'assignment',
+          path: "/home",
+          label: 'Home',
+        });
+      }
+    
+      return menuOptions;
     };
+    
   
     useEffect(() => {
       setDrawerOptions(getMenuOptions());
@@ -100,13 +122,23 @@ export const AppRoutes = () => {
       <Route path="/home" element={<Home/>} />
 
       {/* Rotas condicionais com base na role do usuário */}
-      <Route path="/ordemMec" element={<PermissionComponent requiredRoles={['654d537089323f636a75a2fd']}>
-        <OrdemMec />
-      </PermissionComponent>} />
+      <Route
+        path="/ordemMec"
+        element={
+          <PermissionComponent requiredRoles={['6557a3e40aac2bc3ce21c5ea', '6557a82b0aac2bc3ce21c604', '654d537089323f636a75a2fd']}>
+            <OrdemMec />
+          </PermissionComponent>
+        }
+      />
 
-      <Route path="/ordemprod" element={<PermissionComponent requiredRoles={['6545bc08c05adf0df42e48d2']}>
-        <OrdemProd />
-      </PermissionComponent>} />
+      <Route
+        path="/ordemprod"
+        element={
+          <PermissionComponent requiredRoles={['6557a3830aac2bc3ce21c5e6', '6557a82b0aac2bc3ce21c604', '654d537089323f636a75a2fd']}>
+            <OrdemProd />
+          </PermissionComponent>
+        }
+      />
 
       {/* Rota padrão */}
       <Route path="*" element={<Navigate to="/home" />} />

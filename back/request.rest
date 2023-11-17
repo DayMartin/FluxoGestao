@@ -158,10 +158,10 @@ Content-Type: application/json
     "setor":"fundição",
     "turno":"manha",
     "funcao":"mecanico",
-    "email":"dinah@gmail.com",
+    "email":"dinahadmin@gmail.com",
     "senha":"outrasenha",
     "situacao":"pendente",
-    "roles": "654d537089323f636a75a2fd"
+    "roles": "6557a82b0aac2bc3ce21c604"
     
 }
 
@@ -218,8 +218,8 @@ POST http://localhost:3048/api/usersroles
 Content-Type: application/json
 
 {
-    "name": "user",
-    "description": "usuário"
+    "name": "ROLE_ADMIN",
+    "description": "Administrator"
     
 }
 
