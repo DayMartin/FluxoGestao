@@ -2,7 +2,6 @@ import { createContext, useCallback, useContext, useEffect, useMemo, useState } 
 
 import { AuthService } from '../services/api/auth/AuthService';
 
-
 interface IAuthContextData {
   logout: () => void;
   isAuthenticated: boolean;
@@ -21,7 +20,6 @@ interface IAuthProviderProps {
 export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
   const [token, setToken] = useState<string>();
   const [role, setRole] = useState<string | null>(null);
-  
 
   useEffect(() => {
     const Token = localStorage.getItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN);
@@ -58,6 +56,7 @@ export const AuthProvider: React.FC<IAuthProviderProps> = ({ children }) => {
   
 
   const handleLogout = useCallback(() => {
+    
     localStorage.removeItem(LOCAL_STORAGE_KEY__ACCESS_TOKEN);
     localStorage.removeItem(LOCAL_STORAGE_KEY__ACCESS_ROLES)
     setToken(undefined);

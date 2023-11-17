@@ -40,10 +40,20 @@ const ordemController = {
         const skip = (page - 1) * limit;
     
         const filter = req.query.filter || '';
+        const setor = req.query.setor || '';
             const query = OrdemModel.find();
-    
+        
         if (filter) {
           query.where({ ordemId: parseInt(filter) });
+        }
+
+        // Adicione a condição para filtrar pelo setor "produção"
+        if (setor === 'produção') {
+          query.where({ setor: 'produção' });
+        }
+
+        if (setor === 'mecânica') {
+          query.where({ setor: 'mecânica' });
         }
     
         const ordem = await query

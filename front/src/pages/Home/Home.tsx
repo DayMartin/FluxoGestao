@@ -4,7 +4,7 @@ import PermissionComponent from '../../shared/components/AuthComponent/AuthCompo
 
 export const Home = () => {
   const handleButtonClick = () => {
-    window.location.href = 'http://localhost:3000/ordemListagem'; };
+    window.location.href = 'http://localhost:3000/pagina-inicial'; };
 
   const handleButtonClick1 = () => {
     window.location.href = 'http://localhost:3000/userperfil'; 
