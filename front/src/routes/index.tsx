@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 
 
 import {
-  Home, Dashboard, Ordem, PessoasListagem, Users, OrdemListagem, OrdemProd, OrdemDetalhe, OrdemMec
+  Home, Dashboard, Ordem, PessoasListagem, Users, OrdemListagem, OrdemProd, OrdemDetalhe, OrdemMec, OrdemEncerradas
 } from '../pages';
 import { UserForms } from '../shared/components';
 import PermissionComponent from '../shared/components/AuthComponent/AuthComponent';
@@ -34,6 +34,7 @@ export const AppRoutes = () => {
         path: "/pagina-inicial",
         label: 'Listagem de serviços',
       },
+
 
       /*
       {
@@ -68,6 +69,11 @@ export const AppRoutes = () => {
             icon: 'assignment',
             path: "/ordemMec",
             label: 'Work Mec',
+          },
+          {
+            icon: 'assignment',
+            path: "/ordemEncerrada",
+            label: 'Encerradas',
           }
         );
       } else if (userRoles.includes('654d537089323f636a75a2fd')) {
@@ -81,20 +87,39 @@ export const AppRoutes = () => {
           icon: 'assignment',
           path: "/ordemprod",
           label: 'Work Prod',
+        },
+        {
+          icon: 'assignment',
+          path: "/ordemEncerrada",
+          label: 'Encerradas',
         }
         );
       } else if (userRoles.includes('6557a3e40aac2bc3ce21c5ea')) {
-        menuOptions.push({
+        menuOptions.push(
+          {
           icon: 'assignment',
           path: "/ordemMec",
           label: 'Work Mec',
-        });
+        },
+        {
+          icon: 'assignment',
+          path: "/ordemEncerrada",
+          label: 'Encerradas',
+        }
+        );
       } else if (userRoles.includes('6557a3830aac2bc3ce21c5e6')) {
-        menuOptions.push({
+        menuOptions.push(
+          {
           icon: 'assignment',
           path: "/ordemprod",
           label: 'Work Prod',
-        });
+        },
+        {
+          icon: 'assignment',
+          path: "/ordemEncerrada",
+          label: 'Encerradas',
+        }
+        );
       } else {
         menuOptions.push({
           icon: 'assignment',
@@ -114,14 +139,32 @@ export const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/pagina-inicial" element={<Dashboard />} />
-      <Route path="/user" element={<Users />} />
       <Route path="/usersListagem" element={<PessoasListagem />} />
+      <Route path="/ordemEncerrada" element={<OrdemEncerradas />} />
       <Route path="/userperfil" element={<UserForms />} />
-      <Route path="/ordem" element={<Ordem/>} />
       <Route path="/ordemDetalhe/detalhe/:_id" element={<OrdemDetalhe />} />
       <Route path="/home" element={<Home/>} />
 
       {/* Rotas condicionais com base na role do usuário */}
+
+      <Route
+        path="/user"
+        element={
+          <PermissionComponent requiredRoles={['6557a82b0aac2bc3ce21c604', '654d537089323f636a75a2fd']}>
+            <Users />
+          </PermissionComponent>
+        }
+      />
+
+      <Route
+        path="/ordem"
+        element={
+          <PermissionComponent requiredRoles={['6557a3830aac2bc3ce21c5e6', '6557a82b0aac2bc3ce21c604']}>
+            <Ordem />
+          </PermissionComponent>
+        }
+      />
+
       <Route
         path="/ordemMec"
         element={

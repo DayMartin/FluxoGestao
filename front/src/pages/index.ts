@@ -7,3 +7,4 @@ export * from './Ordem/OrdemDetalhe';
 export * from './Home/Home';
 export * from './Ordem/OrdemProd'
 export * from './Ordem/OrdemMec'
+export * from './Ordem/OrdemEncerradas'

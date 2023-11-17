@@ -41,6 +41,7 @@ const ordemController = {
     
         const filter = req.query.filter || '';
         const setor = req.query.setor || '';
+        const status = req.query.status || '';
             const query = OrdemModel.find();
         
         if (filter) {
@@ -54,6 +55,9 @@ const ordemController = {
 
         if (setor === 'mecânica') {
           query.where({ setor: 'mecânica' });
+        }
+        if (status === 'encerrado') {
+          query.where({ status: 'encerrado' });
         }
     
         const ordem = await query
