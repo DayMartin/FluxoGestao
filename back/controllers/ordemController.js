@@ -91,7 +91,10 @@ const ordemController = {
           totalCountQuery.where({ status: 'Concluido' });
         } else if (status === 'Encerrado'){
           totalCountQuery.where({status:'Encerrado' })
+        } else if (status === 'Em andamento'){
+          totalCountQuery.where({status:'Em andamento' })
         }
+        
 
         const ordem = await query.skip(skip).limit(limit);
 
