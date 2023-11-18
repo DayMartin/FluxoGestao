@@ -61,7 +61,7 @@ export const OrdemEncerradas: React.FC = () => {
     debounce(() => {
       const getCurrentPageData = async (page: number) => {
         try {
-            const result = await OrdemService.getAll({ page: currentPage, limit: Environment.LIMITE_DE_LINHAS, filter: busca, status: 'encerrado' });
+            const result = await OrdemService.getAll({ page: currentPage, limit: Environment.LIMITE_DE_LINHAS, filter: busca, status: 'Encerrado' });
 
           if (result instanceof Error) {
             alert(result.message);
