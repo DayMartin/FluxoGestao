@@ -197,6 +197,7 @@ export const OrdemMec: React.FC = () => {
         aoClicarEmNovo={() => navigate('/ordem')}
         mostrarBotaoAguardando={true}
         mostrarBotaoAndamento={true}
+        mostrarBotaoNovo={false}
         aoClicarEmAguardando={handleFiltrarAguardando}
         aoClicarEmAndamento={handleFiltrarAndamento}
         quantidadeAguardando={quantidadeAguardando}

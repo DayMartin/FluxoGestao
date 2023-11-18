@@ -35,7 +35,7 @@ export const BarraDeFerramentas: React.FC<IFerramentasDaListagemProps> = ({
     mostrarBotaoConcluido = false,
     mostrarBotaoAguardando = false,
     mostrarBotaoAndamento = false,
-    mostrarBotaoNovo = 'true',
+    mostrarBotaoNovo = true,
     aoClicarEmNovo ,
     aoClicarEmConcl,
     aoClicarEmAguardando,
