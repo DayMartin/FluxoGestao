@@ -39,6 +39,9 @@ export const OrdemMec: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedOrdem, setSelectedOrdem] = useState<IDetalheOrdem | null>(null);
   const [showDetalhesDialog, setShowDetalhesDialog] = useState(false);
+  const [quantidadeAguardando, setQuantidadeAguardando] = useState(0);
+  const [quantidadeAndamento, setQuantidadeAndamento] = useState(0);
+
 
   const limit = Environment.LIMITE_DE_LINHAS.toString();
 
@@ -49,7 +52,6 @@ export const OrdemMec: React.FC = () => {
       width: '100%', // Ajuste de largura para telas menores
     },
   }));
-  
 
   const busca = useMemo(() => {
     return searchParams.get('busca') || '';
@@ -61,7 +63,12 @@ export const OrdemMec: React.FC = () => {
     debounce(() => {
       const getCurrentPageData = async (page: number) => {
         try {
-            const result = await OrdemService.getAll({ page: currentPage, limit: Environment.LIMITE_DE_LINHAS, filter: busca, setor: 'mecânica' });
+          const result = await OrdemService.getAll({
+            page: currentPage,
+            limit: Environment.LIMITE_DE_LINHAS,
+            filter: busca,
+            status: 'Aguardando atendimento',
+          });
 
           if (result instanceof Error) {
             alert(result.message);
@@ -89,6 +96,69 @@ export const OrdemMec: React.FC = () => {
     setCurrentPage(newPage);
   };
 
+  const handleFiltrarAguardando = async () => {
+    try {
+      setIsLoading(true);
+      const result = await OrdemService.getAll({
+        page: 1, // Definir a página para 1 ao filtrar por "Aguardando Atendimento"
+        limit: Environment.LIMITE_DE_LINHAS,
+        filter: busca,
+        status: 'Aguardando atendimento',
+      });
+
+      if (result instanceof Error) {
+        alert(result.message);
+        setRows([]);
+      } else {
+        setTotalOrdem(result.pagination.totalOrdem);
+        setRows(result.ordem);
+        setCurrentPage(1); // Atualizar o estado da página para 1
+        // Defina o estado com a quantidade de ordens 'Aguardando atendimento'
+        setQuantidadeAguardando(result.pagination.totalOrdem);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.error('Erro ao buscar ordens aguardando atendimento:', error);
+    }
+  };
+
+    // useEffect para buscar a quantidade de ordens 'Aguardando atendimento' quando o componente for montado
+    useEffect(() => {
+      handleFiltrarAguardando(); // Chama a função ao montar o componente
+    }, []);
+
+  const handleFiltrarAndamento = async () => {
+    try {
+      setIsLoading(true);
+      const result = await OrdemService.getAll({
+        page: 1, // Definir a página para 1 ao filtrar por "Aguardando Atendimento"
+        limit: Environment.LIMITE_DE_LINHAS,
+        filter: busca,
+        status: 'Em andamento',
+      });
+
+      if (result instanceof Error) {
+        alert(result.message);
+        setRows([]);
+      } else {
+        setTotalOrdem(result.pagination.totalOrdem);
+        setRows(result.ordem);
+        setCurrentPage(1); // Atualizar o estado da página para 1
+        // Defina o estado com a quantidade de ordens 'Aguardando atendimento'
+        setQuantidadeAndamento(result.pagination.totalOrdem);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.error('Erro ao buscar ordens aguardando atendimento:', error);
+    }
+  };
+
+  // useEffect para buscar a quantidade de ordens 'Aguardando atendimento' quando o componente for montado
+  useEffect(() => {
+    handleFiltrarAndamento(); // Chama a função ao montar o componente
+  }, []);
 
   const handleDelete = (id: string) => {
     if (confirm('Realmente deseja apagar?')) {
@@ -108,16 +178,16 @@ export const OrdemMec: React.FC = () => {
 
   const handleOpenDetalhesDialog = (ordem: IDetalheOrdem) => {
     setSelectedOrdem(ordem);
-    setShowDetalhesDialog(true); 
-  };  
+    setShowDetalhesDialog(true);
+  };
 
   const handleCloseDetalhesDialog = () => {
-    setShowDetalhesDialog(false); 
+    setShowDetalhesDialog(false);
   };
 
   return (
-    <LayoutBaseDePagina titulo='Listagem de Ordem de serviços de Produção'
-
+    <LayoutBaseDePagina
+      titulo='Listagem de Ordem de serviços de Produção'
     >
       <BarraDeFerramentas
         mostrarInputBusca
@@ -125,13 +195,18 @@ export const OrdemMec: React.FC = () => {
         textoDabusca={busca}
         aoMudarTextoDeBusca={texto => setSearchParams({ busca: texto }, { replace: true })}
         aoClicarEmNovo={() => navigate('/ordem')}
+        mostrarBotaoAguardando={true}
+        mostrarBotaoAndamento={true}
+        aoClicarEmAguardando={handleFiltrarAguardando}
+        aoClicarEmAndamento={handleFiltrarAndamento}
+        quantidadeAguardando={quantidadeAguardando}
+        quantidadeAndamento={quantidadeAndamento}
       />
 
       <TableContainer component={Paper} variant="outlined" sx={{ m: 1, width: 'auto' }}>
         <Table>
           <TableHead>
             <TableRow>
-              
               <TableCell>Id</TableCell>
               <TableCell>Solicitante</TableCell>
               <TableCell>SAL</TableCell>
@@ -161,7 +236,6 @@ export const OrdemMec: React.FC = () => {
               ) : (
                 rows.map(row => (
                   <TableRow key={row.ordemId}>
-
                     <TableCell>{row.ordemId}</TableCell>
                     <TableCell>{row.solicitante}</TableCell>
                     <TableCell>{row.sala}</TableCell>
@@ -171,23 +245,23 @@ export const OrdemMec: React.FC = () => {
                     <TableCell>{row.urgencia}</TableCell>
                     <TableCell>{row.setor}</TableCell>
                     <TableCell>
-                    <IconButton size="small" onClick={() => handleDelete(row._id)}>
-                    <Icon>delete</Icon>
-                    </IconButton>
-                    <IconButton size="small" onClick={() => navigate(`/ordemDetalhe/detalhe/${row._id}`)}>
-                      <Icon>edit</Icon>
-                    </IconButton>
-                    <IconButton size="small" onClick={() => handleOpenDetalhesDialog(row)}>
-                      <Icon>search</Icon>
-                    </IconButton>
-                      </TableCell>
+                      <IconButton size="small" onClick={() => handleDelete(row._id)}>
+                        <Icon>delete</Icon>
+                      </IconButton>
+                      <IconButton size="small" onClick={() => navigate(`/ordemDetalhe/detalhe/${row._id}`)}>
+                        <Icon>edit</Icon>
+                      </IconButton>
+                      <IconButton size="small" onClick={() => handleOpenDetalhesDialog(row)}>
+                        <Icon>search</Icon>
+                      </IconButton>
+                    </TableCell>
                   </TableRow>
                 ))
               )
             )}
 
-        </TableBody>
-        <TableFooter>
+          </TableBody>
+          <TableFooter>
             {(totalOrdem > 0) && (
               <TableRow>
                 <TableCell colSpan={7}>
@@ -202,16 +276,15 @@ export const OrdemMec: React.FC = () => {
           </TableFooter>
         </Table>
       </TableContainer>
-      < Dialog 
-      maxWidth="sm"
-      open={showDetalhesDialog} 
-      onClose={handleCloseDetalhesDialog} 
+      <Dialog
+        maxWidth="sm"
+        open={showDetalhesDialog}
+        onClose={handleCloseDetalhesDialog}
       >
-
-        {showDetalhesDialog && selectedOrdem &&  (
+        {showDetalhesDialog && selectedOrdem && (
           <DetalhesOrdemPopup ordemId={selectedOrdem._id} onClose={handleCloseDetalhesDialog} />
         )}
-      </Dialog>  
+      </Dialog>
     </LayoutBaseDePagina>
   );
 };
