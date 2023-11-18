@@ -39,6 +39,10 @@ export const OrdemProd: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedOrdem, setSelectedOrdem] = useState<IDetalheOrdem | null>(null);
   const [showDetalhesDialog, setShowDetalhesDialog] = useState(false);
+  const [quantidadeAguardando, setQuantidadeAguardando] = useState(0);
+  const [quantidadeConcluido, setQuantidadeConcluido] = useState(0);
+
+
 
   const limit = Environment.LIMITE_DE_LINHAS.toString();
 
@@ -61,7 +65,7 @@ export const OrdemProd: React.FC = () => {
     debounce(() => {
       const getCurrentPageData = async (page: number) => {
         try {
-            const result = await OrdemService.getAll({ page: currentPage, limit: Environment.LIMITE_DE_LINHAS, filter: busca, setor: 'produção' });
+            const result = await OrdemService.getAll({ page: currentPage, limit: Environment.LIMITE_DE_LINHAS, filter: busca, status: 'Aguardando atendimento' });
 
           if (result instanceof Error) {
             alert(result.message);
@@ -115,6 +119,60 @@ export const OrdemProd: React.FC = () => {
     setShowDetalhesDialog(false); 
   };
 
+  const handleFiltrarConcluido = async () => {
+    try {
+      setIsLoading(true);
+      const result = await OrdemService.getAll({ page: 1, limit: Environment.LIMITE_DE_LINHAS, filter: busca, status: 'Concluido' });
+  
+      if (result instanceof Error) {
+        alert(result.message);
+        setRows([]);
+      } else {
+        setTotalOrdem(result.pagination.totalOrdem);
+        setRows(result.ordem);
+        setCurrentPage(1); // Atualizar o estado da página para 1
+        // Defina o estado com a quantidade de ordens 'Aguardando atendimento'
+        setQuantidadeConcluido(result.pagination.totalOrdem);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.error('Erro ao buscar ordens concluídas:', error);
+    }
+  };
+
+    // useEffect para buscar a quantidade de ordens 'COncluido' quando o componente for montado
+    useEffect(() => {
+      handleFiltrarConcluido(); // Chama a função ao montar o componente
+    }, []); 
+
+  const handleFiltrarAguardando = async () => {
+    try {
+      setIsLoading(true);
+      const result = await OrdemService.getAll({ page: 1, limit: Environment.LIMITE_DE_LINHAS, filter: busca, status: 'Aguardando atendimento' });
+  
+      if (result instanceof Error) {
+        alert(result.message);
+        setRows([]);
+      } else {
+        setTotalOrdem(result.pagination.totalOrdem);
+        setRows(result.ordem);
+        setCurrentPage(1); // Atualizar o estado da página para 1
+        // Defina o estado com a quantidade de ordens 'Aguardando atendimento'
+        setQuantidadeAguardando(result.pagination.totalOrdem);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.error('Erro ao buscar ordens aguardando atendimento:', error);
+    }
+  };
+
+  // useEffect para buscar a quantidade de ordens 'Aguardando atendimento' quando o componente for montado
+  useEffect(() => {
+    handleFiltrarAguardando(); // Chama a função ao montar o componente
+  }, []); 
+  
   return (
     <LayoutBaseDePagina titulo='Listagem de Ordem de serviços de Produção'
 
@@ -125,6 +183,13 @@ export const OrdemProd: React.FC = () => {
         textoDabusca={busca}
         aoMudarTextoDeBusca={texto => setSearchParams({ busca: texto }, { replace: true })}
         aoClicarEmNovo={() => navigate('/ordem')}
+        mostrarBotaoConcluido = {true}
+        mostrarBotaoAguardando = {true}
+        aoClicarEmConcl={handleFiltrarConcluido}
+        aoClicarEmAguardando={handleFiltrarAguardando}
+        quantidadeAguardando={quantidadeAguardando}
+        quantidadeConcluido={quantidadeConcluido}
+
       />
 
       <TableContainer component={Paper} variant="outlined" sx={{ m: 1, width: 'auto' }}>
