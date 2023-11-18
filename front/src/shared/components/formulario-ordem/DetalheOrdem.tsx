@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { OrdemService, IDetalheOrdem, IOrdemServiceData } from '../../services/api/Ordem/OrdemService';
+import PermissionComponent from '../AuthComponent/AuthComponent';
 
 function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: () => void }) {
   const [ordemData, setOrdemData] = useState<IDetalheOrdem | null>(null);
@@ -66,6 +67,27 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
       console.error('Erro ao atualizar o status:', error);
     }
   };
+
+  const atualizarSetor = async (novoSetor: string, idOrdem: string) => {
+    try {
+      const dadosAtualizados: Partial<IOrdemServiceData> = {
+        setor: novoSetor
+      };
+  
+      // Adicione os valores apenas se eles existirem em ordemData
+      if (ordemData?.setor) dadosAtualizados.setor = ordemData.setor;
+  
+      const resposta = await OrdemService.updateById(idOrdem, dadosAtualizados as IOrdemServiceData);
+  
+      // Verifique se os dados foram atualizados corretamente
+      console.log('Resposta da atualização:', resposta);
+  
+      // Lógica adicional, como atualizar o estado local, mensagens, etc.
+    } catch (error) {
+      console.error('Erro ao atualizar o status:', error);
+    }
+  };
+
 
   const atualizarServico = async (servicoAtualizado: any, idServico: string) => {
     try {
@@ -144,13 +166,57 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                 </div>
 
                 <div className = "campos-detalhes-os"> 
-                <h5 >Setor Atual </h5>
-                <p> {ordemData.setor}</p>
-                </div>
-
-                <div className = "campos-detalhes-os"> 
                 <h5 >Data</h5>
                 <p> {ordemData.createdAt}</p>
+                </div>
+
+                <div className="campos-detalhes-os">
+                  <h5>Atribuído para:</h5>
+                  {showDadosGerais ? (
+                    <div>
+                      <p>{ordemData.setor}</p>
+                      <div>
+                      
+                        <select
+                          value={ordemData?.setor || ''}
+                          onChange={(e) => {
+                            const novoSetor = e.target.value;
+                            const idOrdem = ordemData?._id || '';
+
+                            // Atualize o estado local após a mudança no select
+                            const updatedOrdemData = {
+                              ...ordemData,
+                              setor: novoSetor,
+                            };
+                            setOrdemData(updatedOrdemData);
+
+                            // Chame a função para atualizar o setor
+                            atualizarSetor(novoSetor, idOrdem);
+                          }}
+                        >
+                           <PermissionComponent requiredRoles={['6557a3830aac2bc3ce21c5e6','6557a82b0aac2bc3ce21c604']}>
+                           <option value="mecânica">Mecânica</option>
+                           </PermissionComponent>
+                           <PermissionComponent requiredRoles={['6557a3e40aac2bc3ce21c5ea','6557a82b0aac2bc3ce21c604']}>
+                           <option value="produção">Produção</option>
+                           </PermissionComponent>
+                        </select>
+                        <button
+                        onClick={() => {
+                          const novoSetor = 'novo setor'; // Defina o novo setor aqui se necessário
+                          const idOrdem = ordemData?._id || ''; // Obtém o ID da ordem
+
+                          atualizarSetor(novoSetor, idOrdem);
+                        }}
+                      >
+                        Atualizar Setor
+                      </button>
+                      </div>
+
+                    </div>
+                  ) : (
+                    <p>Detalhes do setor</p>
+                  )}
                 </div>
 
               </div>
@@ -195,11 +261,14 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                         atualizarStatus(novoStatus, idOrdem);
                       }}
                     >
-                    <option value="Em andamento">Em andamento</option>
-                    <option value="Concluído">Concluído</option>
-                    <option value="Pendente">Pendente</option>
-                    <option value="Dever de recusa">Dever de recusa</option>
+                    <PermissionComponent requiredRoles={['6557a3830aac2bc3ce21c5e6','6557a82b0aac2bc3ce21c604']}>
+                    <option value="Aguardando atendimento">Aguardando atendimento</option>
                     <option value="Encerrado">Encerrado</option>
+                    </PermissionComponent>
+                    <option value="Em andamento">Em andamento</option>
+                    <option value="Concluido">Concluído</option>
+                    <option value="Dever de recusa">Dever de recusa</option>
+                   
                     {/* Adicione outras opções conforme necessário */}
                   </select>
                   <button
