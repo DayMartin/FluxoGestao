@@ -64,13 +64,15 @@ export interface IApiResponse {
     next?: { page: number };
     prev?: { page: number };
   };
-  setor?: string; // Adicionando a propriedade de setor à interface
+  setor?: string;
+  status?: string | string[];
 }
 
 
 const getAll = async (options: { page?: number; limit?: number; filter?: string; ordemId?: string; setor?: string; status?: string }): Promise<IApiResponse | Error> => {
   try {
-    const urlRelativa = `${Environment.URL_BASE}/ordem?page=${options.page || 1}&limit=${options.limit || Environment.LIMITE_DE_LINHAS}&filter=${options.filter || ''}&ordemId=${options.ordemId || ''}&setor=${options.setor || ''}&status=${options.status || ''}`;
+const urlRelativa = `${Environment.URL_BASE}/ordem?page=${options.page || 1}&limit=${options.limit || Environment.LIMITE_DE_LINHAS}&filter=${options.filter || ''}&ordemId=${options.ordemId || ''}&\
+setor=${options.setor || ''}&status=${options.status || ''}`;
     const { data } = await Api.get<IApiResponse>(urlRelativa);
 
     if (data) {
