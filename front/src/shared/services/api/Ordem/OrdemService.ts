@@ -1,14 +1,20 @@
 import { Environment } from '../../../environment';
+import { IDetalheSala, IListagemSala, SalaService } from '../Sala/SalaService';
 import { Api } from '../axios-config';
+import { IDetalhePessoa, PessoasService } from '../users/PessoasService';
 
 
 
 export interface IOrdemServiceData {
   _id: string;
   ordemId: number;
-  solicitante: string;
+  solicitante?: IDetalhePessoa;
   setor: string;
-  sala: number;
+  sala: {
+    _id: string;
+    salaNumber: number;
+    setor: string[];
+  };
   forno: number;
   cabeceira: string;
   status: string;
@@ -16,22 +22,25 @@ export interface IOrdemServiceData {
     name: string;
     description: string;
     status: string;
-  }[];
-  comments: {
-    usuario: string;
-    description: string;
+    comments: {
+      usuario: string;
+      description: string;
+    }[];
   }[];
   urgencia: string;
+  createdAt: string;
 }
 
-
-
 export interface IDetalheOrdem {
-  ordemId: number;
   _id: string;
-  solicitante: string;
+  ordemId: number;
+  solicitante?: IDetalhePessoa;
   setor: string;
-  sala: number;
+  sala: {
+    _id: string;
+    salaNumber: number;
+    setor: string[];
+  };
   forno: number;
   cabeceira: string;
   status: string;
@@ -39,7 +48,6 @@ export interface IDetalheOrdem {
     name: string;
     description: string;
     status: string;
-    _id:string;
   }[];
   comments: {
     usuario: string;
@@ -66,16 +74,58 @@ export interface IApiResponse {
   };
   setor?: string;
   status?: string | string[];
+  sala?: string;
 }
 
 
 const getAll = async (options: { page?: number; limit?: number; filter?: string; ordemId?: string; setor?: string; status?: string }): Promise<IApiResponse | Error> => {
   try {
-const urlRelativa = `${Environment.URL_BASE}/ordem?page=${options.page || 1}&limit=${options.limit || Environment.LIMITE_DE_LINHAS}&filter=${options.filter || ''}&ordemId=${options.ordemId || ''}&\
-setor=${options.setor || ''}&status=${options.status || ''}`;
+    const urlRelativa = `${Environment.URL_BASE}/ordem?page=${options.page || 1}&limit=${options.limit || Environment.LIMITE_DE_LINHAS}&filter=${options.filter || ''}&ordemId=${options.ordemId || ''}&setor=${options.setor || ''}&status=${options.status || ''}`;
     const { data } = await Api.get<IApiResponse>(urlRelativa);
 
-    if (data) {
+    if (data && data.ordem) {
+      const promises = data.ordem.map(async (ordem) => {
+        try {
+          if (ordem.solicitante?._id) {
+            const detalhesSolicitante = await PessoasService.getById(ordem.solicitante._id);
+            if (!(detalhesSolicitante instanceof Error)) {
+              ordem.solicitante = detalhesSolicitante;
+            } else {
+              console.error(`Erro ao obter detalhes do solicitante para a ordem ${ordem.ordemId}:`, detalhesSolicitante);
+              ordem.solicitante = {
+                _id: 'Solicitante não encontrado',
+                name: 'Nome não encontrado',
+                matricula: 'Matrícula não encontrada',
+                setor: 'Setor não encontrado',
+                turno: 'Turno não encontrado',
+                equipe: 'Equipe não encontrada',
+                email: 'Email não encontrado',
+                senha: 'Senha não encontrada',
+                roles: ['Roles não encontrada'],
+              };
+            }
+          }
+
+          if (ordem.sala?._id) {
+            const detalhesSala = await SalaService.getById(ordem.sala._id);
+            if (!(detalhesSala instanceof Error)) {
+              ordem.sala = detalhesSala;
+            } else {
+              console.error(`Erro ao obter detalhes da sala para a ordem ${ordem.ordemId}:`, detalhesSala);
+              ordem.sala = {
+                _id: 'Sala não encontrada',
+                salaNumber: 0,
+                setor: [''],
+              };
+            }
+          }
+        } catch (error) {
+          console.error(`Erro ao processar ordem ${ordem.ordemId}:`, error);
+        }
+      });
+
+      await Promise.all(promises);
+      console.log("Socorro", data);
       return data;
     }
 

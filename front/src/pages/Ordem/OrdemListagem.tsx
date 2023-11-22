@@ -22,16 +22,20 @@ import { styled } from '@mui/material/styles';
 import { Environment } from '../../shared/environment';
 import { BarraDeFerramentas } from '../../shared/components';
 import { LayoutBaseDePagina } from '../../shared/layouts';
-import { OrdemService, IApiResponse } from '../../shared/services/api';
+import { OrdemService, IApiResponse, IDetalhePessoa } from '../../shared/services/api';
 import { useDebounce } from '../../shared/hooks';
 import DetalhesOrdemPopup from '../../shared/components/formulario-ordem/DetalheOrdem';
 
 export interface IDetalheOrdem {
   _id: string;
   ordemId: number;
-  solicitante: string;
+  solicitante?: IDetalhePessoa;
   setor: string;
-  sala: number;
+  sala?: {
+    _id: string;
+    salaNumber: number;
+    setor: string[];
+    };
   forno: number;
   cabeceira: string;
   status: string;
@@ -39,11 +43,12 @@ export interface IDetalheOrdem {
     name: string;
     description: string;
     status: string;
+    comments: {
+      usuario: string;
+      description: string;
+    }[];
   }[];
-  comments: {
-    usuario: string;
-    description: string;
-  }[];
+
   urgencia: string;
 }
 
@@ -136,6 +141,7 @@ export const OrdemListagem: React.FC = () => {
   };
 
   return (
+    
     <LayoutBaseDePagina titulo='Listagem de Ordem de serviços'
 
     >
@@ -180,16 +186,18 @@ export const OrdemListagem: React.FC = () => {
                 </TableRow>
               ) : (
                 rows.map(row => (
+                  
                   <TableRow key={row.ordemId}>
-
+                    
                     <TableCell>{row.ordemId}</TableCell>
-                    <TableCell>{row.solicitante}</TableCell>
-                    <TableCell>{row.sala}</TableCell>
+                    <TableCell>{row.solicitante ? row.solicitante._id: 'N/A'}</TableCell>
+                    <TableCell>{row.sala ? row.sala.salaNumber : 'N/A'}</TableCell>
                     <TableCell>{row.forno}</TableCell>
                     <TableCell>{row.cabeceira}</TableCell>
                     <TableCell>{row.status}</TableCell>
                     <TableCell>{row.urgencia}</TableCell>
                     <TableCell>{row.setor}</TableCell>
+                    
                     <TableCell>
                     <IconButton size="small" onClick={() => handleDelete(row._id)}>
                     <Icon>delete</Icon>
@@ -202,6 +210,7 @@ export const OrdemListagem: React.FC = () => {
                     </IconButton>
                       </TableCell>
                   </TableRow>
+                  
                 ))
               )
             )}

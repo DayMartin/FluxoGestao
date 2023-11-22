@@ -1,12 +1,14 @@
 import { Box, Button, Paper, TextField, useTheme } from "@mui/material";
 import React, { useState } from "react";
 import { OrdemService, IDetalheOrdem } from "../../services/api/Ordem/OrdemService";
-import { PessoasService } from "../../services/api/users/PessoasService";
+import { IDetalhePessoa, PessoasService } from "../../services/api/users/PessoasService";
+import { useAuthContext } from "../../contexts/AuthContext"
 
 
 import { outlinedInputClasses } from '@mui/material/OutlinedInput';
 
 import { createTheme, ThemeProvider, Theme } from '@mui/material/styles';
+import { IDetalheSala } from "../../services/api/Sala/SalaService";
 
 const customTheme = (outerTheme: Theme) =>
   createTheme({
@@ -46,11 +48,15 @@ const customTheme = (outerTheme: Theme) =>
 
 
 export interface IOrdemServiceData {
-  ordemId: number;
   _id: string;
-  solicitante: string;
+  ordemId: number;
+  solicitante?: IDetalhePessoa;
   setor: string;
-  sala: number;
+  sala: {
+    _id:string;
+    salaNumber: number;
+    setor: string[];
+  };
   forno: number;
   cabeceira: string;
   status: string;
@@ -63,23 +69,39 @@ export interface IOrdemServiceData {
       description: string;
     }[];
   }[];
-  comments: {
-    usuario: string;
-    description: string;
-  }[];
   urgencia: string;
+  createdAt: string;
 
   // Add an index signature to allow indexing by string
   [key: string]: any;
 }
 
 export const OrdemForms = () => {
+  const { name } = useAuthContext();
+  console.log(name)
   const [ordemData, setOrdemData] = useState<IOrdemServiceData>({
-    ordemId: NaN,
     _id: "",
-    solicitante: "",
+    ordemId: NaN,
+    solicitante:
+      {
+        _id: "",
+        name: "",
+        matricula: "",
+        setor: "",
+        turno: "",
+        equipe: "",
+        email: "",
+        senha: "",
+        roles: [
+        ],
+      },
     setor: "",
-    sala: NaN,
+    sala:
+    {
+      _id: "",
+      salaNumber: NaN,
+      setor: [],
+    },
     forno: NaN,
     cabeceira: "",
     status: "",
@@ -96,13 +118,9 @@ export const OrdemForms = () => {
         ],
       },
     ],
-    comments: [
-      {
-        usuario: "",
-        description: "",
-      },
-    ],
     urgencia: "",
+    createdAt: ''
+
   });
 
   const handleChange = (
@@ -170,30 +188,37 @@ export const OrdemForms = () => {
       <ThemeProvider theme={customTheme(outerTheme)}>
         <h4> Informações </h4>
 
-        <TextField label="Solicitante" 
-          type="text"
-          name="title"
-          onChange={(event) => handleChange(event, "solicitante")}
-          required
-          margin="normal"
-          style={{ marginRight: '40px' }}
-        />
-        <TextField label="Setor atual" 
-          type="text"
-          name="title"
-          onChange={(event) => handleChange(event, "setor")}
-          required
-          margin="normal"
-          style={{ marginRight: '40px' }}
-        />
-
+        <TextField
+            label="Solicitante"
+            type="text"
+            name="title"
+            value={ordemData.solicitante?.name}
+            onChange={(event) => handleChange(event, "solicitante")}
+            required
+            margin="normal"
+            style={{ marginRight: '40px' }}
+            disabled // Desabilita a edição do campo
+          />
+        <TextField
+            label="Setor atual" 
+            type="text"
+            name="title"
+            value={'Produção'}
+            onChange={(event) => handleChange(event, "setor")}
+            required
+            margin="normal"
+            style={{ marginRight: '40px' }}
+            disabled // Desabilita a edição do campo
+          />
         <TextField label="Status" 
           type="text"
           name="title"
+          value={'Aguardando atendimento'}
           onChange={(event) => handleChange(event, "status")}
           required
           margin="normal"
           style={{ marginRight: '40px' }}
+          disabled
         />
 
         <h4> Informações gerais </h4>
@@ -262,10 +287,12 @@ export const OrdemForms = () => {
             <TextField label="Status do serviço" 
               type="text"
               name="status"
+              value={'Pendente'}
               onChange={(event) => handleChange(event, "services", index)}
               required
               margin="normal"
               style={{ marginRight: '40px' }}
+              disabled
             />
           </div>
         ))}

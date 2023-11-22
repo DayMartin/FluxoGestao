@@ -6,22 +6,23 @@ export interface IListagemPessoa {
   matricula: string;
   setor: string;
   turno: string;
-  funcao: string;
+  equipe: string;
   email: string;
   senha: string;
   situacao: string;
+  roles: string[];
 }
 
 export interface IDetalhePessoa {
-  id: string;
+  _id: string;
   name: string;
   matricula: string;
   setor: string;
   turno: string;
-  funcao: string;
+  equipe: string;
   email: string;
   senha: string;
-  situacao: string;
+  roles: string[];
 }
 
 type TPessoasComTotalCount = {
@@ -76,12 +77,12 @@ const getByEmail = async (email: string): Promise<IDetalhePessoa | Error> => {
   }
 };
 
-const create = async (dados: Omit<IDetalhePessoa, 'id'>): Promise<string> => {
+const create = async (dados: Omit<IDetalhePessoa, '_id'>): Promise<string> => {
   try {
     const { data } = await Api.post<IDetalhePessoa>('/auth/register', dados);
 
     if (data) {
-      return data.id;
+      return data._id;
     }
 
     throw new Error('Erro ao criar o registro.');

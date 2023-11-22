@@ -93,7 +93,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
     try {
       if (ordemData) {
         const servicosAtualizados = ordemData.services.map((servico) => {
-          if (servico._id === idServico) {
+          if (servico.name === idServico) {
             return { ...servico, ...servicoAtualizado };
           }
           return servico;
@@ -157,7 +157,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
 
                 <div className = "campos-detalhes-os"> 
                 <h5 >Solicitante</h5>
-                <p> {ordemData.solicitante}</p>
+                <p> {ordemData.solicitante?.name}</p>
                 </div>
 
                 <div className = "campos-detalhes-os"> 
@@ -225,7 +225,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
 
                 <div className = "campos-detalhes-os"> 
                 <h5 >Sala</h5>
-                <p> {ordemData.sala}</p>
+                <p> {ordemData.sala?.salaNumber}</p>
                 </div>
 
                 <div className = "campos-detalhes-os"> 
@@ -323,7 +323,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
 
                             setOrdemData(updatedOrdemData);
 
-                            atualizarServico(updatedService, service._id);
+                            atualizarServico(updatedService, service.name);
                           }}
                         >
                           <option value="Em andamento">Em andamento</option>

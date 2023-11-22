@@ -42,12 +42,17 @@ POST http://localhost:3048/api/ordem
 Content-Type: application/json
 
 {
-    "solicitante": "dinah martins",
+    "solicitante": [
+        "6557a8370aac2bc3ce21c607"
+    ],
     "setor": "produção",
-    "sala": "5",
+    "sala": [
+        "655be40e08346d6f62ae7a5a"
+    ],
     "forno": "245",
     "cabeceira": "A",
     "status": "Aguardando atendimento",
+    "urgencia": "teste",
     "services": [
         {
             "name":"TESTE ATUALIZAÇÃO",
@@ -66,7 +71,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3048/api/ordem?page=1&limit=5&filter=17
+GET http://localhost:3048/api/ordem?page=1&limit=5&filter=67
 
 ###
 
@@ -75,12 +80,12 @@ GET http://localhost:3048/api/ordem
 
 ###
 
-GET http://localhost:3048/api/ordem?page=1&limit=5&ordemId=17
+GET http://localhost:3048/api/ordem?page=1&limit=5&ordemId=67
 
 
 ###
 
-GET http://localhost:3048/api/ordem/650bf08d45619a86a151623e
+GET http://localhost:3048/api/ordem/655c0400f66b31437ec363b3
 
 ###
 
@@ -247,5 +252,133 @@ Content-Type: application/json
     "senha":"outrasenha",
     "situacao":"pendente",
     "roles": "admin"
+    
+}
+
+### 
+
+POST http://localhost:3048/api/services
+Content-Type: application/json
+
+{
+    "name":"ah, esta funcionando",
+    "description":"Alguma descrição",
+    "status":"Ativo",
+    "comments": [
+        {
+            "usuario":"Dinah Martins",
+            "description":"TESTE PUT"
+        }
+    ] 
+}
+
+###
+
+#EQUIPE
+
+GET http://localhost:3048/api/equipe
+
+### 
+POST http://localhost:3048/api/equipe
+Content-Type: application/json
+
+{  
+    "equipeName":"TESTE"
+    
+}
+
+###
+
+GET http://localhost:3048/api/equipe/655bdd1386440174fc3e149c
+
+###
+
+DELETE http://localhost:3048/api/equipe/655bdd1386440174fc3e149c
+
+###
+
+PUT http://localhost:3048/api/equipe/655bece8f2da4148eba30981
+Content-Type: application/json
+
+{  
+    "equipeName":"TESTE2"
+    
+}
+
+
+#SETOR
+###
+
+GET http://localhost:3048/api/setor
+
+### 
+POST http://localhost:3048/api/setor
+Content-Type: application/json
+
+{  
+    "name":"MFS48",
+    "equipe": [
+        "655be3ea08346d6f62ae7a53"
+    ]
+}
+
+###
+
+GET http://localhost:3048/api/services/64ec7f48cc75ca6f78585768
+
+###
+
+DELETE http://localhost:3048/api/setor/655bdf7010ddb6a3b9781a4c
+
+###
+
+PUT http://localhost:3048/api/setor/655bed3c6cee638bcd00fbcf
+Content-Type: application/json
+
+{  
+    "name":"MFS77",
+    "equipe": [
+        "655be3ea08346d6f62ae7a53",
+        "655bece8f2da4148eba30981"
+
+    ]
+}
+
+#SALA
+###
+
+GET http://localhost:3048/api/sala
+
+### 
+POST http://localhost:3048/api/sala
+Content-Type: application/json
+
+{  
+    "salaNumber":"4",
+    "setor": [
+        "655be5c6585d76b1ab1ca7e5"
+    ]
+    
+}
+
+###
+
+GET http://localhost:3048/api/sala/655be1a1de840472ecebfd0f
+
+###
+
+DELETE http://localhost:3048/api/equipe/64ec7f48cc75ca6f78585761
+
+###
+
+PUT http://localhost:3048/api/sala/655be40e08346d6f62ae7a5a
+Content-Type: application/json
+
+{  
+    "salaNumber":"4",
+    "setor": [
+        "655be5c6585d76b1ab1ca7e5",
+        "655be3fd08346d6f62ae7a56"
+    ]
     
 }

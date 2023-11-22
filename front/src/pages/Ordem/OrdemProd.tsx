@@ -25,7 +25,9 @@ import { LayoutBaseDePagina } from '../../shared/layouts';
 import { OrdemService, IApiResponse } from '../../shared/services/api';
 import { useDebounce } from '../../shared/hooks';
 import DetalhesOrdemPopup from '../../shared/components/formulario-ordem/DetalheOrdem';
-import { IDetalheOrdem } from './OrdemListagem'
+import { IDetalheOrdem } from './OrdemListagem';
+import { IOrdemServiceData } from '../../shared/components/formulario-ordem/OrdemForms';
+
 
 
 export const OrdemProd: React.FC = () => {
@@ -228,8 +230,8 @@ export const OrdemProd: React.FC = () => {
                   <TableRow key={row.ordemId}>
 
                     <TableCell>{row.ordemId}</TableCell>
-                    <TableCell>{row.solicitante}</TableCell>
-                    <TableCell>{row.sala}</TableCell>
+                    <TableCell>{row.solicitante ? row.solicitante.name : 'N/A'}</TableCell>
+                    <TableCell>{row.sala.salaNumber}</TableCell>
                     <TableCell>{row.forno}</TableCell>
                     <TableCell>{row.cabeceira}</TableCell>
                     <TableCell>{row.status}</TableCell>

@@ -8,9 +8,11 @@ export const UserForms = () => {
   const [matricula, setMatricula] = useState('');
   const [setor, setSetor] = useState('');
   const [turno, setTurno] = useState('');
-  const [funcao, setFuncao] = useState('');
+  const [equipe, setEquipe] = useState('');
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
+  const [roles, setRoles] = useState(['']);
+
   const [situacao, setSituacao] = useState('Pendente');
   const [showLogin, setShowLogin] = useState(false);
 
@@ -18,15 +20,15 @@ export const UserForms = () => {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     
-    const userData: Omit<IDetalhePessoa, 'id'> = {
+    const userData: Omit<IDetalhePessoa, '_id'> = {
       name,
       matricula,
       setor,
       turno,
-      funcao,
+      equipe,
       email,
       senha,
-      situacao,
+      roles,
     };
 
     try {
@@ -115,7 +117,7 @@ export const UserForms = () => {
             name="funcao"
             label="Função do usuário"
             style={{ marginBottom: '5px' }}
-            onChange={(event) => setFuncao(event.target.value)}
+            onChange={(event) => setEquipe(event.target.value)}
             required
           />
 

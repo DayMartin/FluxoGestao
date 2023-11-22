@@ -238,8 +238,8 @@ export const OrdemMec: React.FC = () => {
                 rows.map(row => (
                   <TableRow key={row.ordemId}>
                     <TableCell>{row.ordemId}</TableCell>
-                    <TableCell>{row.solicitante}</TableCell>
-                    <TableCell>{row.sala}</TableCell>
+                    <TableCell>{row.solicitante ? row.solicitante.name : 'N/A'}</TableCell>
+                    <TableCell>{row.sala ? row.sala.salaNumber : 'N/A'}</TableCell>
                     <TableCell>{row.forno}</TableCell>
                     <TableCell>{row.cabeceira}</TableCell>
                     <TableCell>{row.status}</TableCell>
