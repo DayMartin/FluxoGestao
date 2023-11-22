@@ -1,5 +1,8 @@
-const OrdemModel = require("../models/Ordem");
+const Ordem = require("../models/Ordem");
+const { Ordem: OrdemModel } = require("../models/Ordem");
+
 const IdCounter = require("../models/IdCounter");
+const { Users: UsersModel } = require("../models/Users");
 
 const ordemController = {
     create: async (req, res) => {
@@ -46,6 +49,7 @@ const ordemController = {
         
         // Consulta base sem filtros aplicados
         let query = OrdemModel.find();
+        query = query.populate(['solicitante', 'sala'])
 
         // Aplicar filtro para 'ordemId'
         if (filter) {
@@ -72,7 +76,8 @@ const ordemController = {
         }
 
         // Consulta para contar documentos com base nos filtros aplicados
-        const totalCountQuery = OrdemModel.find();
+        let totalCountQuery = OrdemModel.find();
+        totalCountQuery = totalCountQuery.populate(['solicitante', 'sala'])
 
         // Aplicar os mesmos filtros para a contagem de documentos
         if (filter) {
@@ -95,9 +100,6 @@ const ordemController = {
           totalCountQuery.where({status:'Em andamento' })
         }
         
-
-        const ordem = await query.skip(skip).limit(limit);
-
       // Contar documentos com base nos filtros aplicados
         const totalCount = await totalCountQuery.countDocuments();
         const results = {
@@ -119,11 +121,12 @@ const ordemController = {
     
         res.setHeader('x-total-count', totalCount);
     
+        const queryResult = await query.exec();
         const formattedResponse = {
-          ordem: ordem.map((item) => ({
+          ordem: queryResult.map((item) => ({
             _id: item._id,
             ordemId: item.ordemId,
-            solicitante: item.solicitante,
+            solicitante: item.solicitante, // Verifique se userDetails está definido aqui
             setor: item.setor,
             sala: item.sala,
             forno: item.forno,
@@ -135,7 +138,7 @@ const ordemController = {
           })),
           pagination: results,
         };
-    
+              
         res.json(formattedResponse);
     
       } catch (error) {
@@ -150,26 +153,29 @@ const ordemController = {
         const busca = req.query.busca; 
         
         let ordem;
-    
+        
         if (busca) {
           ordem = await OrdemModel.findOne({
             $or: [
               { solicitante: { $regex: new RegExp(busca, "i") } }, 
               { setor: { $regex: new RegExp(busca, "i") } },
-              { _id: busca }, // Busca por _id
-              { ordemId: parseInt(busca) }, // Converta busca para número inteiro e busque por ordemId
-            ]
-          });
+              { _id: busca },
+              { ordemId: parseInt(busca) },
+            ],
+          }).populate(['solicitante', 'sala'])
+ // Aqui você inclui a função populate para preencher o solicitante
         } else {
           if (!isNaN(idParam)) {
             // Se idParam for um número, busca por ordemId
-            ordem = await OrdemModel.findOne({ ordemId: parseInt(idParam) });
+            ordem = await OrdemModel.findOne({ ordemId: parseInt(idParam) }).populate(['solicitante', 'sala'])
+
           } else {
             // Caso contrário, busca por _id
-            ordem = await OrdemModel.findOne({ _id: idParam });
+            ordem = await OrdemModel.findOne({ _id: idParam }).populate(['solicitante', 'sala'])
+
           }
         }
-    
+        
         if (!ordem) {
           res.status(404).json({ msg: "Ordem de serviço não encontrada" });
           return;
@@ -178,9 +184,9 @@ const ordemController = {
         res.json(ordem);
       } catch (error) {
         console.log(error);
+        res.status(500).json({ error: "Erro ao buscar ordem de serviço" });
       }
     },
-    
     
     
     delete: async (req, res) => {
