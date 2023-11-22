@@ -43,14 +43,15 @@ require("dotenv").config();
           const token = jwt.sign(
             {
               id: user._id,
+              name: user.name,
               roles: user.roles,
+              
             },
             secret
           );
   
           res.status(200).json({ 
-            token,
-            user
+            token
            });
         } catch (error) {
           res.status(500).json({ msg: error });
