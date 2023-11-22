@@ -12,17 +12,17 @@ const ordemSchema = new Schema ({
         require:false,
     },
     solicitante: {
-        type: String,
-        require:true,
-    },
+        type: Schema.Types.ObjectId,
+        ref: 'Users' 
+      },
     setor: {
         type: String,
         require:true,
     },
     sala: {
-        type: Number,
-        require:true,
-    },
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Sala', // Nome do modelo referenciado
+      },
     forno: {
         type: Number,
         require:true,
@@ -51,4 +51,7 @@ const ordemSchema = new Schema ({
 
 const Ordem = mongoose.model("Ordem", ordemSchema);
 
-module.exports = Ordem;
+module.exports = {
+  Ordem,
+  ordemSchema,
+};
