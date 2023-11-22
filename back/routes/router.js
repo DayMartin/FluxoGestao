@@ -34,7 +34,7 @@ router.use("/", authRouter);
 
 module.exports = router;
 
-// auth routes
+// usersPrivate routes
 
 const usersPrivateRouter = require("./usersPrivate");
 
@@ -43,10 +43,34 @@ router.use("/", usersPrivateRouter);
 module.exports = router;
 
 
-// auth routes
+// roles routes
 
 const usersrolesRouter = require("./roles");
 
 router.use("/", usersrolesRouter);
+
+module.exports = router;
+
+// sala routes
+
+const salaRouter = require("./sala");
+
+router.use("/", salaRouter);
+
+module.exports = router;
+
+// setor routes
+
+const setorRouter = require("./setor");
+
+router.use("/", setorRouter);
+
+module.exports = router;
+
+// equipe routes
+
+const equipeRouter = require("./equipe");
+
+router.use("/", equipeRouter);
 
 module.exports = router;
