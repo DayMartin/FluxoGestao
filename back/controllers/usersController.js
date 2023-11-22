@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt");
 const usersController = {
     create: async (req, res) => {
         try {
-            const { name, email, senha, matricula, setor, funcao, roles } = req.body;
+            const { name, email, senha, matricula, setor, equipe, roles } = req.body;
     
             // validations
             if (!name) {
@@ -19,7 +19,7 @@ const usersController = {
             if (!setor) {
                 return res.status(422).json({ msg: "O setor é obrigatório!" });
             }
-            if (!funcao) {
+            if (!equipe) {
                 return res.status(422).json({ msg: "A função é obrigatória!" });
             }
             if (!email) {
@@ -44,10 +44,9 @@ const usersController = {
               matricula,
               setor,
               turno: req.body.turno,
-              funcao,
+              equipe,
               email,
               senha: passwordHash,
-              situacao: req.body.situacao,
               roles: [roles]
             });
 
@@ -134,10 +133,9 @@ const usersController = {
             matricula: req.body.matricula,
             setor: req.body.setor,
             turno: req.body.turno,
-            funcao: req.body.funcao,
+            equipe: req.body.equipe,
             email: req.body.email,
             senha: req.body.senha,
-            situacao: req.body.situacao,
             roles: req.body.roles,
         };
 
