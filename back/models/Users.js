@@ -16,7 +16,7 @@ const usersSchema = new Schema ({
       turno: {
         type: String,
       },
-      funcao: {
+      equipe: {
         type: String,
       },
       email: {
@@ -25,9 +25,7 @@ const usersSchema = new Schema ({
       senha: {
         type: String,
       },
-      situacao: {
-        type: String,
-      },
+
       roles: [{
         type: Schema.Types.ObjectId,
         ref: 'UsersRoles' 
