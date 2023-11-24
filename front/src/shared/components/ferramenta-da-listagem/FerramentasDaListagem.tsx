@@ -31,7 +31,7 @@ export const BarraDeFerramentas: React.FC<IFerramentasDaListagemProps> = ({
     textoBotaoNovo = 'Novo',
     textoBotaoConcluido = 'Concluídas',
     textoBotaoAguardando = 'Aguardando',
-    textoBotaoAndamento = 'Em andamento',
+    textoBotaoAndamento = 'Andamento',
     mostrarBotaoConcluido = false,
     mostrarBotaoAguardando = false,
     mostrarBotaoAndamento = false,
@@ -77,7 +77,7 @@ export const BarraDeFerramentas: React.FC<IFerramentasDaListagemProps> = ({
                     color="primary"
                     disableElevation
                     onClick={aoClicarEmConcl}
-                    style={{ position: 'relative', paddingRight: '40px' }} // Ajuste o paddingRight para acomodar o espaço da quantidade
+                    style={{ position: 'relative', paddingRight: '40px' }} 
                     >
                     {textoBotaoConcluido}
                     {/* Exibir a quantidade ao lado do botão */}
@@ -95,7 +95,7 @@ export const BarraDeFerramentas: React.FC<IFerramentasDaListagemProps> = ({
                     color="primary"
                     disableElevation
                     onClick={aoClicarEmAguardando}
-                    style={{ position: 'relative', paddingRight: '40px' }} // Ajuste o paddingRight para acomodar o espaço da quantidade
+                    style={{ position: 'relative', paddingRight: '40px' }} 
                     >
                     {textoBotaoAguardando}
                     {/* Exibir a quantidade ao lado do botão */}
@@ -106,14 +106,14 @@ export const BarraDeFerramentas: React.FC<IFerramentasDaListagemProps> = ({
                 )}
                 </Box>
 
-                <Box flex={1} display={"flex"} justifyContent="start">
+                <Box flex={1} display={"flex"} justifyContent="end">
                 {mostrarBotaoAndamento && (
                     <Button
                     variant='contained'
                     color="primary"
                     disableElevation
                     onClick={aoClicarEmAndamento}
-                    style={{ position: 'relative', paddingRight: '40px' }} // Ajuste o paddingRight para acomodar o espaço da quantidade
+                    style={{ position: 'relative', paddingRight: '40px' }} 
                     >
                     {textoBotaoAndamento}
                     {/* Exibir a quantidade ao lado do botão */}
