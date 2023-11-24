@@ -67,7 +67,7 @@ export const OrdemMec: React.FC = () => {
             page: currentPage,
             limit: Environment.LIMITE_DE_LINHAS,
             filter: busca,
-            status: 'Aguardando atendimento',
+            status: 'Em andamento',
           });
 
           if (result instanceof Error) {
@@ -187,7 +187,7 @@ export const OrdemMec: React.FC = () => {
 
   return (
     <LayoutBaseDePagina
-      titulo='Listagem de Ordem de serviços de Produção'
+      titulo='Listagem de Ordem de serviços de Mec'
     >
       <BarraDeFerramentas
         mostrarInputBusca
