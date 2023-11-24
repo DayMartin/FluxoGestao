@@ -20,7 +20,7 @@ const usersController = {
                 return res.status(422).json({ msg: "O setor é obrigatório!" });
             }
             if (!equipe) {
-                return res.status(422).json({ msg: "A função é obrigatória!" });
+                return res.status(422).json({ msg: "A equipe é obrigatória!" });
             }
             if (!email) {
                 return res.status(422).json({ msg: "O email é obrigatório!" });
