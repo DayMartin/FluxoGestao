@@ -41,66 +41,57 @@ const ordemController = {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 5;
         const skip = (page - 1) * limit;
-    
+        
         const filter = req.query.filter || '';
         const setor = req.query.setor || '';
         const status = req.query.status || '';
         
+        // Mapeamento dos status permitidos
+        const statusMap = {
+          'Aguardando atendimento': 'Aguardando atendimento',
+          'Concluido': 'Concluido',
+          'Encerrado': 'Encerrado',
+          'Em andamento': 'Em andamento',
+          'Pendente': 'Pendente',
+        };
+    
+        let statusQuery = {};
+    
+        // Se houver um status na requisição
+        if (status) {
+          const statusList = status.split(','); // Dividir a string de status em um array
+          const validStatusList = statusList.filter(s => statusMap.hasOwnProperty(s)); // Filtrar apenas os status válidos
+          statusQuery = { status: { $in: validStatusList.map(s => statusMap[s]) } }; // Mapear os status válidos e aplicar na busca
+        }
         
         // Consulta base sem filtros aplicados
-        let query = OrdemModel.find();
-        query = query.populate(['solicitante', 'sala'])
-
+        let query = OrdemModel.find(statusQuery);
+        query = query.populate(['solicitante', 'sala']);
+    
         // Aplicar filtro para 'ordemId'
         if (filter) {
           query.where({ ordemId: parseInt(filter) });
         }
-
-        // Aplicar filtro para o setor "produção"
-        if (setor === 'produção') {
-          query.where({ setor: 'produção' });
-        } else if (setor === 'mecânica') { // Aplicar filtro para o setor "mecânica"
-          query.where({ setor: 'mecânica' });
+    
+        // Aplicar filtro para o setor "produção" ou "mecânica"
+        if (setor === 'produção' || setor === 'mecânica') {
+          query.where({ setor });
         }
-
-        // Aplicar filtro para o status "Aguardando atendimento"
-        if (status === 'Aguardando atendimento') {
-          query.where({ status: 'Aguardando atendimento' });
-        } else if (status === 'Concluido') { // Aplicar filtro para o status "Concluido"
-          query.where({ status: 'Concluido' });
-        } else if (status === 'Em andamento'){
-          query.where({ status: 'Em andamento' });
-        }
-        else if (status === 'Encerrado'){
-          query.where({ status: 'Encerrado' });
-        }
-
+    
         // Consulta para contar documentos com base nos filtros aplicados
-        let totalCountQuery = OrdemModel.find();
-        totalCountQuery = totalCountQuery.populate(['solicitante', 'sala'])
-
+        let totalCountQuery = OrdemModel.find(statusQuery);
+        totalCountQuery = totalCountQuery.populate(['solicitante', 'sala']);
+    
         // Aplicar os mesmos filtros para a contagem de documentos
         if (filter) {
           totalCountQuery.where({ ordemId: parseInt(filter) });
         }
-
-        if (setor === 'produção') {
-          totalCountQuery.where({ setor: 'produção' });
-        } else if (setor === 'mecânica') {
-          totalCountQuery.where({ setor: 'mecânica' });
-        }
-
-        if (status === 'Aguardando atendimento') {
-          totalCountQuery.where({ status: 'Aguardando atendimento' });
-        } else if (status === 'Concluido') {
-          totalCountQuery.where({ status: 'Concluido' });
-        } else if (status === 'Encerrado'){
-          totalCountQuery.where({status:'Encerrado' })
-        } else if (status === 'Em andamento'){
-          totalCountQuery.where({status:'Em andamento' })
+    
+        if (setor === 'produção' || setor === 'mecânica') {
+          totalCountQuery.where({ setor });
         }
         
-      // Contar documentos com base nos filtros aplicados
+        // Contar documentos com base nos filtros aplicados
         const totalCount = await totalCountQuery.countDocuments();
         const results = {
           totalOrdem: totalCount,
@@ -138,7 +129,7 @@ const ordemController = {
           })),
           pagination: results,
         };
-              
+                  
         res.json(formattedResponse);
     
       } catch (error) {
