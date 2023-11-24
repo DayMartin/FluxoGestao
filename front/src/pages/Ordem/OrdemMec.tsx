@@ -20,7 +20,7 @@ import {
 import { styled } from '@mui/material/styles';
 
 import { Environment } from '../../shared/environment';
-import { BarraDeFerramentas } from '../../shared/components';
+import { BarraDeFerramentas, IFilterOption } from '../../shared/components';
 import { LayoutBaseDePagina } from '../../shared/layouts';
 import { OrdemService, IApiResponse } from '../../shared/services/api';
 import { useDebounce } from '../../shared/hooks';
@@ -39,9 +39,16 @@ export const OrdemMec: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedOrdem, setSelectedOrdem] = useState<IDetalheOrdem | null>(null);
   const [showDetalhesDialog, setShowDetalhesDialog] = useState(false);
-  const [quantidadeAguardando, setQuantidadeAguardando] = useState(0);
-  const [quantidadeAndamento, setQuantidadeAndamento] = useState(0);
-
+  const statusPermitidos = ['Pendente', 'Aguardando atendimento', 'Em andamento',];
+  const statusString = statusPermitidos.join(',');
+  // const [quantidadeAguardando, setQuantidadeAguardando] = useState(0);
+  // const [quantidadeAndamento, setQuantidadeAndamento] = useState(0);
+  const filterOptions: IFilterOption[] = [
+    { label: 'Em andamento', value: 'opcao1' },
+    { label: 'Aguardando atendimento', value: 'opcao2' },
+    { label: 'Pendente', value: 'opcao3' },
+    { label: 'Todos', value: 'reset' },
+  ];
 
   const limit = Environment.LIMITE_DE_LINHAS.toString();
 
@@ -57,17 +64,21 @@ export const OrdemMec: React.FC = () => {
     return searchParams.get('busca') || '';
   }, [searchParams]);
 
+  // const statusExcluido = 'Encerrado';
   useEffect(() => {
     setIsLoading(true);
 
     debounce(() => {
       const getCurrentPageData = async (page: number) => {
         try {
+          // const statusFiltrado = statusPermitidos.filter(status => status !== statusExcluido);
+          
           const result = await OrdemService.getAll({
             page: currentPage,
             limit: Environment.LIMITE_DE_LINHAS,
             filter: busca,
-            status: 'Em andamento',
+            setor: 'mecânica',
+            status: statusString,
           });
 
           if (result instanceof Error) {
@@ -96,69 +107,79 @@ export const OrdemMec: React.FC = () => {
     setCurrentPage(newPage);
   };
 
-  const handleFiltrarAguardando = async () => {
-    try {
-      setIsLoading(true);
-      const result = await OrdemService.getAll({
-        page: 1, // Definir a página para 1 ao filtrar por "Aguardando Atendimento"
-        limit: Environment.LIMITE_DE_LINHAS,
-        filter: busca,
-        status: 'Aguardando atendimento',
-      });
-
-      if (result instanceof Error) {
-        alert(result.message);
-        setRows([]);
-      } else {
-        setTotalOrdem(result.pagination.totalOrdem);
-        setRows(result.ordem);
-        setCurrentPage(1); // Atualizar o estado da página para 1
-        // Defina o estado com a quantidade de ordens 'Aguardando atendimento'
-        setQuantidadeAguardando(result.pagination.totalOrdem);
-      }
-      setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-      console.error('Erro ao buscar ordens aguardando atendimento:', error);
-    }
-  };
-
     // useEffect para buscar a quantidade de ordens 'Aguardando atendimento' quando o componente for montado
-    useEffect(() => {
-      handleFiltrarAguardando(); // Chama a função ao montar o componente
-    }, []);
+    // useEffect(() => {
+    //   // handleFiltrarAguardando(); // Chama a função ao montar o componente
+    // }, []);
 
-  const handleFiltrarAndamento = async () => {
-    try {
-      setIsLoading(true);
-      const result = await OrdemService.getAll({
-        page: 1, // Definir a página para 1 ao filtrar por "Aguardando Atendimento"
-        limit: Environment.LIMITE_DE_LINHAS,
-        filter: busca,
-        status: 'Em andamento',
-      });
-
-      if (result instanceof Error) {
-        alert(result.message);
-        setRows([]);
-      } else {
-        setTotalOrdem(result.pagination.totalOrdem);
-        setRows(result.ordem);
-        setCurrentPage(1); // Atualizar o estado da página para 1
-        // Defina o estado com a quantidade de ordens 'Aguardando atendimento'
-        setQuantidadeAndamento(result.pagination.totalOrdem);
+    const handleFiltrar = async (setor: string, status: string) => {
+      try {
+        setIsLoading(true);
+        const result = await OrdemService.getAll({
+          page: 1,
+          limit: Environment.LIMITE_DE_LINHAS,
+          filter: busca,
+          setor,
+          status,
+        });
+    
+        if (result instanceof Error) {
+          alert(result.message);
+          setRows([]);
+        } else {
+          setTotalOrdem(result.pagination.totalOrdem);
+          setRows(result.ordem);
+          setCurrentPage(1);
+        }
+        setIsLoading(false);
+      } catch (error) {
+        setIsLoading(false);
+        console.error('Erro ao buscar ordens:', error);
       }
-      setIsLoading(false);
-    } catch (error) {
-      setIsLoading(false);
-      console.error('Erro ao buscar ordens aguardando atendimento:', error);
-    }
-  };
+    };
+
+    const handleFiltrarAguardando = async () => {
+      await handleFiltrar('mecânica', 'Aguardando atendimento');
+    };
+
+    const handleFiltrarAndamento = async () => {
+      await handleFiltrar('mecânica', 'Em andamento');
+    };
+
+    const handleFiltrarPendente = async () => {
+      await handleFiltrar('mecânica', 'Pendente');
+    };
+    // Função para retornar ao estado natural da página
+    const handleReset = async () => {
+      await handleFiltrar('mecânica', statusString); // Sem parâmetros para limpar os filtros
+    };
+
+
+        // Objeto de funções correspondentes às opções de filtro
+    const filtroFunctions: Record<string, () => void> = {
+      opcao1: () => {
+        handleFiltrarAndamento();
+        // console.log('Opção 1 selecionada');
+      },
+      opcao2: () => {
+        handleFiltrarAguardando();
+        // console.log('Opção 2 selecionada');
+      },
+      opcao3: () => {
+        handleFiltrarPendente();
+        // console.log('Opção 2 selecionada');
+      },
+      reset: () => {
+        handleReset();
+      },
+    };
+
+
 
   // useEffect para buscar a quantidade de ordens 'Aguardando atendimento' quando o componente for montado
-  useEffect(() => {
-    handleFiltrarAndamento(); // Chama a função ao montar o componente
-  }, []);
+  // useEffect(() => {
+  //   handleFiltrarAndamento(); // Chama a função ao montar o componente
+  // }, []);
 
   const handleDelete = (id: string) => {
     if (confirm('Realmente deseja apagar?')) {
@@ -193,15 +214,25 @@ export const OrdemMec: React.FC = () => {
         mostrarInputBusca
         textoBotaoNovo='Nova'
         textoDabusca={busca}
+        filterOptions={filterOptions}
         aoMudarTextoDeBusca={texto => setSearchParams({ busca: texto }, { replace: true })}
         aoClicarEmNovo={() => navigate('/ordem')}
-        mostrarBotaoAguardando={true}
-        mostrarBotaoAndamento={true}
+        // mostrarBotaoAguardando={true}
+        // mostrarBotaoAndamento={true}
         mostrarBotaoNovo={false}
-        aoClicarEmAguardando={handleFiltrarAguardando}
-        aoClicarEmAndamento={handleFiltrarAndamento}
-        quantidadeAguardando={quantidadeAguardando}
-        quantidadeAndamento={quantidadeAndamento}
+        // aoClicarEmAguardando={handleFiltrarAguardando}
+        // aoClicarEmAndamento={handleFiltrarAndamento}
+        // quantidadeAguardando={quantidadeAguardando}
+        // quantidadeAndamento={quantidadeAndamento}
+        aoSelecionarFiltro={(filtro) => {
+          // Verifica se a função correspondente à opção selecionada existe no objeto
+          if (filtroFunctions[filtro]) {
+            // Chama a função correspondente à opção selecionada
+            filtroFunctions[filtro]();
+          } else {
+            console.log('Função não encontrada para esta opção de filtro');
+          }
+        }}
       />
 
       <TableContainer component={Paper} variant="outlined" sx={{ m: 1, width: 'auto' }}>

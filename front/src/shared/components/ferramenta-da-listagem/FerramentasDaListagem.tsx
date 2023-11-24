@@ -1,8 +1,15 @@
 
-import { Box, Button, Icon, Paper, TextField, useTheme } from "@mui/material"
+import { Box, Button, Dialog, Icon, List, ListItem, ListItemText, Paper, TextField, useTheme } from "@mui/material"
 import { useNavigate, useSearchParams } from 'react-router-dom';
 
 import { Environment } from "../../environment";
+import { useState } from "react";
+
+
+export interface IFilterOption {
+    label: string;
+    value: string;
+  }
 
 interface IFerramentasDaListagemProps {
     textoDabusca?: string;
@@ -23,6 +30,8 @@ interface IFerramentasDaListagemProps {
     quantidadeAguardando?: number;
     quantidadeConcluido?: number;
     quantidadeAndamento?: number;
+    filterOptions?: IFilterOption[];
+    aoSelecionarFiltro?: (filtro: string) => void;
 }
 export const BarraDeFerramentas: React.FC<IFerramentasDaListagemProps> = ({
     textoDabusca = '',
@@ -40,14 +49,13 @@ export const BarraDeFerramentas: React.FC<IFerramentasDaListagemProps> = ({
     aoClicarEmConcl,
     aoClicarEmAguardando,
     aoClicarEmAndamento,
+    aoSelecionarFiltro,
+    filterOptions,
     quantidadeAguardando = 0,
     quantidadeConcluido = 0,
     quantidadeAndamento = 0,
-    
-    
-    
 }) => {
-
+    const [filtroAberto, setFiltroAberto] = useState(false);
     const theme = useTheme();
 
     return (
@@ -136,6 +144,30 @@ export const BarraDeFerramentas: React.FC<IFerramentasDaListagemProps> = ({
                 >{textoBotaoNovo}</Button>
                 )}
             </Box>
+
+            {/* Adicionar um botão para abrir o filtro */}
+            <Box flex={1} display={'flex'} justifyContent={'start'}>
+                <Button
+                variant="contained"
+                color="primary"
+                disableElevation
+                onClick={() => setFiltroAberto(true)}
+                startIcon={<Icon>filter_list</Icon>} // Adicione o ícone que desejar para o filtro
+                >
+                Filtrar
+                </Button>
+            </Box>
+
+            {/* Diálogo de filtro */}
+            <Dialog open={filtroAberto} onClose={() => setFiltroAberto(false)}>
+            <List>
+            {filterOptions?.map((option, index) => (
+                <ListItem key={index} button onClick={() => aoSelecionarFiltro?.(option.value)}>
+                <ListItemText primary={option.label} />
+                </ListItem>
+            ))}
+            </List>
+            </Dialog>
         </Box>
 
     );
