@@ -162,11 +162,11 @@ Content-Type: application/json
     "matricula":"1234",
     "setor":"fundição",
     "turno":"manha",
-    "funcao":"mecanico",
-    "email":"dinahadmin@gmail.com",
+    "equipe":"mecânica",
+    "email":"dinahmec@gmail.com",
     "senha":"outrasenha",
     "situacao":"pendente",
-    "roles": "6557a82b0aac2bc3ce21c604"
+    "roles": "655fa44c3cd09a126e61f961"
     
 }
 
@@ -195,7 +195,7 @@ GET http://localhost:3048/api/auth/register/email?email=giovana@gmail.com
 
 ###
 
-DELETE http://localhost:3048/api/auth/register/65459fad1942da3d10827a4d
+DELETE http://localhost:3048/api/auth/register/655fa4c54cc873e5817f5353
 
 ###
 
@@ -223,8 +223,8 @@ POST http://localhost:3048/api/usersroles
 Content-Type: application/json
 
 {
-    "name": "ROLE_ADMIN",
-    "description": "Administrator"
+    "name": "ROLE_MEC",
+    "description": "Mecânica"
     
 }
 

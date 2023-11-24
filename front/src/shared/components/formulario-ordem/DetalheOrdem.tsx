@@ -194,10 +194,10 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                             atualizarSetor(novoSetor, idOrdem);
                           }}
                         >
-                           <PermissionComponent requiredRoles={['6557a3830aac2bc3ce21c5e6','6557a82b0aac2bc3ce21c604']}>
+                           <PermissionComponent requiredRoles={['655fa4283cd09a126e61f95e','655fa44c3cd09a126e61f961']}>
                            <option value="mecânica">Mecânica</option>
                            </PermissionComponent>
-                           <PermissionComponent requiredRoles={['6557a3e40aac2bc3ce21c5ea','6557a82b0aac2bc3ce21c604']}>
+                           <PermissionComponent requiredRoles={['655fa44c3cd09a126e61f961','655fa4283cd09a126e61f95e']}>
                            <option value="produção">Produção</option>
                            </PermissionComponent>
                         </select>
@@ -261,20 +261,17 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                         atualizarStatus(novoStatus, idOrdem);
                       }}
                     >
-                    <PermissionComponent requiredRoles={['6557a3830aac2bc3ce21c5e6','6557a82b0aac2bc3ce21c604']}>
                     <option value="Aguardando atendimento">Aguardando atendimento</option>
                     <option value="Encerrado">Encerrado</option>
-                    </PermissionComponent>
                     <option value="Em andamento">Em andamento</option>
                     <option value="Concluido">Concluído</option>
                     <option value="Dever de recusa">Dever de recusa</option>
                    
-                    {/* Adicione outras opções conforme necessário */}
                   </select>
                   <button
                     onClick={() => {
-                      const novoStatus = 'novo status'; // Defina o novo status aqui se necessário
-                      const idOrdem = ordemData?._id || ''; // Obtém o ID da ordem
+                      const novoStatus = 'novo status'; 
+                      const idOrdem = ordemData?._id || ''; 
 
                       atualizarStatus(novoStatus, idOrdem);
                     }}

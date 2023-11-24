@@ -94,7 +94,7 @@ export const AppRoutes = () => {
           label: 'Encerradas',
         }
         );
-      } else if (userRoles.includes('6557a3e40aac2bc3ce21c5ea')) {
+      } else if (userRoles.includes('655fa44c3cd09a126e61f961')) {
         menuOptions.push(
           {
           icon: 'assignment',
@@ -107,7 +107,7 @@ export const AppRoutes = () => {
           label: 'Encerradas',
         }
         );
-      } else if (userRoles.includes('6557a3830aac2bc3ce21c5e6')) {
+      } else if (userRoles.includes('655fa4283cd09a126e61f95e')) {
         menuOptions.push(
           {
           icon: 'assignment',
@@ -159,7 +159,7 @@ export const AppRoutes = () => {
       <Route
         path="/ordem"
         element={
-          <PermissionComponent requiredRoles={['6557a3830aac2bc3ce21c5e6', '6557a82b0aac2bc3ce21c604']}>
+          <PermissionComponent requiredRoles={['655fa4283cd09a126e61f95e', '6557a82b0aac2bc3ce21c604','655fa44c3cd09a126e61f961']}>
             <Ordem />
           </PermissionComponent>
         }
@@ -168,7 +168,7 @@ export const AppRoutes = () => {
       <Route
         path="/ordemMec"
         element={
-          <PermissionComponent requiredRoles={['6557a3e40aac2bc3ce21c5ea', '6557a82b0aac2bc3ce21c604', '654d537089323f636a75a2fd']}>
+          <PermissionComponent requiredRoles={['6557a82b0aac2bc3ce21c604', '655fa44c3cd09a126e61f961']}>
             <OrdemMec />
           </PermissionComponent>
         }
@@ -177,7 +177,7 @@ export const AppRoutes = () => {
       <Route
         path="/ordemprod"
         element={
-          <PermissionComponent requiredRoles={['6557a3830aac2bc3ce21c5e6', '6557a82b0aac2bc3ce21c604', '654d537089323f636a75a2fd']}>
+          <PermissionComponent requiredRoles={['6557a82b0aac2bc3ce21c604', '655fa4283cd09a126e61f95e']}>
             <OrdemProd />
           </PermissionComponent>
         }
