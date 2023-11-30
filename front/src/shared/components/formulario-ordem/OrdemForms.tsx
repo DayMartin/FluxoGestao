@@ -1,6 +1,6 @@
 import { Box, Button, Paper, TextField, useTheme } from "@mui/material";
 import React, { useState } from "react";
-import { OrdemService, IDetalheOrdem } from "../../services/api/Ordem/OrdemService";
+import { OrdemService, IDetalheOrdem, IOrdemServiceData } from "../../services/api/Ordem/OrdemService";
 import { IDetalhePessoa, PessoasService } from "../../services/api/users/PessoasService";
 import { useAuthContext } from "../../contexts/AuthContext"
 
@@ -47,34 +47,34 @@ const customTheme = (outerTheme: Theme) =>
   });
 
 
-export interface IOrdemServiceData {
-  _id: string;
-  ordemId: number;
-  solicitante?: IDetalhePessoa;
-  setor: string;
-  sala: {
-    _id:string;
-    salaNumber: number;
-    setor: string[];
-  };
-  forno: number;
-  cabeceira: string;
-  status: string;
-  services: {
-    name: string;
-    description: string;
-    status: string;
-    comments: {
-      usuario: string;
-      description: string;
-    }[];
-  }[];
-  urgencia: string;
-  createdAt: string;
+// export interface IOrdemServiceData {
+//   _id: string;
+//   ordemId: number;
+//   solicitante?: IDetalhePessoa;
+//   setor: string;
+//   sala: {
+//     _id:string;
+//     salaNumber: number;
+//     setor: string[];
+//   };
+//   forno: number;
+//   cabeceira: string;
+//   status: string;
+//   services: {
+//     name: string;
+//     description: string;
+//     status: string;
+//   }[];
+//   comments: {
+//     usuario: string;
+//     description: string;
+//   }[];
+//   urgencia: string;
+//   createdAt: string;
 
-  // Add an index signature to allow indexing by string
-  [key: string]: any;
-}
+//   // Add an index signature to allow indexing by string
+//   [key: string]: any;
+// }
 
 export const OrdemForms = ( ) => {
   const { name } = useAuthContext();
@@ -110,12 +110,13 @@ export const OrdemForms = ( ) => {
         name: "",
         description: "",
         status: "",
-        comments: [
-          {
-            usuario: "",
-            description: "",
-          },
-        ],
+      },
+    ],
+    comments: [
+      {
+        usuario: "",
+        description: "",
+        createdAt: "",
       },
     ],
     urgencia: "",
