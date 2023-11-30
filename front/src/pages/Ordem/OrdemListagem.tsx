@@ -25,32 +25,34 @@ import { LayoutBaseDePagina } from '../../shared/layouts';
 import { OrdemService, IApiResponse, IDetalhePessoa } from '../../shared/services/api';
 import { useDebounce } from '../../shared/hooks';
 import DetalhesOrdemPopup from '../../shared/components/formulario-ordem/DetalheOrdem';
+import { IDetalheOrdem } from '../../shared/services/api/Ordem/OrdemService';
 
-export interface IDetalheOrdem {
-  _id: string;
-  ordemId: number;
-  solicitante?: IDetalhePessoa;
-  setor: string;
-  sala?: {
-    _id: string;
-    salaNumber: number;
-    setor: string[];
-    };
-  forno: number;
-  cabeceira: string;
-  status: string;
-  services: {
-    name: string;
-    description: string;
-    status: string;
-    comments: {
-      usuario: string;
-      description: string;
-    }[];
-  }[];
 
-  urgencia: string;
-}
+// export interface IDetalheOrdem {
+//   _id: string;
+//   ordemId: number;
+//   solicitante?: IDetalhePessoa;
+//   setor: string;
+//   sala?: {
+//     _id: string;
+//     salaNumber: number;
+//     setor: string[];
+//     };
+//   forno: number;
+//   cabeceira: string;
+//   status: string;
+//   services: {
+//     name: string;
+//     description: string;
+//     status: string;
+//     comments: {
+//       usuario: string;
+//       description: string;
+//     }[];
+//   }[];
+
+//   urgencia: string;
+// }
 
 
 export const OrdemListagem: React.FC = () => {

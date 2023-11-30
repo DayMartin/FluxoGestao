@@ -25,7 +25,7 @@ import { LayoutBaseDePagina } from '../../shared/layouts';
 import { OrdemService, IApiResponse } from '../../shared/services/api';
 import { useDebounce } from '../../shared/hooks';
 import DetalhesOrdemPopup from '../../shared/components/formulario-ordem/DetalheOrdem';
-import { IDetalheOrdem } from './OrdemListagem'
+import { IDetalheOrdem } from '../../shared/services/api/Ordem/OrdemService';
 
 
 export const OrdemEncerradas: React.FC = () => {

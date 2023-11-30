@@ -25,8 +25,8 @@ import { LayoutBaseDePagina } from '../../shared/layouts';
 import { OrdemService, IApiResponse } from '../../shared/services/api';
 import { useDebounce } from '../../shared/hooks';
 import DetalhesOrdemPopup from '../../shared/components/formulario-ordem/DetalheOrdem';
-import { IDetalheOrdem } from './OrdemListagem';
-// import { IOrdemServiceData } from '../../shared/components/formulario-ordem/OrdemForms';
+import { IDetalheOrdem } from '../../shared/services/api/Ordem/OrdemService';
+//import { IOrdemServiceData } from '../../shared/components/formulario-ordem/OrdemForms';
 
 
 export const OrdemProd: React.FC = () => {
