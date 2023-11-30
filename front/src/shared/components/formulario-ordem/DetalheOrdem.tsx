@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { OrdemService, IDetalheOrdem, IOrdemServiceData } from '../../services/api/Ordem/OrdemService';
 import PermissionComponent from '../AuthComponent/AuthComponent';
+import { formatarData } from '../FormateDate/FormateDate';
+import { Icon } from '@mui/material';
 
 function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: () => void }) {
   const [ordemData, setOrdemData] = useState<IDetalheOrdem | null>(null);
@@ -8,6 +10,12 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
   const [showServicos, setShowServicos] = useState(false);
   const [showComentarios, setShowComentarios] = useState(false);
   const [botaoClicado, setBotaoClicado] = useState('');
+  const [novoComentario, setNovoComentario] = useState('');
+  const [novoServico, setNovoServico] = useState('');
+  const [novoServicoDescricao, setNovoServicoDescricao] = useState('');
+  const [novoServicoStatus, setNovoServicoStatus] = useState('Pendente');
+  const [mostrarPopupNovoServico, setMostrarPopupNovoServico] = useState(false);
+
 
   useEffect(() => {
     const fetchOrdemData = async () => {
@@ -114,8 +122,122 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
       console.error('Erro ao atualizar o serviço:', error);
     }
   };
-  
 
+  const adicionarNovoComentario = async () => {
+    try {
+      const idOrdem = ordemData?._id || '';
+      const nomeUsuario = localStorage.getItem('APP_ACCESS_USER') || 'Nome de Usuário Padrão';
+  
+      // Obter a data atual e formatar para o formato desejado (exemplo: "2023-11-21T12:00:00")
+      const dataAtual = new Date().toISOString();
+  
+      const novoComentarioData = {
+        usuario: nomeUsuario,
+        description: novoComentario,
+        createdAt: dataAtual, // Inserir a data atual no comentário
+      };
+  
+      const comentariosAtuais = ordemData?.comments || [];
+      const comentariosAtualizados = [...comentariosAtuais, novoComentarioData];
+  
+      const dadosAtualizados: Partial<IOrdemServiceData> = {
+        comments: comentariosAtualizados,
+      };
+  
+      const resposta = await OrdemService.updateById(idOrdem, dadosAtualizados as IOrdemServiceData);
+  
+      setNovoComentario('');
+      setOrdemData(prevData => {
+        if (prevData) {
+          return { ...prevData, comments: comentariosAtualizados };
+        }
+        return prevData;
+      });
+    } catch (error) {
+      console.error('Erro ao adicionar o comentário:', error);
+    }
+  };
+
+  interface NovoServicoPopupProps {
+    adicionarNovoServico: any; // Substitua 'any' pelo tipo correto, se possível
+    onClose: any; // Substitua 'any' pelo tipo correto, se possível
+  }
+
+  function NovoServicoPopup({ adicionarNovoServico, onClose }: NovoServicoPopupProps) {
+    const [mostrarModal, setMostrarModal] = useState(false);
+    const adicionarNovoServicoHandler = async () => {
+      try {
+        const idOrdem = ordemData?._id || '';
+    
+        const novoServiceData = {
+          name: novoServico,
+          description: novoServicoDescricao,
+          status: novoServicoStatus, 
+        };
+    
+        const servicesAtuais = ordemData?.services || [];
+        const servicesAtualizados = [...servicesAtuais, novoServiceData];
+    
+        const dadosAtualizados: Partial<IOrdemServiceData> = {
+          services: servicesAtualizados,
+        };
+    
+        const resposta = await OrdemService.updateById(idOrdem, dadosAtualizados as IOrdemServiceData);
+    
+        setNovoServico('');
+        setNovoServicoDescricao('');
+        setNovoServicoStatus('');
+        setOrdemData(prevData => {
+          if (prevData) {
+            return { ...prevData, services: servicesAtualizados };
+          }
+          return prevData;
+        });
+      } catch (error) {
+        console.error('Erro ao adicionar o comentário:', error);
+      }
+    };
+
+      // Se mostrarModal for verdadeiro, renderizamos o modal
+  if (mostrarModal) {
+    // Aqui, atualizei o retorno do componente para exibir o popup sobre todo o conteúdo
+    return mostrarModal ? (
+      <div className="modal" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999 }}>
+        {/* Conteúdo do modal */}
+        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: '#fff', padding: '20px', borderRadius: '5px' }}>
+          <h2>Adicionar Novo Serviço</h2>
+          {/* ... (restante do código do popup) */}
+        </div>
+      </div>
+    ) : null;
+  }
+
+    return (
+      <div className="modal-content">
+        <span className="close" onClick={onClose}>&times;</span>
+        <h2>Adicionar Novo Serviço</h2>
+        <label>Serviço:</label>
+        <input type="text" value={novoServico} onChange={(e) => setNovoServico(e.target.value)} />
+        <label>Descrição do Serviço:</label>
+        <input
+          type="text"
+          value={novoServicoDescricao}
+          onChange={(e) => setNovoServicoDescricao(e.target.value)}
+        />
+        <label>Status do Serviço:</label>
+        <input
+          type="text"
+          value={novoServicoStatus}
+          onChange={(e) => setNovoServicoStatus(e.target.value)}
+        />
+        <button onClick={adicionarNovoServicoHandler}>Adicionar Serviço</button>
+      </div>
+    );
+  }
+
+
+
+  
   return (
     <div className="div-externa-ordem-listagem">
       {ordemData ? (
@@ -145,11 +267,6 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
               <div className="div-detalhes-os">
                 <h4 className="titulos-detalhes-os"> DADOS GERAIS </h4>
 
-                <div className="campos-detalhes-os">
-                  <h5>ID da Ordem</h5>
-                  <p> {ordemData._id}</p>
-                </div>
-
                 <div className = "campos-detalhes-os"> 
                 <h5 >ID da Ordem</h5>
                 <p> {ordemData.ordemId}</p>
@@ -166,8 +283,8 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                 </div>
 
                 <div className = "campos-detalhes-os"> 
-                <h5 >Data</h5>
-                <p> {ordemData.createdAt}</p>
+                <h5 >Data da criação</h5>
+                <p>{formatarData(ordemData.createdAt)}</p>
                 </div>
 
                 <div className="campos-detalhes-os">
@@ -177,7 +294,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
 
               </div>
 
-              <div className="div-detalhes-os2">
+              <div className="div-detalhes-os">
                 <p className="titulos-detalhes-os"> DADOS SALA</p>
 
                 <div className = "campos-detalhes-os"> 
@@ -202,33 +319,29 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
               </div>  
 
               <div className="div-detalhes-os3">        
-                <div className = "campos-detalhes-os3">
-                  <p> Atribuir para: </p>
-              
-                  {showDadosGerais ? (
-                        <div>
-                          <div>
+                <div className = "campos-detalhes-os">
+                   <p> Atribuir para: </p>
+                          <div className="selectContainer">
                             <select
-                            className='selectsInfo'
+                              className="selectsInfo"
                               value={ordemData?.setor || ''}
                               onChange={(e) => {
                                 const novoSetor = e.target.value;
                                 const idOrdem = ordemData?._id || '';
 
-                                // Atualize o estado local após a mudança no select
                                 const updatedOrdemData = {
                                   ...ordemData,
                                   setor: novoSetor,
                                 };
                                 setOrdemData(updatedOrdemData);
-
-                                // Chame a função para atualizar o setor
-                                // atualizarSetor(novoSetor, idOrdem);
                               }}
                             >
                               <option value="mecânica">Mecânica</option>
                               <option value="produção">Produção</option>
                             </select>
+                            <div className="arrowIcon">&#9660;</div>
+                          </div>
+
                             {/* <button
                             onClick={() => {
                               const novoSetor = 'novo setor'; // Defina o novo setor aqui se necessário
@@ -238,16 +351,12 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                           >
                             Atualizar Setor
                           </button> */}
-                          </div>
 
-                        </div>
-                      ) : (
-                        <p>Detalhes do setor</p>
-                      )}
                   </div>
 
-                  <div className = "campos-detalhes-os3"> 
+                  <div className = "campos-detalhes-os"> 
                   <p >Definir status da OS: </p>
+                  <div className="selectContainer">
                   <select
                       className="selectsInfo"
                       value={ordemData?.status || ''}
@@ -273,6 +382,8 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                     <option value="Dever de recusa">Dever de recusa</option>
                    
                   </select>
+                  <div className="arrowIcon">&#9660;</div>
+                  </div>
                   {/* <button
                     onClick={() => {
                       const novoStatus = 'novo status'; 
@@ -312,16 +423,25 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
           {showServicos && (
             <div className="div-interna-detalhes-os">
               <div className="div-detalhes-os">
-              <div className = "campos-detalhes-os4"> 
+              <button onClick={() => setMostrarPopupNovoServico(true)}><Icon>add_circle</Icon></button>
+                      {mostrarPopupNovoServico && (
+                        <NovoServicoPopup
+                          onClose={() => setMostrarPopupNovoServico(false)}
+                          adicionarNovoServico={NovoServicoPopup}
+                        />
+                      )}
               <h4>Serviços</h4>
+              <div className = "campos-detalhes-os4"> 
+              
                 <ul>
                   {ordemData.services.map((service, index) => (
-                    <li key={index}>
+                    <div key={index} className="comments-container">
                       <p>Nome: {service.name}</p>
                       <p>Descrição: {service.description}</p>
                       <p>Status: {service.status}</p>
-                      <div>
-                      <p>Atualize o status do serviço abaixo:</p>
+                      <div className = "campos-detalhes-os">
+                      <p>Atualize o status do serviço</p>
+                      <div className="selectContainer">
                         <select
                          className="selectsInfo"
                           value={service.status}
@@ -352,32 +472,45 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                           <option value="Dever de recusa">Dever de recusa</option>
                           {/* Adicione outras opções conforme necessário */}
                         </select>
-
+                        <div className="arrowIcon">&#9660;</div>
+                        </div>
                       </div>
-                            </li>
+                      </div>
                           ))}
                         </ul>
                         </div>
                       </div>
+ 
+
                     </div>
                   )}
 
           {showComentarios && (
             <div className="div-interna-detalhes-os">
               <div className="div-detalhes-os">
+
                 <h4>Comentários</h4>
-                <ul>
-                  {ordemData.comments.map((comments, index) => (
-                    <li key={index}>
-                      <p>Usuário: {comments.usuario}</p>
-                      <p>Descrição: {comments.description}</p>
-                    </li>
+                <div className = "campos-detalhes-os4"> 
+                <div className="comments-container">
+                  {ordemData.comments.map((comment, index) => (
+                    <div key={index} className="comment-box">
+                      <p>Usuário: {comment.usuario}</p>
+                      <p>Data: {formatarData(comment.createdAt)}</p>
+                      <p>Descrição: {comment.description}</p>
+                    </div>
                   ))}
-                </ul>
-                <br></br>
-                <textarea></textarea>
-                <button>Adicionar novo comentário</button>
+                </div>
+                </div>
+                <textarea
+                  value={novoComentario}
+                  onChange={(e) => setNovoComentario(e.target.value)}
+                  className="comment-input"
+                  placeholder="Adicionar novo comentário..."
+                ></textarea>
+
+              <button className='botao-detalhes-os' onClick={adicionarNovoComentario}>Adicionar novo comentário</button>
               </div>
+
             </div>
           )}
 
