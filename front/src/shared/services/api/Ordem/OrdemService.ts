@@ -22,13 +22,15 @@ export interface IOrdemServiceData {
     name: string;
     description: string;
     status: string;
-    comments: {
-      usuario: string;
-      description: string;
-    }[];
+  }[];
+  comments: {
+    usuario: string;
+    description: string;
+    createdAt: string;
   }[];
   urgencia: string;
   createdAt: string;
+  [key: string]: any;
 }
 
 export interface IDetalheOrdem {
@@ -52,6 +54,7 @@ export interface IDetalheOrdem {
   comments: {
     usuario: string;
     description: string;
+    createdAt: string;
   }[];
   urgencia: string;
   createdAt: string;
