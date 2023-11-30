@@ -21,20 +21,32 @@ code {
 
 .div-interna-detalhes-os {
   margin-top: 20px;
+  height: 100%;
   width: 100%;
 }
 
 .botao-detalhes-os {
   width: 30%;
   height: 50px;
-  background-color: #0d48a11a;
-  align-items: center;
- 
+  background-color: #0d48a1c9;
+  border: none;
+  color: rgb(255, 255, 255);
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: regular;
+  border-radius: 8px;
+  margin: 5px;
+  transition: background-color 0.3s ease;
 }
 
 .botao-detalhes-os.botao-clicado {
-  background-color: #0d47a1; /* Substitua #FF0000 pela cor desejada */
+  background-color: #03132b;
 }
+
+.botao-detalhes-os:hover {
+  background-color: #7497cc;
+}
+
 
 .alinhamento-buttons {
   display: flex;
@@ -53,19 +65,63 @@ code {
   height: 560px;
 }
 
+.div-detalhes-os2 {
+  border: 1px solid rgba(148, 148, 148, 0.308);
+  margin-bottom: 20px;
+  padding: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 400px;
+}
+
+.div-detalhes-os3 {
+  border: 1px solid rgba(148, 148, 148, 0.308);
+  margin-bottom: 20px;
+  padding: 10px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 320px;
+}
+
+
+
 .titulos-detalhes-os {
   font-weight: bold;
+  font-weight: 300;
 }
 
 .campos-detalhes-os {
+  border: 1px solid #ccc; /* Bordas com um cinza mais suave */
+  height: 40px; /* Aumentei um pouco a altura para melhorar a visibilidade */
+  padding: 14px; /* Aumentei o preenchimento para mais espaçamento interno */
+  font-weight: 400; /* Reforço na espessura da fonte para maior destaque */
+  background-color: #f7f7f7; /* Fundo com um tom mais claro */
+  border-radius: 12px; /* Bordas mais arredondadas para um visual mais suave */
+  margin: 12px 0; /* Margem um pouco maior para melhor espaçamento */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transições suaves */
+  display: flex; /* Ajuste para alinhar o conteúdo verticalmente */
+  align-items: center; /* Alinhamento vertical */
+  justify-content: space-between;
+}
+
+.campos-detalhes-os3 {
   border: 1px solid rgba(148, 148, 148, 0.445);
-  height: 55px;
+  height: 120px;
   padding: 5px;
-  font-weight: 200;
   background-color: rgba(240, 240, 240, 0);
   border-radius: 6px;
   margin: 10px 0;
 }
+
+.campos-detalhes-os4 {
+  border: 1px solid rgba(148, 148, 148, 0.445);
+  height: 300px;
+  padding: 5px;
+  background-color: rgba(240, 240, 240, 0);
+  border-radius: 6px;
+  margin: 10px 0;
+}
+
 
 h5 {
   margin: 0;
@@ -125,5 +181,21 @@ h5 {
     width: 100%; /* Faça a largura ocupar 100% da tela em dispositivos móveis */
     height: 500px;
   }
+
+  .div-detalhes-os2 {
+    width: 100%; /* Faça a largura ocupar 100% da tela em dispositivos móveis */
+    height: 200px;
+  }
+
+  .div-detalhes-os3 {
+    width: 100%; /* Faça a largura ocupar 100% da tela em dispositivos móveis */
+    height: 200px;
+  }
+}
+
+.selectsInfo{
+  width: 100%;
+  height: 50px;
+  border-radius: 6px;
 }
 

@@ -76,7 +76,7 @@ export interface IOrdemServiceData {
   [key: string]: any;
 }
 
-export const OrdemForms = () => {
+export const OrdemForms = ( ) => {
   const { name } = useAuthContext();
   console.log(name)
   const [ordemData, setOrdemData] = useState<IOrdemServiceData>({

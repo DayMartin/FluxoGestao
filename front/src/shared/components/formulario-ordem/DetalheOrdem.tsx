@@ -171,56 +171,13 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                 </div>
 
                 <div className="campos-detalhes-os">
-                  <h5>Atribuído para:</h5>
-                  {showDadosGerais ? (
-                    <div>
-                      <p>{ordemData.setor}</p>
-                      <div>
-                      
-                        <select
-                          value={ordemData?.setor || ''}
-                          onChange={(e) => {
-                            const novoSetor = e.target.value;
-                            const idOrdem = ordemData?._id || '';
-
-                            // Atualize o estado local após a mudança no select
-                            const updatedOrdemData = {
-                              ...ordemData,
-                              setor: novoSetor,
-                            };
-                            setOrdemData(updatedOrdemData);
-
-                            // Chame a função para atualizar o setor
-                            atualizarSetor(novoSetor, idOrdem);
-                          }}
-                        >
-                           <PermissionComponent requiredRoles={['655fa4283cd09a126e61f95e','655fa44c3cd09a126e61f961']}>
-                           <option value="mecânica">Mecânica</option>
-                           </PermissionComponent>
-                           <PermissionComponent requiredRoles={['655fa44c3cd09a126e61f961','655fa4283cd09a126e61f95e']}>
-                           <option value="produção">Produção</option>
-                           </PermissionComponent>
-                        </select>
-                        <button
-                        onClick={() => {
-                          const novoSetor = 'novo setor'; // Defina o novo setor aqui se necessário
-                          const idOrdem = ordemData?._id || ''; // Obtém o ID da ordem
-
-                          atualizarSetor(novoSetor, idOrdem);
-                        }}
-                      >
-                        Atualizar Setor
-                      </button>
-                      </div>
-
-                    </div>
-                  ) : (
-                    <p>Detalhes do setor</p>
-                  )}
+                  <h5>Setor atual:</h5>
+                  <p>{ordemData.setor}</p>
                 </div>
 
               </div>
-              <div className="div-detalhes-os">
+
+              <div className="div-detalhes-os2">
                 <p className="titulos-detalhes-os"> DADOS SALA</p>
 
                 <div className = "campos-detalhes-os"> 
@@ -241,10 +198,58 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                 <div className="campos-detalhes-os">
                   <h5>Status</h5>
                   <p> {ordemData.status}</p>
+                </div>
+              </div>  
 
-                  <div className = "campos-detalhes-os"> 
-                <h5 >Atualize o status da OS</h5>
-                <select
+              <div className="div-detalhes-os3">        
+                <div className = "campos-detalhes-os3">
+                  <p> Atribuir para: </p>
+              
+                  {showDadosGerais ? (
+                        <div>
+                          <div>
+                            <select
+                            className='selectsInfo'
+                              value={ordemData?.setor || ''}
+                              onChange={(e) => {
+                                const novoSetor = e.target.value;
+                                const idOrdem = ordemData?._id || '';
+
+                                // Atualize o estado local após a mudança no select
+                                const updatedOrdemData = {
+                                  ...ordemData,
+                                  setor: novoSetor,
+                                };
+                                setOrdemData(updatedOrdemData);
+
+                                // Chame a função para atualizar o setor
+                                // atualizarSetor(novoSetor, idOrdem);
+                              }}
+                            >
+                              <option value="mecânica">Mecânica</option>
+                              <option value="produção">Produção</option>
+                            </select>
+                            {/* <button
+                            onClick={() => {
+                              const novoSetor = 'novo setor'; // Defina o novo setor aqui se necessário
+                              const idOrdem = ordemData?._id || ''; // Obtém o ID da ordem
+                              atualizarSetor(novoSetor, idOrdem);
+                            }}
+                          >
+                            Atualizar Setor
+                          </button> */}
+                          </div>
+
+                        </div>
+                      ) : (
+                        <p>Detalhes do setor</p>
+                      )}
+                  </div>
+
+                  <div className = "campos-detalhes-os3"> 
+                  <p >Definir status da OS: </p>
+                  <select
+                      className="selectsInfo"
                       value={ordemData?.status || ''}
                       onChange={(e) => {
                         const novoStatus = e.target.value;
@@ -268,7 +273,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                     <option value="Dever de recusa">Dever de recusa</option>
                    
                   </select>
-                  <button
+                  {/* <button
                     onClick={() => {
                       const novoStatus = 'novo status'; 
                       const idOrdem = ordemData?._id || ''; 
@@ -277,20 +282,37 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                     }}
                   >
                     Atualizar Status
-                  </button>
+                  </button> */}
                 
                 </div>
-
-
-                </div>
-
               </div>
-            </div>
+                  <div className='alinhamento-buttons'>
+                  <button className='botao-detalhes-os' onClick={() => {
+                    onClose(); // Chama a função onClose para fechar o pop-up
+                    window.location.reload(); // Atualiza a página
+                  }}>Fechar</button>
+
+                  <button className='botao-detalhes-os' onClick={() => {
+                    const novoStatus = 'novo status'; 
+                    const idOrdem = ordemData?._id || ''; 
+                    atualizarStatus(novoStatus, idOrdem);
+
+                    const novoSetor = 'novo setor'; // Defina o novo setor aqui se necessário
+                    atualizarSetor(novoSetor, idOrdem);
+
+
+                    onClose(); // Chama a função onClose para fechar o pop-up
+                  
+                    window.location.reload(); // Atualiza a página
+                  }}>Atualizar</button>
+                </div>
+              </div>
           )}
 
           {showServicos && (
             <div className="div-interna-detalhes-os">
               <div className="div-detalhes-os">
+              <div className = "campos-detalhes-os4"> 
               <h4>Serviços</h4>
                 <ul>
                   {ordemData.services.map((service, index) => (
@@ -301,6 +323,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                       <div>
                       <p>Atualize o status do serviço abaixo:</p>
                         <select
+                         className="selectsInfo"
                           value={service.status}
                           onChange={(e) => {
                             const novoStatus = e.target.value;
@@ -330,10 +353,11 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                           {/* Adicione outras opções conforme necessário */}
                         </select>
 
-                              </div>
+                      </div>
                             </li>
                           ))}
                         </ul>
+                        </div>
                       </div>
                     </div>
                   )}
@@ -356,13 +380,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
               </div>
             </div>
           )}
-          <div className='alinhamento-buttons'>
-            <button className='botao-detalhes-os' onClick={() => {
-              onClose(); // Chama a função onClose para fechar o pop-up
-              window.location.reload(); // Atualiza a página
-            }}>Fechar</button>
-          </div>
-          
+
         </div>
       ) : (
         <p>Carregando os detalhes da ordem...</p>

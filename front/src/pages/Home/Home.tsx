@@ -27,11 +27,6 @@ export const Home = () => {
       </Button>
       <PermissionComponent requiredRoles={['6557a82b0aac2bc3ce21c604', '654d537089323f636a75a2fd']}>
       <Button variant="contained" color="primary" style={{ width: '200px', height:'80px', margin: '10px' }}>
-        Funcionários
-      </Button>
-      </PermissionComponent>
-      <PermissionComponent requiredRoles={['6557a82b0aac2bc3ce21c604', '654d537089323f636a75a2fd']}>
-      <Button variant="contained" color="primary" style={{ width: '200px', height:'80px', margin: '10px' }}>
         Relatórios
       </Button>
       </PermissionComponent>

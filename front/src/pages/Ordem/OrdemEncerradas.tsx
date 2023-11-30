@@ -20,7 +20,7 @@ import {
 import { styled } from '@mui/material/styles';
 
 import { Environment } from '../../shared/environment';
-import { BarraDeFerramentas } from '../../shared/components';
+import { BarraDeFerramentas, IFilterOption } from '../../shared/components';
 import { LayoutBaseDePagina } from '../../shared/layouts';
 import { OrdemService, IApiResponse } from '../../shared/services/api';
 import { useDebounce } from '../../shared/hooks';
@@ -39,6 +39,12 @@ export const OrdemEncerradas: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedOrdem, setSelectedOrdem] = useState<IDetalheOrdem | null>(null);
   const [showDetalhesDialog, setShowDetalhesDialog] = useState(false);
+
+  const filterOptions: IFilterOption[] = [
+    { label: 'Mecânica', value: 'opcao1' },
+    { label: 'Produção', value: 'opcao2' },
+    { label: 'Todos', value: 'reset' },
+  ];
 
   const limit = Environment.LIMITE_DE_LINHAS.toString();
 
@@ -115,6 +121,58 @@ export const OrdemEncerradas: React.FC = () => {
     setShowDetalhesDialog(false); 
   };
 
+  const handleFiltrar = async (setor: string, status: string) => {
+    try {
+      setIsLoading(true);
+      const result = await OrdemService.getAll({
+        page: 1,
+        limit: Environment.LIMITE_DE_LINHAS,
+        filter: busca,
+        setor,
+        status,
+      });
+  
+      if (result instanceof Error) {
+        alert(result.message);
+        setRows([]);
+      } else {
+        setTotalOrdem(result.pagination.totalOrdem);
+        setRows(result.ordem);
+        setCurrentPage(1);
+      }
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.error('Erro ao buscar ordens:', error);
+    }
+  };
+
+  const handleFiltrarEncerradoProd = async () => {
+    await handleFiltrar('produção', 'Encerrado');
+  };
+
+  const handleFiltrarEncerradoMec = async () => {
+    await handleFiltrar('mecânica', 'Encerrado');
+  };
+
+        // Função para retornar ao estado natural da página
+  const handleReset = async () => {
+          await handleFiltrar('', 'Encerrado'); // Sem parâmetros para limpar os filtros
+      };
+    
+        // Objeto de funções correspondentes às opções de filtro
+    const filtroFunctions: Record<string, () => void> = {
+      opcao1: () => {
+        handleFiltrarEncerradoMec();
+      },
+      opcao2: () => {
+        handleFiltrarEncerradoProd();
+      },
+      reset: () => {
+        handleReset();
+      },
+    };
+
   return (
     <LayoutBaseDePagina titulo='Listagem de Ordem de serviços de Produção'
 
@@ -125,6 +183,16 @@ export const OrdemEncerradas: React.FC = () => {
         textoDabusca={busca}
         aoMudarTextoDeBusca={texto => setSearchParams({ busca: texto }, { replace: true })}
         aoClicarEmNovo={() => navigate('/ordem')}
+        filterOptions={filterOptions}
+        aoSelecionarFiltro={(filtro) => {
+          // Verifica se a função correspondente à opção selecionada existe no objeto
+          if (filtroFunctions[filtro]) {
+            // Chama a função correspondente à opção selecionada
+            filtroFunctions[filtro]();
+          } else {
+            console.log('Função não encontrada para esta opção de filtro');
+          }
+        }}
       />
 
       <TableContainer component={Paper} variant="outlined" sx={{ m: 1, width: 'auto' }}>

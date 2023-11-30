@@ -152,7 +152,7 @@ export const BarraDeFerramentas: React.FC<IFerramentasDaListagemProps> = ({
                 color="primary"
                 disableElevation
                 onClick={() => setFiltroAberto(true)}
-                startIcon={<Icon>filter_list</Icon>} // Adicione o ícone que desejar para o filtro
+                startIcon={<Icon>filter_list</Icon>} 
                 >
                 Filtrar
                 </Button>
@@ -160,13 +160,18 @@ export const BarraDeFerramentas: React.FC<IFerramentasDaListagemProps> = ({
 
             {/* Diálogo de filtro */}
             <Dialog open={filtroAberto} onClose={() => setFiltroAberto(false)}>
-            <List>
-            {filterOptions?.map((option, index) => (
-                <ListItem key={index} button onClick={() => aoSelecionarFiltro?.(option.value)}>
-                <ListItemText primary={option.label} />
-                </ListItem>
-            ))}
-            </List>
+                <List>
+                    {filterOptions?.map((option, index) => (
+                    <ListItem
+                        key={index}
+                        button
+                        onClick={() => aoSelecionarFiltro?.(option.value)}
+                        sx={{ border: '1px solid #ccc', padding: '10px', width: '200px', margin: '10px' }} // Adicionando uma borda inferior
+                    >
+                        <ListItemText primary={option.label} />
+                    </ListItem>
+                    ))}
+                </List>
             </Dialog>
         </Box>
 
