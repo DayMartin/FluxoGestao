@@ -21,7 +21,7 @@ code {
 
 .div-interna-detalhes-os {
   margin-top: 20px;
-  height: 100%;
+  height: auto;
   width: 100%;
 }
 
@@ -59,31 +59,29 @@ code {
 .div-detalhes-os {
   border: 1px solid rgba(148, 148, 148, 0.308);
   margin-bottom: 20px;
-  padding: 10px;
+  padding: 10px 30px 10px 30px;
   box-sizing: border-box;
   width: 100%;
-  height: 560px;
+  height: auto;
 }
 
 .div-detalhes-os2 {
   border: 1px solid rgba(148, 148, 148, 0.308);
   margin-bottom: 20px;
-  padding: 10px;
+  padding: 10px 30px 10px 30px;
   box-sizing: border-box;
   width: 100%;
-  height: 400px;
+  height: auto;
 }
 
 .div-detalhes-os3 {
   border: 1px solid rgba(148, 148, 148, 0.308);
   margin-bottom: 20px;
-  padding: 10px;
+  padding: 10px 30px 10px 30px;
   box-sizing: border-box;
   width: 100%;
-  height: 320px;
+  height: auto;
 }
-
-
 
 .titulos-detalhes-os {
   font-weight: bold;
@@ -106,7 +104,7 @@ code {
 
 .campos-detalhes-os3 {
   border: 1px solid rgba(148, 148, 148, 0.445);
-  height: 120px;
+  height: auto;
   padding: 5px;
   background-color: rgba(240, 240, 240, 0);
   border-radius: 6px;
@@ -115,7 +113,7 @@ code {
 
 .campos-detalhes-os4 {
   border: 1px solid rgba(148, 148, 148, 0.445);
-  height: 300px;
+  height: auto;
   padding: 5px;
   background-color: rgba(240, 240, 240, 0);
   border-radius: 6px;
@@ -179,23 +177,123 @@ h5 {
 
   .div-detalhes-os {
     width: 100%; /* Faça a largura ocupar 100% da tela em dispositivos móveis */
-    height: 500px;
+    height: auto;
   }
 
   .div-detalhes-os2 {
     width: 100%; /* Faça a largura ocupar 100% da tela em dispositivos móveis */
-    height: 200px;
+    height: auto;
   }
 
   .div-detalhes-os3 {
     width: 100%; /* Faça a largura ocupar 100% da tela em dispositivos móveis */
-    height: 200px;
+    height: auto;
   }
 }
 
-.selectsInfo{
+
+.selectContainer {
+  position: relative;
+  width: 50%; /* Defina a largura desejada */
+}
+
+.selectsInfo {
   width: 100%;
   height: 50px;
-  border-radius: 6px;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f7f7f7;
+  color: #333;
+  appearance: none;
+}
+
+.arrowIcon {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 14px;
+  pointer-events: none;
+}
+
+
+.selectsInfo::after {
+  content: '\25BC';
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 12px;
+  pointer-events: none;
+}
+
+/* Estilização quando focado */
+.selectsInfo:focus {
+  outline: none;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+}
+
+.comments-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.comment-box {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.comment-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  resize: vertical; /* Permite redimensionar verticalmente */
+  min-height: 100px; /* Altura mínima */
+  margin-bottom: 15px;
+}
+
+/* Estilo para o placeholder */
+.comment-input::placeholder {
+  color: #aaa;
+}
+
+.modal {
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* fundo escuro para destacar o modal */
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 600px;
+  position: relative;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
 }
 
