@@ -11,7 +11,8 @@ const usersSchema = new Schema ({
         type: String,
       },
       setor: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Setor' 
       },
       turno: {
         type: String,
