@@ -423,14 +423,14 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
           {showServicos && (
             <div className="div-interna-detalhes-os">
               <div className="div-detalhes-os">
-              <button onClick={() => setMostrarPopupNovoServico(true)}><Icon>add_circle</Icon></button>
+             
                       {mostrarPopupNovoServico && (
                         <NovoServicoPopup
                           onClose={() => setMostrarPopupNovoServico(false)}
                           adicionarNovoServico={NovoServicoPopup}
                         />
                       )}
-              <h4>Serviços</h4>
+              <h4>Serviços <button onClick={() => setMostrarPopupNovoServico(true)}><Icon>add_circle</Icon></button></h4>
               <div className = "campos-detalhes-os4"> 
               
                 <ul>
