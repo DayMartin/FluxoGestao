@@ -1,19 +1,20 @@
 import { Environment } from '../../../environment';
+import { IDetalheSetor } from '../Setor/SetorService';
 import { Api } from '../axios-config';
 
 export interface IListagemSala {
   _id: string;
   salaNumber: number;
-  setor: string[];
+  setor?: IDetalheSetor;
 }
 
 export interface IDetalheSala {
   _id: string;
   salaNumber: number;
-  setor: string[];
+  setor?: IDetalheSetor;
 }
 
-type TSalaComTotalCount = {
+export type TSalaComTotalCount = {
   data: IListagemSala[];
   totalCount: number;
 };
