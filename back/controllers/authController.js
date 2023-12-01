@@ -44,6 +44,7 @@ require("dotenv").config();
             {
               id: user._id,
               name: user.name,
+              setor: user.setor,
               roles: user.roles,
               
             },
