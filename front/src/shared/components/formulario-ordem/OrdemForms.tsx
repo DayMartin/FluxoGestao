@@ -1,14 +1,16 @@
-import { Box, Button, Paper, TextField, useTheme } from "@mui/material";
-import React, { useState } from "react";
+import { Box, Button, Icon, Paper, SelectChangeEvent, TextField, useTheme } from "@mui/material";
+import React, { useEffect, useState } from "react";
 import { OrdemService, IDetalheOrdem, IOrdemServiceData } from "../../services/api/Ordem/OrdemService";
 import { IDetalhePessoa, PessoasService } from "../../services/api/users/PessoasService";
 import { useAuthContext } from "../../contexts/AuthContext"
+import { Select, MenuItem } from "@mui/material";
 
 
 import { outlinedInputClasses } from '@mui/material/OutlinedInput';
 
 import { createTheme, ThemeProvider, Theme } from '@mui/material/styles';
-import { IDetalheSala } from "../../services/api/Sala/SalaService";
+import { IDetalheSala, IListagemSala, SalaService, TSalaComTotalCount } from "../../services/api/Sala/SalaService";
+import { IDetalheSetor, SetorService } from "../../services/api";
 
 const customTheme = (outerTheme: Theme) =>
   createTheme({
@@ -78,6 +80,7 @@ const customTheme = (outerTheme: Theme) =>
 
 export const OrdemForms = ( ) => {
   const { name } = useAuthContext();
+  const [salas, setSalas] = useState<IListagemSala[]>([]);
   console.log(name)
   const [ordemData, setOrdemData] = useState<IOrdemServiceData>({
     _id: "",
@@ -100,7 +103,11 @@ export const OrdemForms = ( ) => {
     {
       _id: "",
       salaNumber: NaN,
-      setor: [],
+      setor: {
+        _id: "",
+        name: "",
+        equipe: [],
+      },
     },
     forno: NaN,
     cabeceira: "",
@@ -125,11 +132,12 @@ export const OrdemForms = ( ) => {
   });
 
   const handleChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    event: React.ChangeEvent<HTMLInputElement | { value: unknown }>,
     field: string,
     index?: number
   ) => {
-    const { name, value } = event.target;
+    const { name, value } = event.target as HTMLInputElement & { value: unknown };
+  
     if (index !== undefined) {
       const updatedArray = [...ordemData[field]];
       updatedArray[index] = { ...updatedArray[index], [name]: value };
@@ -138,6 +146,7 @@ export const OrdemForms = ( ) => {
       setOrdemData({ ...ordemData, [field]: value });
     }
   };
+  
 
   const handleAddService = () => {
     // Crie um novo serviço vazio e adicione-o à lista de serviços
@@ -173,7 +182,46 @@ export const OrdemForms = ( ) => {
 
   const theme = useTheme();
   const outerTheme = useTheme();
+  
+  const [setorName, setSetorName] = useState<string | null>(null);
+  const [userName, setUserName] = useState<string | null>(null); 
+  const [salaNumber, setSalaNumber] = useState<number | null>(null); 
 
+  useEffect(() => {
+    const setorFromLocalStorage = localStorage.getItem('APP_ACCESS_SETOR');
+    const userNameFromLocalStorage = localStorage.getItem('APP_ACCESS_USER');
+  
+    if (setorFromLocalStorage) {
+      const setorId = JSON.parse(setorFromLocalStorage);
+  
+      SetorService.getById(setorId).then((setor: IDetalheSetor | Error) => {
+        if (!(setor instanceof Error)) {
+          setSetorName(setor.name);
+        } else {
+          console.error("Erro ao buscar detalhes do setor:", setor.message);
+        }
+      });
+    }
+  
+    if (userNameFromLocalStorage) {
+      setUserName(JSON.parse(userNameFromLocalStorage));
+    }
+
+    // async function fetchSalas() {
+    //   try {
+    //     const response = await SalaService.getAll(); // Chame o método getAll do seu serviço
+    //     console.log('Dados das salas:', response); // Adicione este console.log para verificar os dados
+
+    //     if (!(response instanceof Error) && response.data) {
+    //       setSalas(response.data); // Atualize o estado com as salas retornadas
+    //     }
+    //   } catch (error) {
+    //     console.error('Erro ao buscar salas:', error);
+    //   }
+    // }
+
+    //     fetchSalas(); // Chame a função para buscar as salas ao montar o componente
+  }, []);
   return (
     <Box
       marginX={1}
@@ -193,7 +241,7 @@ export const OrdemForms = ( ) => {
             label="Solicitante"
             type="text"
             name="title"
-            value={ordemData.solicitante?.name}
+            value={userName || 'NAO PEGOU NADA' }
             onChange={(event) => handleChange(event, "solicitante")}
             required
             margin="normal"
@@ -204,7 +252,8 @@ export const OrdemForms = ( ) => {
             label="Setor atual" 
             type="text"
             name="title"
-            value={'Produção'}
+            value={setorName || 'NAO PEGOU NADA'}
+            placeholder="ola" 
             onChange={(event) => handleChange(event, "setor")}
             required
             margin="normal"
@@ -232,6 +281,16 @@ export const OrdemForms = ( ) => {
           margin="normal"
           style={{ marginRight: '40px' }}
         />
+{/* 
+        <select onChange={(event) => handleChange(event, "sala")}>
+          <option value="">Selecione uma sala</option>
+          {salas.map((sala) => (
+            <option key={sala._id} value={sala._id}>
+              Sala {sala.salaNumber}
+            </option>
+          ))}
+        </select> */}
+
 
         <TextField label="For" 
           type="number"
@@ -263,7 +322,7 @@ export const OrdemForms = ( ) => {
         />
 
 
-        <h4> Serviços a serem realizados </h4>
+        <h4> Serviços a serem realizados <Button onClick={handleAddService}><Icon> add_circle</Icon></Button></h4>
         {/* Services e Comments */}
         {ordemData.services.map((service, index) => (
           <div key={`service-${index}`}>
@@ -298,7 +357,7 @@ export const OrdemForms = ( ) => {
           </div>
         ))}
             {/* Botão para adicionar novo serviço */}
-            <Button onClick={handleAddService}>Adicionar Novo Serviço</Button>
+          
 
         
         {/* Comentários */}
