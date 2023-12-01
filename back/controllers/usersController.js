@@ -42,7 +42,7 @@ const usersController = {
             const users = new Users({
               name,
               matricula,
-              setor,
+              setor: [setor],
               turno: req.body.turno,
               equipe,
               email,
@@ -61,7 +61,7 @@ const usersController = {
     getAll: async (req, res) => {
         try {
             //const users = await UsersModel.find();
-         const users = await UsersModel.find().populate('roles');
+         const users = await UsersModel.find().populate(['roles', 'setor']);
 
             res.json(users);
         } catch (error) {
@@ -73,7 +73,7 @@ const usersController = {
         try {
             const id = req.params.id;
             //const users = await UsersModel.findById(id);
-            const users = await UsersModel.findById(id).populate('roles');
+            const users = await UsersModel.findById(id).populate(['roles', 'setor']);
 
             if(!users) {
                 res.status(404).json({ msg: "Usuário não encontrado"});
