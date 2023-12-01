@@ -160,13 +160,13 @@ Content-Type: application/json
 {
     "name": "dinah doria",
     "matricula":"1234",
-    "setor":"fundição",
+    "setor":"655be5c6585d76b1ab1ca7e5",
     "turno":"manha",
     "equipe":"mecânica",
-    "email":"dinahmec@gmail.com",
+    "email":"dinahmsf@gmail.com",
     "senha":"outrasenha",
     "situacao":"pendente",
-    "roles": "655fa44c3cd09a126e61f961"
+    "roles": "6557a82b0aac2bc3ce21c604"
     
 }
 
@@ -187,7 +187,7 @@ GET http://localhost:3048/api/auth/register
 
 ###
 
-GET http://localhost:3048/api/auth/register/654436f2f1da38c005c61dce
+GET http://localhost:3048/api/auth/register/6568e04f68e2728e8b3aaaa0
 
 ###
 
@@ -195,7 +195,7 @@ GET http://localhost:3048/api/auth/register/email?email=giovana@gmail.com
 
 ###
 
-DELETE http://localhost:3048/api/auth/register/655fa4c54cc873e5817f5353
+DELETE http://localhost:3048/api/auth/register/6568decd68e2728e8b3aaa6f
 
 ###
 
@@ -324,7 +324,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3048/api/services/64ec7f48cc75ca6f78585768
+GET http://localhost:3048/api/setor/655be5c6585d76b1ab1ca7e5
 
 ###
 
