@@ -19,9 +19,17 @@ const ordemSchema = new Schema ({
         type: String,
         require:true,
     },
+    equipe: {
+        type: String,
+        require:true,
+    },
+    setor_criacao: {
+        type: String,
+        require:true,
+    },
     sala: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Sala', // Nome do modelo referenciado
+        ref: 'Sala', 
       },
     forno: {
         type: Number,
