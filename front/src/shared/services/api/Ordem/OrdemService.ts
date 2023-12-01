@@ -1,5 +1,6 @@
 import { Environment } from '../../../environment';
 import { IDetalheSala, IListagemSala, SalaService } from '../Sala/SalaService';
+import { IDetalheSetor } from '../Setor/SetorService';
 import { Api } from '../axios-config';
 import { IDetalhePessoa, PessoasService } from '../users/PessoasService';
 
@@ -13,7 +14,7 @@ export interface IOrdemServiceData {
   sala: {
     _id: string;
     salaNumber: number;
-    setor: string[];
+    setor?: IDetalheSetor;
   };
   forno: number;
   cabeceira: string;
@@ -41,7 +42,7 @@ export interface IDetalheOrdem {
   sala: {
     _id: string;
     salaNumber: number;
-    setor: string[];
+    setor?: IDetalheSetor;
   };
   forno: number;
   cabeceira: string;
@@ -118,7 +119,15 @@ const getAll = async (options: { page?: number; limit?: number; filter?: string;
               ordem.sala = {
                 _id: 'Sala não encontrada',
                 salaNumber: 0,
-                setor: [''],
+                setor: {
+                  _id: '',
+                  name: '',
+                  equipe: [{
+                    _id: '',
+                    equipeName: '',
+
+                  }],
+                },
               };
             }
           }
