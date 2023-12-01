@@ -4,6 +4,7 @@ interface IAuth {
   token: string; 
   role: string;
   name: string;
+  setor: string;
 }
 
 const auth = async (email: string, senha: string): Promise<IAuth | Error> => {
@@ -11,7 +12,7 @@ const auth = async (email: string, senha: string): Promise<IAuth | Error> => {
     const { data } = await Api.post('/auth/login', { email, senha }); 
 
     if (data && data.token) { // Verifique se 'token' está presente na resposta
-      return { token: data.token, role: data.role, name: data.name, }; // Retorna a resposta com 'token'
+      return { token: data.token, role: data.role, name: data.name, setor: data.setor, }; // Retorna a resposta com 'token'
     }
 
     return new Error('Erro no login.');
