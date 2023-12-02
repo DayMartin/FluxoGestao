@@ -12,24 +12,22 @@ const ordemSchema = new Schema ({
         require:false,
     },
     solicitante: {
-        type: Schema.Types.ObjectId,
-        ref: 'Users' 
+        type: String,
+        require:true,
       },
-    setor: {
+
+    solicitante_name: {
         type: String,
         require:true,
-    },
-    equipe: {
-        type: String,
-        require:true,
-    },
-    setor_criacao: {
-        type: String,
-        require:true,
-    },
+      },
+
+    setor_solicitante: {
+         type: String,
+         require:true,
+     },
     sala: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Sala', 
+        type: Number,
+        require:true,
       },
     forno: {
         type: Number,
@@ -39,9 +37,17 @@ const ordemSchema = new Schema ({
         type: String,
         require:true,
     },
+    setor: {
+        type: Schema.Types.ObjectId,
+        ref: 'Setor' 
+    },
     status: {
         type: String,
         require:true,
+    },
+    equipe: {
+        type: Schema.Types.ObjectId,
+        ref: 'Equipe' 
     },
     services: {
         type: [serviceSchema],

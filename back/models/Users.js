@@ -18,7 +18,8 @@ const usersSchema = new Schema ({
         type: String,
       },
       equipe: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'Equipe' 
       },
       email: {
         type: String,

@@ -4,11 +4,11 @@ const { Sala } = require("../models/Sala");
 const salaController = {
     create: async (req, res) => {
         try {
-            const { salaNumber, setor} = req.body;
+            const { salaNumber } = req.body;
     
             // validations
             if (!salaNumber) {
-                return res.status(422).json({ msg: "O nome é obrigatório!" });
+                return res.status(422).json({ msg: "O numero da sala é obrigatório!" });
             }
 
             // check if sala exists
@@ -19,7 +19,6 @@ const salaController = {
 
             const sala = new Sala({
               salaNumber,
-              setor: [setor]
             });
 
 
@@ -33,12 +32,12 @@ const salaController = {
         getAll: async (req, res) => {
             try {
                 const sala = await SalaModel.find()
-                    .populate({
-                        path: 'setor',
-                        populate: {
-                            path: 'equipe'
-                        }
-                    });
+                    // .populate({
+                    //     path: 'setor',
+                    //     populate: {
+                    //         path: 'equipe'
+                    //     }
+                    // });
         
                 res.json(sala);
             } catch (error) {
@@ -52,12 +51,12 @@ const salaController = {
             const _id = req.params.id;
             //const sala = await SalaModel.findById(id);
             const sala = await SalaModel.findById(_id)
-            .populate({
-                path: 'setor',
-                populate: {
-                    path: 'equipe'
-                }
-            });
+            // .populate({
+            //     path: 'setor',
+            //     populate: {
+            //         path: 'equipe'
+            //     }
+            // });
             if(!sala) {
                 res.status(404).json({ msg: "Sala não encontrada"});
                 return;
@@ -92,7 +91,7 @@ const salaController = {
 
         const sala = {
             salaNumber: req.body.salaNumber,
-            setor: req.body.setor,
+            // setor: req.body.setor,
         };
 
         const updatedSala = await SalaModel.findByIdAndUpdate(id, sala);

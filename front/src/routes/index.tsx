@@ -29,11 +29,23 @@ export const AppRoutes = () => {
       //   label: 'Usuário',
       // },
 
+      // {
+      //   icon: 'assignment',
+      //   path: "/pagina-inicial",
+      //   label: 'Listagem de serviços',
+      // },
+
       {
         icon: 'assignment',
-        path: "/pagina-inicial",
-        label: 'Listagem de serviços',
+        path: "/ordemprod",
+        label: 'Work Prod',
       },
+
+      {
+        icon: 'assignment',
+        path: "/ordemEncerrada",
+        label: 'Encerradas',
+      }
 
 
       /*
@@ -55,86 +67,86 @@ export const AppRoutes = () => {
       }
     }, []);
   
-    const getMenuOptions = () => {
-      const menuOptions = [];
+    // const getMenuOptions = () => {
+    //   const menuOptions = [];
     
-      if (userRoles.includes('6557a82b0aac2bc3ce21c604')) {
-        menuOptions.push(
-          {
-            icon: 'assignment',
-            path: "/ordemprod",
-            label: 'Work Prod',
-          },
-          {
-            icon: 'assignment',
-            path: "/ordemMec",
-            label: 'Work Mec',
-          },
-          {
-            icon: 'assignment',
-            path: "/ordemEncerrada",
-            label: 'Encerradas',
-          }
-        );
-      } else if (userRoles.includes('654d537089323f636a75a2fd')) {
-        menuOptions.push(
-          {
-          icon: 'assignment',
-          path: "/ordemMec",
-          label: 'Work Mec',
-        },
-        {
-          icon: 'assignment',
-          path: "/ordemprod",
-          label: 'Work Prod',
-        },
-        {
-          icon: 'assignment',
-          path: "/ordemEncerrada",
-          label: 'Encerradas',
-        }
-        );
-      } else if (userRoles.includes('655fa44c3cd09a126e61f961')) {
-        menuOptions.push(
-          {
-          icon: 'assignment',
-          path: "/ordemMec",
-          label: 'Work Mec',
-        },
-        {
-          icon: 'assignment',
-          path: "/ordemEncerrada",
-          label: 'Encerradas',
-        }
-        );
-      } else if (userRoles.includes('655fa4283cd09a126e61f95e')) {
-        menuOptions.push(
-          {
-          icon: 'assignment',
-          path: "/ordemprod",
-          label: 'Work Prod',
-        },
-        {
-          icon: 'assignment',
-          path: "/ordemEncerrada",
-          label: 'Encerradas',
-        }
-        );
-      } else {
-        menuOptions.push({
-          icon: 'assignment',
-          path: "/home",
-          label: 'Home',
-        });
-      }
+    //   if (userRoles.includes('6557a82b0aac2bc3ce21c604')) {
+    //     menuOptions.push(
+      //     {
+      //       icon: 'assignment',
+      //       path: "/ordemprod",
+      //       label: 'Work Prod',
+      //     },
+      //     {
+      //       icon: 'assignment',
+      //       path: "/ordemMec",
+      //       label: 'Work Mec',
+      //     },
+      //     {
+      //       icon: 'assignment',
+      //       path: "/ordemEncerrada",
+      //       label: 'Encerradas',
+      //     }
+      //   );
+      // } else if (userRoles.includes('654d537089323f636a75a2fd')) {
+      //   menuOptions.push(
+      //     {
+      //     icon: 'assignment',
+      //     path: "/ordemMec",
+      //     label: 'Work Mec',
+      //   },
+      //   {
+      //     icon: 'assignment',
+      //     path: "/ordemprod",
+      //     label: 'Work Prod',
+      //   },
+      //   {
+      //     icon: 'assignment',
+      //     path: "/ordemEncerrada",
+      //     label: 'Encerradas',
+      //   }
+      //   );
+      // } else if (userRoles.includes('655fa44c3cd09a126e61f961')) {
+      //   menuOptions.push(
+      //     {
+      //     icon: 'assignment',
+      //     path: "/ordemMec",
+      //     label: 'Work Mec',
+      //   },
+      //   {
+      //     icon: 'assignment',
+      //     path: "/ordemEncerrada",
+      //     label: 'Encerradas',
+      //   }
+      //   );
+      // } else if (userRoles.includes('655fa4283cd09a126e61f95e')) {
+      //   menuOptions.push(
+      //     {
+      //     icon: 'assignment',
+      //     path: "/ordemprod",
+      //     label: 'Work Prod',
+      //   },
+      //   {
+      //     icon: 'assignment',
+      //     path: "/ordemEncerrada",
+      //     label: 'Encerradas',
+      //   }
+      //   );
+      // } else {
+      //   menuOptions.push({
+      //     icon: 'assignment',
+      //     path: "/home",
+      //     label: 'Home',
+      //   });
+      // }
     
-      return menuOptions;
-    };
+    //   return menuOptions;
+    // };
     
   
-    useEffect(() => {
-      setDrawerOptions(getMenuOptions());
-    }, [userRoles, setDrawerOptions]);
+    // useEffect(() => {
+    //   setDrawerOptions(getMenuOptions());
+    // }, [userRoles, setDrawerOptions]);
 
   return (
     <Routes>
@@ -165,21 +177,19 @@ export const AppRoutes = () => {
         }
       />
 
-      <Route
+      {/* <Route
         path="/ordemMec"
         element={
           <PermissionComponent requiredRoles={['6557a82b0aac2bc3ce21c604', '655fa44c3cd09a126e61f961']}>
             <OrdemMec />
           </PermissionComponent>
         }
-      />
+      /> */}
 
       <Route
         path="/ordemprod"
         element={
-          <PermissionComponent requiredRoles={['6557a82b0aac2bc3ce21c604', '655fa4283cd09a126e61f95e']}>
             <OrdemProd />
-          </PermissionComponent>
         }
       />
 

@@ -4,7 +4,7 @@ const { Setor } = require("../models/Setor");
 const setorController = {
     create: async (req, res) => {
         try {
-            const { name, equipe } = req.body;
+            const { name } = req.body;
     
             // validations
             if (!name) {
@@ -19,7 +19,7 @@ const setorController = {
 
             const setor = new Setor({
               name,
-              equipe: [equipe]
+            //   equipe: [equipe]
             });
 
 
@@ -33,7 +33,8 @@ const setorController = {
     getAll: async (req, res) => {
         try {
             //const setor = await SetorModel.find();
-         const setor = await SetorModel.find().populate('equipe');
+         const setor = await SetorModel.find()
+        //  .populate('equipe');
 
             res.json(setor);
         } catch (error) {
@@ -45,7 +46,8 @@ const setorController = {
         try {
             const id = req.params.id;
             //const setor = await SetorModel.findById(id);
-            const setor = await SetorModel.findById(id).populate('equipe');
+            const setor = await SetorModel.findById(id)
+            // .populate('equipe');
 
             if(!setor) {
                 res.status(404).json({ msg: "Setor não encontrada"});
@@ -77,14 +79,13 @@ const setorController = {
         }
     },
     update: async (req, res) => {
-        const id = req.params.id;
+        const _id = req.params.id;
 
         const setor = {
             name: req.body.name,
-            equipe: req.body.equipe
         };
 
-        const updatedSetor = await SetorModel.findByIdAndUpdate(id, setor);
+        const updatedSetor = await SetorModel.findByIdAndUpdate(_id, setor);
 
         if (!updatedSetor) {
             res.status(404).json({ msg: "Setor não encontrada. "});

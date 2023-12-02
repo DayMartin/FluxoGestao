@@ -40,8 +40,11 @@ export const OrdemProd: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedOrdem, setSelectedOrdem] = useState<IDetalheOrdem | null>(null);
   const [showDetalhesDialog, setShowDetalhesDialog] = useState(false);
-  const statusPermitidos = ['Pendente', 'Concluido', 'Em andamento'];
+  const statusPermitidos = ['Pendente', 'Concluido', 'Em andamento', 'Aguardando atendimento'];
   const statusString = statusPermitidos.join(',');
+  const [equipeName, setEquipeName] = useState<string | undefined>(undefined); 
+  const [setorName, setSetorName] = useState<string | null>(null); 
+
 
   // const [quantidadeAguardando, setQuantidadeAguardando] = useState(0);
   // const [quantidadeConcluido, setQuantidadeConcluido] = useState(0);
@@ -49,6 +52,7 @@ export const OrdemProd: React.FC = () => {
     { label: 'Concluido', value: 'opcao1' },
     { label: 'Pendente', value: 'opcao2' },
     { label: 'Em andamento', value: 'opcao3' },
+    { label: 'Aguardando atendimento', value: 'opcao4' },
     { label: 'Todos', value: 'reset' },
   ];
 
@@ -68,41 +72,46 @@ export const OrdemProd: React.FC = () => {
   }, [searchParams]);
 
   useEffect(() => {
-    setIsLoading(true);
-
-    debounce(() => {
-      const getCurrentPageData = async (page: number) => {
+    const equipeFromLocalStorage = localStorage.getItem('APP_ACCESS_EQUIPE');
+    const setorFromLocalStorage = localStorage.getItem('APP_ACCESS_SETOR');
+  
+    if (equipeFromLocalStorage && setorFromLocalStorage) {
+      const equipeNameFromLocalStorage = JSON.parse(equipeFromLocalStorage);
+      setEquipeName(equipeNameFromLocalStorage);
+  
+      const setorNameFromLocalStorage = JSON.parse(setorFromLocalStorage);
+      setSetorName(setorNameFromLocalStorage);
+  
+      setIsLoading(true);
+  
+      debounce(async () => {
         try {
-            
-            const result = await OrdemService.getAll({ 
-              page: currentPage, 
-              limit: Environment.LIMITE_DE_LINHAS, 
-              filter: busca, 
-              setor: 'produção',
-              status: statusString, 
-            });
+          const result = await OrdemService.getAll({ 
+            page: currentPage, 
+            limit: Environment.LIMITE_DE_LINHAS, 
+            filter: busca, 
+            equipe: equipeNameFromLocalStorage,
+            setor: setorNameFromLocalStorage,
+          });
 
+          console.log(setorNameFromLocalStorage)
+  
           if (result instanceof Error) {
             alert(result.message);
             setRows([]);
           } else {
-            console.log('Dados recebidos:', result);
             setTotalOrdem(result.pagination.totalOrdem);
             setRows(result.ordem);
           }
           setIsLoading(false);
         } catch (error) {
           setIsLoading(false);
+          console.error('Erro ao buscar ordens:', error);
         }
-      };
-
-      const pageFromURL = parseInt(searchParams.get('pagina') || '1', 10);
-      setCurrentPage(pageFromURL);
-
-      getCurrentPageData(pageFromURL);
-    });
-  }, [busca, currentPage, debounce, limit, searchParams]);
-
+      });
+    }
+  }, [busca, currentPage, debounce, setIsLoading]);
+  
   const handlePageChange = (event: React.ChangeEvent<unknown>, newPage: number) => {
     setSearchParams({ busca, pagina: newPage.toString() }, { replace: true });
     setCurrentPage(newPage);
@@ -135,59 +144,64 @@ export const OrdemProd: React.FC = () => {
   };
 
 
-const handleFiltrar = async (setor: string, status: string) => {
-  try {
-    setIsLoading(true);
-    const result = await OrdemService.getAll({
-      page: 1,
-      limit: Environment.LIMITE_DE_LINHAS,
-      filter: busca,
-      setor,
-      status,
-    });
-
-    if (result instanceof Error) {
-      alert(result.message);
-      setRows([]);
-    } else {
-      setTotalOrdem(result.pagination.totalOrdem);
-      setRows(result.ordem);
-      setCurrentPage(1);
+  const handleFiltrar = async (status: string) => {
+    try {
+      setIsLoading(true);
+  
+      const equipeFromLocalStorage = localStorage.getItem('APP_ACCESS_EQUIPE');
+      const setorFromLocalStorage = localStorage.getItem('APP_ACCESS_SETOR');
+  
+      if (equipeFromLocalStorage && setorFromLocalStorage) {
+        const equipeNameFromLocalStorage = JSON.parse(equipeFromLocalStorage);
+        const setorNameFromLocalStorage = JSON.parse(setorFromLocalStorage);
+  
+        const result = await OrdemService.getAll({
+          page: 1,
+          limit: Environment.LIMITE_DE_LINHAS,
+          filter: busca,
+          equipe: equipeNameFromLocalStorage,
+          setor: setorNameFromLocalStorage,
+          status,
+        });
+  
+        if (result instanceof Error) {
+          alert(result.message);
+          setRows([]);
+        } else {
+          setTotalOrdem(result.pagination.totalOrdem);
+          setRows(result.ordem);
+          setCurrentPage(1);
+        }
+      } else {
+        console.error('Valores de equipe ou setor não encontrados no localStorage');
+      }
+  
+      setIsLoading(false);
+    } catch (error) {
+      setIsLoading(false);
+      console.error('Erro ao buscar ordens:', error);
     }
-    setIsLoading(false);
-  } catch (error) {
-    setIsLoading(false);
-    console.error('Erro ao buscar ordens:', error);
-  }
-};
-
-const handleFiltrarConcluido = async () => {
-  await handleFiltrar('produção', 'Concluido');
-};
-
-    // useEffect para buscar a quantidade de ordens 'COncluido' quando o componente for montado
-    // useEffect(() => {
-    //   handleFiltrarConcluido(); // Chama a função ao montar o componente
-    // }, []);
-
+  };
+  
+  const handleFiltrarConcluido = async () => {
+    await handleFiltrar('Concluido');
+  };
+  
   const handleFiltrarPendente = async () => {
-    await handleFiltrar('produção', 'Pendente');
+    await handleFiltrar('Pendente');
   };
-
-  // useEffect para buscar a quantidade de ordens 'Aguardando atendimento' quando o componente for montado
-  // useEffect(() => {
-  //   handleFiltrarAguardando(); // Chama a função ao montar o componente
-  // }, []);
-
+  
   const handleFiltrarAndamento = async () => {
-    await handleFiltrar('produção', 'Em andamento');
+    await handleFiltrar('Em andamento');
   };
 
-      // Função para retornar ao estado natural da página
+  const handleFiltrarAguardando = async () => {
+    await handleFiltrar('Aguardando atendimento');
+  };
+  
   const handleReset = async () => {
-      await handleFiltrar('produção', statusString); // Sem parâmetros para limpar os filtros
+    await handleFiltrar(statusString);
   };
-
     // Objeto de funções correspondentes às opções de filtro
 const filtroFunctions: Record<string, () => void> = {
   opcao1: () => {
@@ -200,6 +214,11 @@ const filtroFunctions: Record<string, () => void> = {
   },
   opcao3: () => {
     handleFiltrarAndamento();
+    // console.log('Opção 2 selecionada');
+  },
+
+  opcao4: () => {
+    handleFiltrarAguardando();
     // console.log('Opção 2 selecionada');
   },
   reset: () => {
@@ -266,8 +285,8 @@ const filtroFunctions: Record<string, () => void> = {
                   <TableRow key={row.ordemId}>
 
                     <TableCell>{row.ordemId}</TableCell>
-                    <TableCell>{row.solicitante ? row.solicitante.name : 'N/A'}</TableCell>
-                    <TableCell>{row.sala.salaNumber}</TableCell>
+                    <TableCell>{row.solicitante ? row.solicitante : 'N/A'}</TableCell>
+                    <TableCell>{row.sala ? row.sala : 'N/A'}</TableCell>
                     <TableCell>{row.forno}</TableCell>
                     <TableCell>{row.cabeceira}</TableCell>
                     <TableCell>{row.status}</TableCell>

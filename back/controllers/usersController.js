@@ -44,7 +44,7 @@ const usersController = {
               matricula,
               setor: [setor],
               turno: req.body.turno,
-              equipe,
+              equipe: [equipe],
               email,
               senha: passwordHash,
               roles: [roles]

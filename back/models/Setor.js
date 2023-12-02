@@ -8,10 +8,10 @@ const setorSchema = new Schema ({
         type: String,
         require:true,
     },
-    equipe: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Equipe' 
-      }],
+    // equipe: [{
+    //     type: Schema.Types.ObjectId,
+    //     ref: 'Equipe' 
+    //   }],
   },
   { timestamps: true }
 );

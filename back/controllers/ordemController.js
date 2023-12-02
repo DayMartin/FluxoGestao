@@ -17,7 +17,10 @@ const ordemController = {
             const ordem = {
                 ordemId: idCounter.count,
                 solicitante: req.body.solicitante,
+                solicitante_name: req.body.solicitante_name,
+                setor_solicitante: req.body.setor_solicitante,
                 setor: req.body.setor,
+                equipe: req.body.equipe,
                 sala: req.body.sala,
                 forno: req.body.forno,
                 cabeceira: req.body.cabeceira,
@@ -45,6 +48,7 @@ const ordemController = {
         const filter = req.query.filter || '';
         const setor = req.query.setor || '';
         const status = req.query.status || '';
+        const equipe = req.query.equipe || '';
         
         // Mapeamento dos status permitidos
         const statusMap = {
@@ -73,9 +77,14 @@ const ordemController = {
           query.where({ ordemId: parseInt(filter) });
         }
     
-        // Aplicar filtro para o setor "produção" ou "mecânica"
-        if (setor === 'produção' || setor === 'mecânica') {
+        // Aplicar filtro para o setor "MSF" ou "PRODUCAO"
+        if (setor === '655be5c6585d76b1ab1ca7e5' || setor === '655be3fd08346d6f62ae7a56') {
           query.where({ setor });
+        }
+
+        // Aplicar filtro para o equipe "ELETRICA" ou " GREEN", ou "PRODUCAO"
+        if (equipe === '655be3ea08346d6f62ae7a53' || equipe === '655bece8f2da4148eba30981' || equipe === '6569783744abf5a3198e2de0') {
+          query.where({ equipe });
         }
     
         // Consulta para contar documentos com base nos filtros aplicados
@@ -87,8 +96,12 @@ const ordemController = {
           totalCountQuery.where({ ordemId: parseInt(filter) });
         }
     
-        if (setor === 'produção' || setor === 'mecânica') {
+        if (setor === '655be5c6585d76b1ab1ca7e5' || setor === '655be3fd08346d6f62ae7a56') {
           totalCountQuery.where({ setor });
+        }
+
+        if (equipe === '655be3ea08346d6f62ae7a53' || equipe === '655bece8f2da4148eba30981' || equipe === '6569783744abf5a3198e2de0') {
+          totalCountQuery.where({ equipe });
         }
         
         // Contar documentos com base nos filtros aplicados
@@ -117,8 +130,11 @@ const ordemController = {
           ordem: queryResult.map((item) => ({
             _id: item._id,
             ordemId: item.ordemId,
-            solicitante: item.solicitante, // Verifique se userDetails está definido aqui
+            solicitante: item.solicitante,
+            solicitante_name: req.body.solicitante_name,
+            setor_solicitante: req.body.setor_solicitante,
             setor: item.setor,
+            equipe: item.equipe,
             sala: item.sala,
             forno: item.forno,
             cabeceira: item.cabeceira,
@@ -150,6 +166,7 @@ const ordemController = {
             $or: [
               { solicitante: { $regex: new RegExp(busca, "i") } }, 
               { setor: { $regex: new RegExp(busca, "i") } },
+              { equipe: { $regex: new RegExp(busca, "i") } },
               { _id: busca },
               { ordemId: parseInt(busca) },
             ],
@@ -202,7 +219,10 @@ const ordemController = {
 
         const ordem = {
             solicitante: req.body.solicitante,
+            solicitante_name: req.body.solicitante_name,
+            setor_solicitante: req.body.setor_solicitante,
             setor: req.body.setor,
+            equipe: req.body.equipe,
             sala: req.body.sala,
             forno: req.body.forno,
             cabeceira: req.body.cabeceira,

@@ -42,13 +42,14 @@ POST http://localhost:3048/api/ordem
 Content-Type: application/json
 
 {
-    "solicitante": [
-        "6557a8370aac2bc3ce21c607"
-    ],
-    "setor": "produção",
-    "sala": [
-        "655be40e08346d6f62ae7a5a"
-    ],
+    "solicitante": "6569634528b16fb7838cafdb"
+    ,
+    "solicitante_name": "dinah",
+    "setor_solicitante": "dinah",
+    "setor": "655be5c6585d76b1ab1ca7e5",
+    "equipe": "655bece8f2da4148eba30981",
+    "sala": 4
+    ,
     "forno": "245",
     "cabeceira": "A",
     "status": "Aguardando atendimento",
@@ -71,7 +72,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3048/api/ordem?page=1&limit=5&filter=67
+GET http://localhost:3048/api/ordem?page=1&limit=5&filter=77
 
 ###
 
@@ -89,7 +90,7 @@ GET http://localhost:3048/api/ordem/655c0400f66b31437ec363b3
 
 ###
 
-DELETE http://localhost:3048/api/ordem/650a7fe2dc4ef4dbffb2d119
+DELETE http://localhost:3048/api/ordem/65696746c470976a965159fd
 
 ###
 
@@ -160,13 +161,13 @@ Content-Type: application/json
 {
     "name": "dinah doria",
     "matricula":"1234",
-    "setor":"655be5c6585d76b1ab1ca7e5",
+    "setor":"655be3fd08346d6f62ae7a56",
     "turno":"manha",
-    "equipe":"mecânica",
-    "email":"dinahmsf@gmail.com",
+    "equipe":"6569783744abf5a3198e2de0",
+    "email":"dinahprod@gmail.com",
     "senha":"outrasenha",
     "situacao":"pendente",
-    "roles": "6557a82b0aac2bc3ce21c604"
+    "roles": "655fa4283cd09a126e61f95e"
     
 }
 
@@ -195,7 +196,7 @@ GET http://localhost:3048/api/auth/register/email?email=giovana@gmail.com
 
 ###
 
-DELETE http://localhost:3048/api/auth/register/6568decd68e2728e8b3aaa6f
+DELETE http://localhost:3048/api/auth/register/6557a8370aac2bc3ce21c607
 
 ###
 
@@ -283,7 +284,7 @@ POST http://localhost:3048/api/equipe
 Content-Type: application/json
 
 {  
-    "equipeName":"TESTE"
+    "equipeName":"PRODUCAO"
     
 }
 
@@ -297,11 +298,11 @@ DELETE http://localhost:3048/api/equipe/655bdd1386440174fc3e149c
 
 ###
 
-PUT http://localhost:3048/api/equipe/655bece8f2da4148eba30981
+PUT http://localhost:3048/api/equipe/655be3ea08346d6f62ae7a53
 Content-Type: application/json
 
 {  
-    "equipeName":"TESTE2"
+    "equipeName":"ELETRICA"
     
 }
 
@@ -328,20 +329,15 @@ GET http://localhost:3048/api/setor/655be5c6585d76b1ab1ca7e5
 
 ###
 
-DELETE http://localhost:3048/api/setor/655bdf7010ddb6a3b9781a4c
+DELETE http://localhost:3048/api/setor/655bed3c6cee638bcd00fbcf
 
 ###
 
-PUT http://localhost:3048/api/setor/655bed3c6cee638bcd00fbcf
+PUT http://localhost:3048/api/setor/655be5c6585d76b1ab1ca7e5
 Content-Type: application/json
 
 {  
-    "name":"MFS77",
-    "equipe": [
-        "655be3ea08346d6f62ae7a53",
-        "655bece8f2da4148eba30981"
-
-    ]
+    "name":"MSF"
 }
 
 #SALA
@@ -354,10 +350,7 @@ POST http://localhost:3048/api/sala
 Content-Type: application/json
 
 {  
-    "salaNumber":"4",
-    "setor": [
-        "655be5c6585d76b1ab1ca7e5"
-    ]
+    "salaNumber":"4"
     
 }
 
@@ -367,7 +360,7 @@ GET http://localhost:3048/api/sala/655be1a1de840472ecebfd0f
 
 ###
 
-DELETE http://localhost:3048/api/equipe/64ec7f48cc75ca6f78585761
+DELETE http://localhost:3048/api/sala/655be1a1de840472ecebfd0f
 
 ###
 
@@ -375,10 +368,5 @@ PUT http://localhost:3048/api/sala/655be40e08346d6f62ae7a5a
 Content-Type: application/json
 
 {  
-    "salaNumber":"4",
-    "setor": [
-        "655be5c6585d76b1ab1ca7e5",
-        "655be3fd08346d6f62ae7a56"
-    ]
-    
+    "salaNumber":"4"
 }

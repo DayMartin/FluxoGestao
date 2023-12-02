@@ -7,11 +7,7 @@ const salaSchema = new Schema ({
     salaNumber: {
         type: Number,
         require:true,
-    },
-    setor: [{
-        type: Schema.Types.ObjectId,
-        ref: 'Setor' 
-      }],
+    }
   },
   { timestamps: true }
 );

@@ -1,27 +1,26 @@
 import { Environment } from '../../../environment';
-import { IDetalheSetor } from '../Setor/SetorService';
 import { Api } from '../axios-config';
 
-export interface IListagemSala {
+export interface IListagemEquipe {
   _id: string;
-  salaNumber: number;
-  // setor?: IDetalheSetor;
+  equipeName: string;
+
 }
 
-export interface IDetalheSala {
+export interface IDetalheEquipe {
   _id: string;
-  salaNumber: number;
-  // setor?: IDetalheSetor;
+  equipeName: string;
+
 }
 
-export type TSalaComTotalCount = {
-  data: IListagemSala[];
+type TEquipeComTotalCount = {
+  data: IListagemEquipe[];
   totalCount: number;
 };
 
-const getAll = async (page = 1, filter = ''): Promise<TSalaComTotalCount | Error> => {
+const getAll = async (page = 1, filter = ''): Promise<TEquipeComTotalCount | Error> => {
   try {
-    const urlRelativa = `${Environment.URL_BASE}/sala`;
+    const urlRelativa = `${Environment.URL_BASE}/equipe`;
 
     const { data } = await Api.get(urlRelativa);
 
@@ -37,9 +36,9 @@ const getAll = async (page = 1, filter = ''): Promise<TSalaComTotalCount | Error
   }
 };
 
-const getById = async (id: string): Promise<IDetalheSala | Error> => {
+const getById = async (id: string): Promise<IDetalheEquipe | Error> => {
   try {
-    const { data } = await Api.get(`/sala/${id}`); // Adicionando a barra antes do ID
+    const { data } = await Api.get(`/equipe/${id}`); // Adicionando a barra antes do ID
 
     if (data) {
       return data;
@@ -54,9 +53,9 @@ const getById = async (id: string): Promise<IDetalheSala | Error> => {
 
 
 
-const create = async (dados: Omit<IDetalheSala, '_id'>): Promise<string> => {
+const create = async (dados: Omit<IDetalheEquipe, '_id'>): Promise<string> => {
   try {
-    const { data } = await Api.post<IDetalheSala>('/sala', dados);
+    const { data } = await Api.post<IDetalheEquipe>('/equipe', dados);
 
     if (data) {
       return data._id;
@@ -68,9 +67,9 @@ const create = async (dados: Omit<IDetalheSala, '_id'>): Promise<string> => {
   }
 };
 
-const updateById = async (id: string, dados: IDetalheSala): Promise<void | Error> => {
+const updateById = async (id: string, dados: IDetalheEquipe): Promise<void | Error> => {
   try {
-    await Api.put(`/sala${id}`, dados);
+    await Api.put(`/equipe${id}`, dados);
   } catch (error) {
     console.error(error);
     return new Error((error as { message: string }).message || 'Erro ao atualizar o registro.');
@@ -79,14 +78,14 @@ const updateById = async (id: string, dados: IDetalheSala): Promise<void | Error
 
 const deleteById = async (id: string): Promise<void | Error> => {
   try {
-    await Api.delete(`/sala${id}`); 
+    await Api.delete(`/equipe${id}`); 
   } catch (error) {
     console.error(error);
     return new Error((error as { message: string }).message || 'Erro ao apagar o registro.');
   }
 };
 
-export const SalaService = {
+export const EquipeService = {
   getAll,
   create,
   getById,

@@ -192,8 +192,8 @@ export const OrdemListagem: React.FC = () => {
                   <TableRow key={row.ordemId}>
                     
                     <TableCell>{row.ordemId}</TableCell>
-                    <TableCell>{row.solicitante ? row.solicitante._id: 'N/A'}</TableCell>
-                    <TableCell>{row.sala ? row.sala.salaNumber : 'N/A'}</TableCell>
+                    <TableCell>{row.solicitante ? row.solicitante: 'N/A'}</TableCell>
+                    <TableCell>{row.sala ? row.sala : 'N/A'}</TableCell>
                     <TableCell>{row.forno}</TableCell>
                     <TableCell>{row.cabeceira}</TableCell>
                     <TableCell>{row.status}</TableCell>

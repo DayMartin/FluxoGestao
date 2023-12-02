@@ -4,19 +4,19 @@ import { Api } from '../axios-config';
 export interface IListagemSetor {
   _id: string;
   name: string;
-  equipe: {
-    _id: string;
-    equipeName: string;
-  }[];
+  // equipe: {
+  //   _id: string;
+  //   equipeName: string;
+  // }[];
 }
 
 export interface IDetalheSetor {
   _id: string;
   name: string;
-  equipe: {
-    _id: string;
-    equipeName: string;
-  }[];
+  // equipe: {
+  //   _id: string;
+  //   equipeName: string;
+  // }[];
 }
 
 type TSetorComTotalCount = {

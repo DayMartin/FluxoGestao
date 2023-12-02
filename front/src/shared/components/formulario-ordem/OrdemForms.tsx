@@ -1,5 +1,5 @@
 import { Box, Button, Icon, Paper, SelectChangeEvent, TextField, useTheme } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, ChangeEvent} from "react";
 import { OrdemService, IDetalheOrdem, IOrdemServiceData } from "../../services/api/Ordem/OrdemService";
 import { IDetalhePessoa, PessoasService } from "../../services/api/users/PessoasService";
 import { useAuthContext } from "../../contexts/AuthContext"
@@ -79,36 +79,47 @@ const customTheme = (outerTheme: Theme) =>
 // }
 
 export const OrdemForms = ( ) => {
+  const [selectedSetor, setSelectedSetor] = useState<string>("");
+
+  const handleSetorChange = (event: ChangeEvent<{ value: unknown }>) => {
+    const newValue = event.target.value as string;
+    setSelectedSetor(newValue);
+  };
+
   const { name } = useAuthContext();
   const [salas, setSalas] = useState<IListagemSala[]>([]);
   console.log(name)
   const [ordemData, setOrdemData] = useState<IOrdemServiceData>({
     _id: "",
     ordemId: NaN,
-    solicitante:
-      {
-        _id: "",
-        name: "",
-        matricula: "",
-        setor: "",
-        turno: "",
-        equipe: "",
-        email: "",
-        senha: "",
-        roles: [
-        ],
-      },
+    solicitante: "",
+      // {
+      //   _id: "",
+      //   name: "",
+      //   matricula: "",
+      //   setor: "",
+      //   turno: "",
+      //   equipe: "",
+      //   email: "",
+      //   senha: "",
+      //   roles: [
+      //   ],
+      // },
+    solicitante_nome: "",
+    setor_solicitante: "",
     setor: "",
-    sala:
-    {
-      _id: "",
-      salaNumber: NaN,
-      setor: {
-        _id: "",
-        name: "",
-        equipe: [],
-      },
-    },
+    equipe: "",
+    sala: NaN,
+    // sala:
+    // {
+    //   _id: "",
+    //   salaNumber: NaN,
+    //   // setor: {
+    //   //   _id: "",
+    //   //   name: "",
+    //   //   equipe: [],
+    //   // },
+    // },
     forno: NaN,
     cabeceira: "",
     status: "",
@@ -184,12 +195,16 @@ export const OrdemForms = ( ) => {
   const outerTheme = useTheme();
   
   const [setorName, setSetorName] = useState<string | null>(null);
+  const [setorID, setSetorID] = useState<string | null>(null);
+
   const [userName, setUserName] = useState<string | null>(null); 
-  const [salaNumber, setSalaNumber] = useState<number | null>(null); 
+  // const [userName, setUserName] = useState('');
+  const [userId, setUserId] = useState('');
 
   useEffect(() => {
     const setorFromLocalStorage = localStorage.getItem('APP_ACCESS_SETOR');
     const userNameFromLocalStorage = localStorage.getItem('APP_ACCESS_USER');
+    const userIDFromLocalStorage = localStorage.getItem('APP_ACCESS_USER_ID');
   
     if (setorFromLocalStorage) {
       const setorId = JSON.parse(setorFromLocalStorage);
@@ -207,6 +222,10 @@ export const OrdemForms = ( ) => {
       setUserName(JSON.parse(userNameFromLocalStorage));
     }
 
+    if (userIDFromLocalStorage) {
+      setUserId(JSON.parse(userIDFromLocalStorage)); // Atualiza o estado com o ID do usuário
+    }
+
     // async function fetchSalas() {
     //   try {
     //     const response = await SalaService.getAll(); // Chame o método getAll do seu serviço
@@ -222,6 +241,7 @@ export const OrdemForms = ( ) => {
 
     //     fetchSalas(); // Chame a função para buscar as salas ao montar o componente
   }, []);
+
   return (
     <Box
       marginX={1}
@@ -235,31 +255,40 @@ export const OrdemForms = ( ) => {
     >
       <form onSubmit={handleSubmit}>
       <ThemeProvider theme={customTheme(outerTheme)}>
-        <h4> Informações </h4>
+        <h4> Informações Solicitante </h4>
 
         <TextField
-            label="Solicitante"
-            type="text"
-            name="title"
-            value={userName || 'NAO PEGOU NADA' }
-            onChange={(event) => handleChange(event, "solicitante")}
-            required
-            margin="normal"
-            style={{ marginRight: '40px' }}
-            disabled // Desabilita a edição do campo
-          />
+          label="Solicitante"
+          type="text"
+          name="title"
+          value={userName || 'NAO PEGOU NADA' }
+          onChange={(event) => handleChange(event, "solicitante_name")}
+          required
+          margin="normal"
+          style={{ marginRight: '40px' }}
+          disabled // Desabilita a edição do campo
+        />
+
+        <input
+          type="hidden"
+          name="solicitante" 
+          value={userId}
+          onChange={(event) => handleChange(event, "solicitante")}
+        />
+
         <TextField
-            label="Setor atual" 
+            label="Setor Solicitante" 
             type="text"
             name="title"
             value={setorName || 'NAO PEGOU NADA'}
             placeholder="ola" 
-            onChange={(event) => handleChange(event, "setor")}
+            onChange={(event) => handleChange(event, "setor_solicitante")}
             required
             margin="normal"
             style={{ marginRight: '40px' }}
             disabled // Desabilita a edição do campo
           />
+
         <TextField label="Status" 
           type="text"
           name="title"
@@ -273,14 +302,20 @@ export const OrdemForms = ( ) => {
 
         <h4> Informações gerais </h4>
 
-        <TextField label="Sall" 
-          type="number"
-          name="title"
-          onChange={(event) => handleChange(event, "sala")}
-          required
-          margin="normal"
-          style={{ marginRight: '40px' }}
-        />
+        <div className = "campos-detalhes-os">
+        <p> Sala: </p>
+         <div className="selectContainer">
+          <select
+            className="selectsInfo"
+            value={ordemData?.sala || ''}
+            onChange={(e) => handleChange(e, "sala")} 
+            >
+            <option value="65695c3e1c3697c13429d689">4</option>
+          </select>
+
+        <div className="arrowIcon">&#9660;</div>
+        </div>
+        </div>
 {/* 
         <select onChange={(event) => handleChange(event, "sala")}>
           <option value="">Selecione uma sala</option>
@@ -384,6 +419,34 @@ export const OrdemForms = ( ) => {
             />
           </div>
         ))} */}
+
+        <p> Atribuir para qual setor: </p>
+         <div className="selectContainer">
+          <select
+            className="selectsInfo"
+            value={ordemData?.setor || ''}
+            onChange={(e) => handleChange(e, "setor")} 
+            >
+            <option value="655be3fd08346d6f62ae7a56">PRODUCAO</option>
+            <option value="655be5c6585d76b1ab1ca7e5">MSF</option>
+          </select>
+
+        <div className="arrowIcon">&#9660;</div>
+        </div>
+
+        <p> Atribuir para qual equipe: </p>
+         <div className="selectContainer">
+          <select
+            className="selectsInfo"
+            value={ordemData?.equipe || ''}
+            onChange={(e) => handleChange(e, "equipe")} 
+            >
+           <option value="655bece8f2da4148eba30981">GREEN</option>
+           <option value="6569783744abf5a3198e2de0">PRODUCAO</option>
+          </select>
+
+        <div className="arrowIcon">&#9660;</div>
+        </div>
 
         <Button type="submit">Cadastrar ordem de serviço</Button>
         </ThemeProvider>
