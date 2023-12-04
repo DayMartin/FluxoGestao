@@ -282,10 +282,10 @@ const filtroFunctions: Record<string, () => void> = {
                 </TableRow>
               ) : (
                 rows.map(row => (
-                  <TableRow key={row.ordemId}>
+                  <TableRow key={row._id}>
 
                     <TableCell>{row.ordemId}</TableCell>
-                    <TableCell>{row.solicitante ? row.solicitante : 'N/A'}</TableCell>
+                    <TableCell>{row.solicitante_name}</TableCell>
                     <TableCell>{row.sala ? row.sala : 'N/A'}</TableCell>
                     <TableCell>{row.forno}</TableCell>
                     <TableCell>{row.cabeceira}</TableCell>

@@ -134,7 +134,7 @@ const ordemController = {
             _id: item._id,
             ordemId: item.ordemId,
             solicitante: item.solicitante,
-            solicitante_name: req.body.solicitante_name,
+            solicitante_name: item.solicitante_name,
             setor_solicitante: req.body.setor_solicitante,
             name_setor_solicitante: req.body.name_setor_solicitante,
             equipe_solicitante: req.body.equipe_solicitante,

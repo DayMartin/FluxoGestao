@@ -152,7 +152,6 @@ const getAll = async (options: { page?: number; limit?: number; filter?: string;
       });
 
       await Promise.all(promises);
-      console.log("Socorro", data);
       return data;
     }
 
