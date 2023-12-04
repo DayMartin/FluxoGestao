@@ -275,16 +275,11 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
           {showDadosGerais && (
             <div className="div-interna-detalhes-os">
               <div className="div-detalhes-os">
-                <h4 className="titulos-detalhes-os"> DADOS GERAIS </h4>
+                <h4 className="titulos-detalhes-os"> DADOS DA ORDEM </h4>
 
                 <div className = "campos-detalhes-os">
                 <h5 >ID da Ordem</h5>
                 <p> {ordemData.ordemId}</p>
-                </div>
-
-                <div className = "campos-detalhes-os">
-                <h5 >Solicitante</h5>
-                <p> {ordemData.solicitante}</p>
                 </div>
 
                 <div className = "campos-detalhes-os">
@@ -298,7 +293,12 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                 </div>
 
                 <div className="campos-detalhes-os">
-                  <h5>Setor atual:</h5>
+                  <h5>Status da ordem</h5>
+                  <p> {ordemData.status}</p>
+                </div>
+
+                <div className="campos-detalhes-os">
+                  <h5>Atribuído para Setor:</h5>
                   {ordemData.setor === process.env.REACT_APP_SETOR_PRODUCAO ? (
                     <p>PRODUÇÃO</p>
                   ) : ordemData.setor === process.env.REACT_APP_SETOR_MSF ? (
@@ -308,11 +308,41 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                   )}
                 </div>
 
+                <div className="campos-detalhes-os">
+                  <h5>Atribuído para Equipe:</h5>
+                  {ordemData.equipe === process.env.REACT_APP_EQUIPE_PRODUCAO ? (
+                    <p>PRODUÇÃO</p>
+                  ) : ordemData.equipe === process.env.REACT_APP_EQUIPE_GREEN ? (
+                    <p>GREEN</p>
+                  ) : (
+                    <p>{ordemData.equipe}</p>
+                  )}
+                </div>
+
+
+                <h4 className="titulos-detalhes-os"> DADOS DO SOLICITANTE </h4>
+
+                <div className = "campos-detalhes-os">
+                <h5 >Solicitante</h5>
+                <p> {ordemData.solicitante_name}</p>
+                </div>
+
+                <div className = "campos-detalhes-os">
+                <h5 >Setor do Solicitante</h5>
+                <p> {ordemData.name_setor_solicitante}</p>
+                </div>
+
+                <div className = "campos-detalhes-os">
+                <h5 >Equipe do Solicitante</h5>
+                <p> {ordemData.name_equipe_solicitante}</p>
+                </div>
+
+
 
               </div>
 
               <div className="div-detalhes-os">
-                <p className="titulos-detalhes-os"> DADOS SALA</p>
+                <p className="titulos-detalhes-os"> DADOS DO LOCAL PARA REALIZAR O SERVIÇO</p>
 
                 <div className = "campos-detalhes-os">
                 <h5 >Sala</h5>
@@ -329,10 +359,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                 <p> {ordemData.cabeceira}</p>
                 </div>
 
-                <div className="campos-detalhes-os">
-                  <h5>Status</h5>
-                  <p> {ordemData.status}</p>
-                </div>
+
               </div>
 
               <div className="div-detalhes-os3">
