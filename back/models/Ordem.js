@@ -25,6 +25,18 @@ const ordemSchema = new Schema ({
          type: String,
          require:true,
      },
+    name_setor_solicitante: {
+        type: String,
+        require:true,
+    },
+    equipe_solicitante: {
+        type: String,
+        require:true,
+    },
+    name_equipe_solicitante: {
+        type: String,
+        require:true,
+    },
     sala: {
         type: Number,
         require:true,

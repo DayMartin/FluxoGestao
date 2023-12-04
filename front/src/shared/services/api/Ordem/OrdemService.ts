@@ -9,8 +9,11 @@ export interface IOrdemServiceData {
   ordemId: number;
   solicitante?: string;
   // solicitante?: IDetalhePessoa;
-  solicitante_nome: string; 
+  solicitante_name: string; 
   setor_solicitante: string;
+  name_setor_solicitante: string;
+  equipe_solicitante: string;
+  name_equipe_solicitante: string;
   equipe: string;
   setor: string;
   sala: number;
@@ -41,8 +44,11 @@ export interface IDetalheOrdem {
   ordemId: number;
   // solicitante?: IDetalhePessoa;
   solicitante?: string;
-  solicitante_nome: string; 
+  solicitante_name: string; 
   setor_solicitante: string;
+  name_setor_solicitante: string;
+  equipe_solicitante: string;
+  name_equipe_solicitante: string;
   equipe: string;
   setor: string;
   sala: number;

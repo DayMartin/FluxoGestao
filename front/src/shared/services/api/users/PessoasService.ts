@@ -2,7 +2,7 @@ import { Environment } from '../../../environment';
 import { Api } from '../axios-config';
 
 export interface IListagemPessoa {
-    name: string;
+  name: string;
   matricula: string;
   setor: string;
   turno: string;
