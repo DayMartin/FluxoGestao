@@ -291,7 +291,15 @@ const filtroFunctions: Record<string, () => void> = {
                     <TableCell>{row.cabeceira}</TableCell>
                     <TableCell>{row.status}</TableCell>
                     <TableCell>{row.urgencia}</TableCell>
-                    <TableCell>{row.setor}</TableCell>
+                    <TableCell>
+                      {row.setor === process.env.REACT_APP_SETOR_PRODUCAO ? (
+                        <p>PRODUÇÃO</p>
+                      ) : row.setor === process.env.REACT_APP_SETOR_MSF ? (
+                        <p>MSF</p>
+                      ) : (
+                        <p>{row.setor}</p>
+                      )}
+                    </TableCell>
                     <TableCell>
                     <IconButton size="small" onClick={() => handleDelete(row._id)}>
                     <Icon>delete</Icon>
