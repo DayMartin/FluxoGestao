@@ -17,6 +17,10 @@ const serviceSchema = new Schema ({
         type: String,
         require:true,
     },
+    solicitante_servico: {
+        type: String,
+        require:true,
+    },
   },
   { timestamps: true }
 );

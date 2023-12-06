@@ -39,6 +39,7 @@ code {
   transition: background-color 0.3s ease;
 }
 
+
 .botao-detalhes-os.botao-clicado {
   background-color: #03132b;
 }
@@ -283,6 +284,7 @@ h5 {
   position: relative;
 }
 
+
 .close {
   color: #aaa;
   float: right;
@@ -297,3 +299,17 @@ h5 {
   cursor: pointer;
 }
 
+.input1[type="text"] {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.label1 {
+  margin-bottom: 6px;
+  display: block;
+  font-weight: bold;
+}

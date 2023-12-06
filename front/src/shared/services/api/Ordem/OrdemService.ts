@@ -28,6 +28,8 @@ export interface IOrdemServiceData {
     name: string;
     description: string;
     status: string;
+    solicitante_servico: string;
+
   }[];
   comments: {
     usuario: string;
@@ -63,6 +65,7 @@ export interface IDetalheOrdem {
     name: string;
     description: string;
     status: string;
+    solicitante_servico: string;
   }[];
   comments: {
     usuario: string;
@@ -94,6 +97,7 @@ export interface IApiResponse {
   status?: string | string[];
   sala?: string | string[];
   equipe?: string;
+  solicitante?: string;
 }
 
 

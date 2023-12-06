@@ -7,6 +7,7 @@ const serviceController = {
                 name: req.body.name,
                 description:req.body.description,
                 status:req.body.status,
+                solicitante_servico: req.body.solicitante_servico,
             
             };
             const response = await ServiceModel.create(service);
@@ -66,6 +67,7 @@ const serviceController = {
             name: req.body.name,
             description:req.body.description,
             status:req.body.status,
+            solicitante_servico: req.body.solicitante_servico,
 
         };
 

@@ -4,6 +4,13 @@ const { Ordem: OrdemModel } = require("../models/Ordem");
 const IdCounter = require("../models/IdCounter");
 const { Users: UsersModel } = require("../models/Users");
 
+require("dotenv").config();
+
+const producaoId = process.env.REACT_APP_SETOR_PRODUCAO;
+const msfId = process.env.REACT_APP_SETOR_MSF;
+const equipe_producaoId = process.env.REACT_APP_EQUIPE_PRODUCAO;
+const equipe_greenId = process.env.REACT_APP_EQUIPE_GREEN;
+
 const ordemController = {
     create: async (req, res) => {
         try {
@@ -81,15 +88,16 @@ const ordemController = {
         }
     
         // Aplicar filtro para o setor "MSF" ou "PRODUCAO"
-        if (setor === '655be5c6585d76b1ab1ca7e5' || setor === '655be3fd08346d6f62ae7a56') {
+        if (setor === msfId || setor === producaoId) {
           query.where({ setor });
         }
 
         // Aplicar filtro para o equipe "ELETRICA" ou " GREEN", ou "PRODUCAO"
-        if (equipe === '655be3ea08346d6f62ae7a53' || equipe === '655bece8f2da4148eba30981' || equipe === '6569783744abf5a3198e2de0') {
+        if (equipe === '655be3ea08346d6f62ae7a53' || equipe === equipe_greenId || equipe === equipe_producaoId ) {
           query.where({ equipe });
         }
-    
+        
+        query = query.skip(skip).limit(limit);
         // Consulta para contar documentos com base nos filtros aplicados
         let totalCountQuery = OrdemModel.find(statusQuery);
         totalCountQuery = totalCountQuery.populate(['solicitante', 'sala']);
@@ -99,14 +107,14 @@ const ordemController = {
           totalCountQuery.where({ ordemId: parseInt(filter) });
         }
     
-        if (setor === '655be5c6585d76b1ab1ca7e5' || setor === '655be3fd08346d6f62ae7a56') {
+        if (setor === msfId || setor === producaoId) {
           totalCountQuery.where({ setor });
         }
 
-        if (equipe === '655be3ea08346d6f62ae7a53' || equipe === '655bece8f2da4148eba30981' || equipe === '6569783744abf5a3198e2de0') {
+        if (equipe === '655be3ea08346d6f62ae7a53' || equipe === equipe_greenId || equipe === equipe_producaoId ) {
           totalCountQuery.where({ equipe });
         }
-        
+
         // Contar documentos com base nos filtros aplicados
         const totalCount = await totalCountQuery.countDocuments();
         const results = {

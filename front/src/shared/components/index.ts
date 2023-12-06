@@ -6,3 +6,4 @@ export * from './formulario-ordem/OrdemForms';
 export * from './login/Login'
 export * from './formulario-ordem/DetalheOrdem'
 export * from './FormateDate/FormateDate'
+export * from './formulario-ordem/NovoServicoModal'

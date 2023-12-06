@@ -1,27 +1,27 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import { OrdemService, IDetalheOrdem, IOrdemServiceData } from '../../services/api/Ordem/OrdemService';
 import PermissionComponent from '../AuthComponent/AuthComponent';
 import { formatarData } from '../FormateDate/FormateDate';
-import { Icon } from '@mui/material';
+import { Dialog, Icon } from '@mui/material';
 import config from '../../../config';
+import NovoServicoPopup from './NovoServicoModal';
 
 function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: () => void }) {
+  const [showDialog, setShowDialog] = useState(false); // Estado para controlar a exibição do dialog
   const [ordemData, setOrdemData] = useState<IDetalheOrdem | null>(null);
   const [showDadosGerais, setShowDadosGerais] = useState(true);
   const [showServicos, setShowServicos] = useState(false);
   const [showComentarios, setShowComentarios] = useState(false);
   const [botaoClicado, setBotaoClicado] = useState('');
   const [novoComentario, setNovoComentario] = useState('');
-  const [novoServico, setNovoServico] = useState('');
-  const [novoServicoDescricao, setNovoServicoDescricao] = useState('');
-  const [novoServicoStatus, setNovoServicoStatus] = useState('Pendente');
   const [mostrarPopupNovoServico, setMostrarPopupNovoServico] = useState(false);
-  const [novoEquipe, setNovoEquipe] = useState('655bece8f2da4148eba30981'); 
-  const [novoSetor, setNovoSetor] = useState('655be3fd08346d6f62ae7a56');
-  const producaoId = process.env.REACT_APP_PRODUCAO_ID;
-  const msfId = process.env.REACT_APP_MSF_ID;
+  const [novoEquipe, setNovoEquipe] = useState(process.env.REACT_APP_EQUIPE_GREEN || 'NULL'); 
+  const [novoSetor, setNovoSetor] = useState(process.env.REACT_APP_SETOR_PRODUCAO || 'NULL');
+  const producaoId = process.env.REACT_APP_SETOR_PRODUCAO;
+  const msfId = process.env.REACT_APP_SETOR_MSF;
   const equipe_producaoId = process.env.REACT_APP_EQUIPE_PRODUCAO;
   const equipe_greenId = process.env.REACT_APP_EQUIPE_GREEN;
+  const servicoInputRef = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
     const fetchOrdemData = async () => {
@@ -31,15 +31,20 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
           console.error(detalhes);
         } else {
           setOrdemData(detalhes);
+  
+          if (detalhes && detalhes.services.length === 0) {
+            if (servicoInputRef.current) {
+              servicoInputRef.current.focus();
+            }
+          }
         }
       } catch (error) {
         console.error(error);
       }
     };
-
+  
     fetchOrdemData();
-  }, [ordemId]);
-
+  }, [ordemId, showDialog]);
   /* MUDAR A COR DO BOTÃO AO SER CLICADO */
 
   const handleButtonClick = (botao: string) => {
@@ -94,7 +99,6 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
       console.error('Erro ao atualizar a equipe:', error);
     }
   };
-
   const atualizarSetor = async (novoSetor: string, idOrdem: string) => {
       try {
         const dadosAtualizados: Partial<IOrdemServiceData> = {
@@ -108,8 +112,6 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
         console.error('Erro ao atualizar a equipe:', error);
       }
   };
-
-
   const atualizarServico = async (servicoAtualizado: any, idServico: string) => {
     try {
       if (ordemData) {
@@ -135,7 +137,6 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
       console.error('Erro ao atualizar o serviço:', error);
     }
   };
-
   const adicionarNovoComentario = async () => {
     try {
       const idOrdem = ordemData?._id || '';
@@ -147,7 +148,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
       const novoComentarioData = {
         usuario: nomeUsuario,
         description: novoComentario,
-        createdAt: dataAtual, // Inserir a data atual no comentário
+        createdAt: dataAtual, 
       };
 
       const comentariosAtuais = ordemData?.comments || [];
@@ -170,83 +171,50 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
       console.error('Erro ao adicionar o comentário:', error);
     }
   };
+  const abrirDialogNovoServico = () => {
+    setShowDialog(true); // Configurar o estado para exibir o Dialog
+  };
 
-  interface NovoServicoPopupProps {
-    adicionarNovoServico: any; // Substitua 'any' pelo tipo correto, se possível
-    onClose: any; // Substitua 'any' pelo tipo correto, se possível
-  }
+  const fecharDialog = () => {
+    setShowDialog(false);
+  };
 
-  function NovoServicoPopup({ adicionarNovoServico, onClose }: NovoServicoPopupProps) {
-    const [mostrarModal, setMostrarModal] = useState(false);
-    const adicionarNovoServicoHandler = async () => {
-      try {
-        const idOrdem = ordemData?._id || '';
-
-        const novoServiceData = {
-          name: novoServico,
-          description: novoServicoDescricao,
-          status: novoServicoStatus,
-        };
-
-        const servicesAtuais = ordemData?.services || [];
-        const servicesAtualizados = [...servicesAtuais, novoServiceData];
-
-        const dadosAtualizados: Partial<IOrdemServiceData> = {
-          services: servicesAtualizados,
-        };
-
-        const resposta = await OrdemService.updateById(idOrdem, dadosAtualizados as IOrdemServiceData);
-
-        setNovoServico('');
-        setNovoServicoDescricao('');
-        setNovoServicoStatus('');
-        setOrdemData(prevData => {
-          if (prevData) {
-            return { ...prevData, services: servicesAtualizados };
+  const apagarServico = async (nomeServico: string) => {
+    try {
+      const nomeUsuario = localStorage.getItem('APP_ACCESS_USER') || '';
+  
+      if (ordemData) {
+        const servicoParaApagar = ordemData.services.find((servico) => servico.name === nomeServico);
+  
+        if (servicoParaApagar && servicoParaApagar.solicitante_servico === nomeUsuario) {
+          const servicosRestantes = ordemData.services.filter((servico) => servico.name !== nomeServico);
+  
+          if (servicosRestantes.length > 0) {
+            const dadosAtualizados = {
+              services: servicosRestantes,
+            };
+  
+            const resposta = await OrdemService.updateById(ordemData._id, dadosAtualizados as IOrdemServiceData);
+  
+            setOrdemData({ ...ordemData, services: servicosRestantes });
+  
+            console.log('Serviço apagado:', nomeServico);
+            console.log('Resposta da atualização:', resposta);
+          } else {
+            alert('Deve haver ao menos um serviço.');
+            console.log('Pelo menos um serviço deve permanecer.');
           }
-          return prevData;
-        });
-      } catch (error) {
-        console.error('Erro ao adicionar o comentário:', error);
+        } else {
+          alert('Você não tem permissão para excluir este serviço.');
+          console.log('Permissão negada para excluir o serviço.');
+        }
       }
-    };
-
-      // Se mostrarModal for verdadeiro, renderizamos o modal
-  if (mostrarModal) {
-    // Aqui, atualizei o retorno do componente para exibir o popup sobre todo o conteúdo
-    return mostrarModal ? (
-      <div className="modal" style={{ position: 'fixed', top: 0, left: 0, width: '100%', height: '100%', backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999 }}>
-        {/* Conteúdo do modal */}
-        <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', backgroundColor: '#fff', padding: '20px', borderRadius: '5px' }}>
-          <h2>Adicionar Novo Serviço</h2>
-          {/* ... (restante do código do popup) */}
-        </div>
-      </div>
-    ) : null;
-  }
-
-    return (
-      <div className="modal-content">
-        <span className="close" onClick={onClose}>&times;</span>
-        <h2>Adicionar Novo Serviço</h2>
-        <label>Serviço:</label>
-        <input type="text" value={novoServico} onChange={(e) => setNovoServico(e.target.value)} />
-        <label>Descrição do Serviço:</label>
-        <input
-          type="text"
-          value={novoServicoDescricao}
-          onChange={(e) => setNovoServicoDescricao(e.target.value)}
-        />
-        <label>Status do Serviço:</label>
-        <input
-          type="text"
-          value={novoServicoStatus}
-          onChange={(e) => setNovoServicoStatus(e.target.value)}
-        />
-        <button onClick={adicionarNovoServicoHandler}>Adicionar Serviço</button>
-      </div>
-    );
-  }
+    } catch (error) {
+      console.error('Erro ao apagar o serviço:', error);
+    }
+  };
+  
+  
 
   return (
     <div className="div-externa-ordem-listagem">
@@ -337,8 +305,6 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                 <p> {ordemData.name_equipe_solicitante}</p>
                 </div>
 
-
-
               </div>
 
               <div className="div-detalhes-os">
@@ -371,21 +337,11 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                             value={novoSetor}
                             onChange={(e) => setNovoSetor(e.target.value)} // Atualiza o estado de novoSetor
                           >
-                            <option value="655be3fd08346d6f62ae7a56">PRODUCAO</option>
-                            <option value="655be5c6585d76b1ab1ca7e5">MSF</option>
+                            <option value={producaoId}>PRODUCAO</option>
+                            <option value={msfId}>MSF</option>
                           </select>
                             <div className="arrowIcon">&#9660;</div>
                           </div>
-
-                            {/* <button
-                            onClick={() => {
-                              const novoSetor = 'novo setor'; // Defina o novo setor aqui se necessário
-                              const idOrdem = ordemData?._id || ''; // Obtém o ID da ordem
-                              atualizarSetor(novoSetor, idOrdem);
-                            }}
-                          >
-                            Atualizar Setor
-                          </button> */}
 
                   </div>
                   <div className = "campos-detalhes-os">
@@ -396,21 +352,11 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                           value={novoEquipe}
                           onChange={(e) => setNovoEquipe(e.target.value)} // Atualiza o estado de novoEquipe
                         >
-                          <option value="655bece8f2da4148eba30981">GREEN</option>
-                          <option value="6569783744abf5a3198e2de0">PRODUCAO</option>
+                          <option value={equipe_greenId}>GREEN</option>
+                          <option value={equipe_producaoId}>PRODUCAO</option>
                         </select>
                             <div className="arrowIcon">&#9660;</div>
                           </div>
-
-                            {/* <button
-                            onClick={() => {
-                              const novoSetor = 'novo setor'; // Defina o novo setor aqui se necessário
-                              const idOrdem = ordemData?._id || ''; // Obtém o ID da ordem
-                              atualizarSetor(novoSetor, idOrdem);
-                            }}
-                          >
-                            Atualizar Setor
-                          </button> */}
 
                   </div>
 
@@ -444,16 +390,6 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                   </select>
                   <div className="arrowIcon">&#9660;</div>
                   </div>
-                  {/* <button
-                    onClick={() => {
-                      const novoStatus = 'novo status';
-                      const idOrdem = ordemData?._id || '';
-
-                      atualizarStatus(novoStatus, idOrdem);
-                    }}
-                  >
-                    Atualizar Status
-                  </button> */}
 
                 </div>
               </div>
@@ -463,7 +399,6 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                     window.location.reload(); // Atualiza a página
                   }}>Fechar</button>
 
-                  // Dentro do seu código
                   <button
                     className='botao-detalhes-os'
                     onClick={(e) => {
@@ -487,18 +422,17 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
               </div>
           )}
 
-          {showServicos && (
-            <div className="div-interna-detalhes-os">
-              <div className="div-detalhes-os">
-
-                      {mostrarPopupNovoServico && (
-                        <NovoServicoPopup
-                          onClose={() => setMostrarPopupNovoServico(false)}
-                          adicionarNovoServico={NovoServicoPopup}
-                        />
-                      )}
-              <h4>Serviços <button onClick={() => setMostrarPopupNovoServico(true)}><Icon>add_circle</Icon></button></h4>
+      {showServicos && (
+        <div className="div-interna-detalhes-os">
+          <div className="div-detalhes-os">
+              
+              <h4>Serviços <button onClick={abrirDialogNovoServico}><Icon>add_circle</Icon></button></h4>
               <div className = "campos-detalhes-os4">
+              <Dialog open={showDialog} onClose={fecharDialog} maxWidth="sm">
+                {showDialog && (
+                  <NovoServicoPopup ordemData={ordemData} onClose={() => { fecharDialog(); }} />
+                )}
+               </Dialog>
 
                 <ul>
                   {ordemData.services.map((service, index) => (
@@ -541,6 +475,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                         </select>
                         <div className="arrowIcon">&#9660;</div>
                         </div>
+                        <button onClick={() => apagarServico(service.name)}><Icon>delete</Icon></button>
                       </div>
                       </div>
                           ))}

@@ -11,7 +11,10 @@ import { OrdemService, IDetalheOrdem, IOrdemServiceData } from "../../services/a
 import { IDetalheSala, IListagemSala, SalaService, TSalaComTotalCount } from "../../services/api/Sala/SalaService";
 import { EquipeService, IDetalheEquipe, IDetalheSetor, SetorService } from "../../services/api";
 
-
+const producaoId = process.env.REACT_APP_SETOR_PRODUCAO;
+const msfId = process.env.REACT_APP_SETOR_MSF;
+const equipe_producaoId = process.env.REACT_APP_EQUIPE_PRODUCAO;
+const equipe_greenId = process.env.REACT_APP_EQUIPE_GREEN;
 
 const customTheme = (outerTheme: Theme) =>
   createTheme({
@@ -93,6 +96,7 @@ export const OrdemForms = ( ) => {
   const [userName, setUserName] = useState<string | null>(null);
   const [userId, setUserId] = useState('');
 
+
   useEffect(() => {
 
     if (setorID) {
@@ -127,6 +131,7 @@ export const OrdemForms = ( ) => {
       setOrdemData((prevOrdemData) => ({
         ...prevOrdemData,
         solicitante_name: userName,
+        
       }));
     }
 
@@ -137,6 +142,34 @@ export const OrdemForms = ( ) => {
         solicitante: userId,
       }));
     }
+
+      if (userId && userName) {
+    setOrdemData((prevOrdemData) => {
+      const updatedServices = prevOrdemData.services.map((service) => ({
+        ...service,
+        solicitante_servico: userName,
+      }));
+
+      return {
+        ...prevOrdemData,
+        services: updatedServices,
+      };
+    });
+  }
+
+  if (userId && userName) {
+    setOrdemData((prevOrdemData) => {
+      const updatedComments = prevOrdemData.comments.map((comments) => ({
+        ...comments,
+        usuario: userName,
+      }));
+
+      return {
+        ...prevOrdemData,
+        comments: updatedComments,
+      };
+    });
+  }
 
 
     if (setorFromLocalStorage) {
@@ -190,8 +223,8 @@ export const OrdemForms = ( ) => {
     name_setor_solicitante: setorName || "",
     name_equipe_solicitante: equipeName || "",
     equipe_solicitante: equipeID || "",
-    setor: "655be5c6585d76b1ab1ca7e5",
-    equipe: "655bece8f2da4148eba30981",
+    setor: process.env.REACT_APP_SETOR_PRODUCAO || "NULL" ,
+    equipe: process.env.REACT_APP_EQUIPE_GREEN || "NULL" ,
     sala: 1,
     forno: NaN,
     cabeceira: "",
@@ -201,16 +234,17 @@ export const OrdemForms = ( ) => {
         name: "",
         description: "",
         status: "Pendente",
+        solicitante_servico: userName || "",
       },
     ],
     comments: [
       {
-        usuario: "",
-        description: "",
+        usuario: userName || "",
+        description: "Criou Nova OS",
         createdAt: "",
       },
     ],
-    urgencia: "",
+    urgencia: "Não Urgente",
     createdAt: ''
 
   });
@@ -231,39 +265,91 @@ export const OrdemForms = ( ) => {
     }
   };
 
-
-  const handleAddService = () => {
-    // Crie um novo serviço vazio e adicione-o à lista de serviços
-    const newService = {
-      name: "",
-      description: "",
-      status: "",
-      comments: [
-        {
-          usuario: "",
-          description: "",
-        },
-      ],
-    };
-
-    setOrdemData((prevState) => ({
-      ...prevState,
-      services: [...prevState.services, newService],
-    }));
-  };
-
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+  
     try {
       const orderId = await OrdemService.create(ordemData);
       console.log(`Ordem de serviço criada com ID: ${orderId}`);
+      alert(`Ordem de serviço criada com ID: ${orderId}`);
+  
+      // Limpar todos os campos após o cadastro
+      setOrdemData({
+        _id: "",
+        ordemId: NaN,
+        solicitante: userId || '',
+        solicitante_name: userName || "",
+        setor_solicitante: setorID || '',
+        name_setor_solicitante: setorName || "",
+        name_equipe_solicitante: equipeName || "",
+        equipe_solicitante: equipeID || "",
+        setor: process.env.REACT_APP_SETOR_PRODUCAO || "NULL",
+        equipe: process.env.REACT_APP_EQUIPE_GREEN || "NULL",
+        sala: 1,
+        forno: NaN,
+        cabeceira: "",
+        status: "Aguardando atendimento",
+        services: [
+          {
+            name: "",
+            description: "",
+            status: "Pendente",
+            solicitante_servico: userName || "PADRAO",
+          },
+        ],
+        comments: [
+          {
+            usuario: userName || "",
+            description: "Criou Nova OS",
+            createdAt: "",
+          },
+        ],
+        urgencia: "Não Urgente",
+        createdAt: ''
+      });
+  
       event.currentTarget?.reset();
     } catch (error) {
+      alert("Erro ao criar a ordem de serviço");
       console.error("Erro ao criar a ordem de serviço", (error as Error).message);
     }
   };
+  
 
+
+  const handleAddService = () => {
+    // Se já houver pelo menos um serviço na lista, adicione um novo serviço vazio
+    const hasService = ordemData.services.length > 0;
+  
+    if (hasService) {
+      const newService = {
+        name: "",
+        description: "",
+        status: "Pendente",
+        solicitante_servico: userName || "ADD",
+      };
+      
+      setOrdemData((prevState) => ({
+        ...prevState,
+        services: [...prevState.services, newService],
+      }));
+    }
+  };
+  
+  const handleRemoveService = (indexToRemove: number) => {
+    if (ordemData.services.length === 1) {
+      // Se houver apenas um serviço, exiba um alerta e não remova
+      alert("É necessário ter ao menos 1 serviço.");
+      return;
+    }
+  
+    setOrdemData((prevState) => ({
+      ...prevState,
+      services: prevState.services.filter((_, index) => index !== indexToRemove),
+    }));
+  };
+  
+  
   const theme = useTheme();
   const outerTheme = useTheme();
 
@@ -289,7 +375,7 @@ export const OrdemForms = ( ) => {
           label="Solicitante"
           type="text"
           name="title"
-          value={userName || 'NAO PEGOU NADA' }
+          value={userName || 'NULL' }
           onChange={(event) => handleChange(event, "solicitante_name")}
           required
           margin="normal"
@@ -309,7 +395,7 @@ export const OrdemForms = ( ) => {
         <input
           type="hidden"
           name="setor_solicitante"
-          value={setorID || 'NAO PEGOU NADA' }
+          value={setorID || 'NULL' }
           onChange={(event) => handleChange(event, "setor_solicitante")}
         />
 
@@ -320,7 +406,7 @@ export const OrdemForms = ( ) => {
             label="Setor Solicitante"
             type="text"
             name="title"
-            value={setorName || 'NAO PEGOU NADA'}
+            value={setorName || 'NULL'}
             onChange={(event) => handleChange(event, "name_setor_solicitante")}
             required
             margin="normal"
@@ -333,7 +419,7 @@ export const OrdemForms = ( ) => {
         <input
           type="hidden"
           name="equipe_solicitante"
-          value={equipeID || 'NAO PEGOU NADA' }
+          value={equipeID || 'NULL' }
           onChange={(event) => handleChange(event, "equipe_solicitante")}
         />
 
@@ -344,7 +430,7 @@ export const OrdemForms = ( ) => {
             label="Equipe Solicitante"
             type="text"
             name="title"
-            value={equipeName || 'NAO PEGOU NADA'}
+            value={equipeName || 'NULL'}
             onChange={(event) => handleChange(event, "name_equipe_solicitante")}
             required
             margin="normal"
@@ -376,15 +462,6 @@ export const OrdemForms = ( ) => {
         <div className="arrowIcon">&#9660;</div>
         </div>
         </div>
-{/*
-        <select onChange={(event) => handleChange(event, "sala")}>
-          <option value="">Selecione uma sala</option>
-          {salas.map((sala) => (
-            <option key={sala._id} value={sala._id}>
-              Sala {sala.salaNumber}
-            </option>
-          ))}
-        </select> */}
 
         <div className = "campos-detalhes-os">
         <p> Forno: </p>
@@ -414,44 +491,24 @@ export const OrdemForms = ( ) => {
         </div>
         </div>
 
-        {/* Comentários */}
-        { /*
-        {ordemData.comments.map((comment, index) => (
-          <div key={`comment-${index}`}>
-            <h4> Comentário </h4>
-
-            <TextField label="Usuário do comentário"
-              type="text"
-              name="usuario"
-              onChange={(event) => handleChange(event, "comments", index)}
-              required
-              margin="normal"
-              style={{ marginRight: '40px' }}
-            />
-            <TextField label="Descrição do comentário"
-              type="text"
-              name="description"
-              onChange={(event) => handleChange(event, "comments", index)}
-              required
-              margin="normal"
-              style={{ marginRight: '40px' }}
-            />
-          </div>
-        ))} */}
 
     <h4> Informações gerais da Ordem </h4>
 
-        <div className = "campos-detalhes-os">
+      <div className = "campos-detalhes-os">
         <p> Urgência: </p>
          <div className="selectContainer">
-        <TextField label="Urgência"
-          type="text"
-          name="title"
-          onChange={(event) => handleChange(event, "urgencia")}
-          required
-          margin="normal"
-          style={{ marginRight: '40px' }}
-        />
+          <select
+            className="selectsInfo"
+            value={ordemData?.urgencia || ''}
+            onChange={(e) => handleChange(e, "urgencia")}
+            >
+            <option value="Não Urgente">Não Urgente</option>
+            <option value="Urgente">Urgente</option>
+            <option value="Perigo">Perigo</option>
+            <option value="Risco de vida">Risco de vida</option>
+          </select>
+
+        <div className="arrowIcon">&#9660;</div>
         </div>
         </div>
 
@@ -480,8 +537,8 @@ export const OrdemForms = ( ) => {
             value={ordemData?.setor || ''}
             onChange={(e) => handleChange(e, "setor")}
             >
-            <option value="655be5c6585d76b1ab1ca7e5">MSF</option>
-            <option value="655be3fd08346d6f62ae7a56">PRODUCAO</option>
+            <option value={msfId}>MSF</option>
+            <option value={producaoId}>PRODUCAO</option>
 
           </select>
 
@@ -497,8 +554,8 @@ export const OrdemForms = ( ) => {
             value={ordemData?.equipe || ''}
             onChange={(e) => handleChange(e, "equipe")}
             >
-           <option value="655bece8f2da4148eba30981">GREEN</option>
-           <option value="6569783744abf5a3198e2de0">PRODUCAO</option>
+           <option value={equipe_greenId}>GREEN</option>
+           <option value={equipe_producaoId}>PRODUCAO</option>
           </select>
 
         <div className="arrowIcon">&#9660;</div>
@@ -508,40 +565,80 @@ export const OrdemForms = ( ) => {
         <h4> Serviços a serem realizados <Button onClick={handleAddService}><Icon> add_circle</Icon></Button></h4>
         {/* Services e Comments */}
         {ordemData.services.map((service, index) => (
-          <div key={`service-${index}`}>
+        <div key={`service-${index}`}>
+          <TextField
+            label="Serviço"
+            type="text"
+            name="name"
+            value={service.name}
+            onChange={(event) => handleChange(event, "services", index)}
+            required
+            margin="normal"
+            style={{ marginRight: '40px' }}
+          />
+          <TextField
+            label="Descrição do serviço"
+            type="text"
+            name="description"
+            value={service.description}
+            onChange={(event) => handleChange(event, "services", index)}
+            required
+            margin="normal"
+            style={{ marginRight: '40px' }}
+          />
+          <TextField
+            label="Status do serviço"
+            type="text"
+            name="status"
+            value={service.status}
+            onChange={(event) => handleChange(event, "services", index)}
+            required
+            margin="normal"
+            style={{ marginRight: '40px' }}
+            disabled
+          />
 
+        <input
+          type="hidden"
+          name="solicitante_servico"
+          value={service.solicitante_servico}
+          onChange={(event) => handleChange(event, "services", index)}
+        />
+          <Button
+            variant="outlined"
+            color="error"
+            onClick={() => handleRemoveService(index)}
+          >
+            Excluir
+          </Button>
+        </div>
+      ))}
 
-            <TextField label="Serviço"
-              type="text"
-              name="name"
-              onChange={(event) => handleChange(event, "services", index)}
-              required
-              margin="normal"
-              style={{ marginRight: '40px' }}
-            />
-            <TextField label="Descrição do serviço"
-              type="text"
-              name="description"
-              onChange={(event) => handleChange(event, "services", index)}
-              required
-              margin="normal"
-              style={{ marginRight: '40px' }}
-            />
-            <TextField label="Status do serviço"
-              type="text"
-              name="status"
-              value={'Pendente'}
-              onChange={(event) => handleChange(event, "services", index)}
-              required
-              margin="normal"
-              style={{ marginRight: '40px' }}
-              disabled
-            />
-          </div>
-        ))}
+        <Button
+          className='botao-detalhes-os1'
+          type="submit"
+          sx={{
+            width: '40%',
+            height: '50px',
+            backgroundColor: '#0d48a1c9',
+            border: 'none',
+            color: 'rgb(255, 255, 255)',
+            cursor: 'pointer',
+            fontSize: '16px',
+            fontWeight: 'regular',
+            borderRadius: '8px',
+            margin: '5px',
+            marginTop: '50px',
+            marginBottom: '60px',
+            transition: 'background-color 0.3s ease',
+            '&:hover': {
+              backgroundColor: '#08101bc9', // Change to the color you want on hover
+            },
+          }}
+        >
+          Cadastrar ordem de serviço
+        </Button>
 
-
-        <Button type="submit">Cadastrar ordem de serviço</Button>
         </ThemeProvider>
       </form>
     </Box>
