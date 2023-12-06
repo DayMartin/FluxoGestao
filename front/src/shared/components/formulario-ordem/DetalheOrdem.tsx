@@ -181,32 +181,42 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
 
   const apagarServico = async (nomeServico: string) => {
     try {
-      const nomeUsuario = localStorage.getItem('APP_ACCESS_USER') || '';
-  
       if (ordemData) {
-        const servicoParaApagar = ordemData.services.find((servico) => servico.name === nomeServico);
+        // Consultar o banco para contar quantos serviços existem na ordem atual
+        const ordemCompleta = await OrdemService.getById(ordemData._id);
   
-        if (servicoParaApagar && servicoParaApagar.solicitante_servico === nomeUsuario) {
-          const servicosRestantes = ordemData.services.filter((servico) => servico.name !== nomeServico);
+        if (ordemCompleta instanceof Error) {
+          console.error('Erro ao buscar a ordem completa:', ordemCompleta);
+          return;
+        }
   
-          if (servicosRestantes.length > 0) {
-            const dadosAtualizados = {
-              services: servicosRestantes,
-            };
+        const quantidadeDeServicos = ordemCompleta.services.length;
   
-            const resposta = await OrdemService.updateById(ordemData._id, dadosAtualizados as IOrdemServiceData);
+        if (quantidadeDeServicos === 1) {
+          // Se houver apenas um serviço, exiba um alerta e não remova
+          alert('É necessário ter ao menos 1 serviço.');
+          return;
+        }
   
-            setOrdemData({ ...ordemData, services: servicosRestantes });
+        const servicosRestantes = ordemData.services.filter((servico) => servico.name !== nomeServico);
   
-            console.log('Serviço apagado:', nomeServico);
-            console.log('Resposta da atualização:', resposta);
-          } else {
-            alert('Deve haver ao menos um serviço.');
-            console.log('Pelo menos um serviço deve permanecer.');
-          }
+        // Atualize apenas se ainda houver pelo menos um serviço após a exclusão
+        if (servicosRestantes.length >= 1) {
+          const dadosAtualizados = {
+            services: servicosRestantes,
+          };
+  
+          const resposta = await OrdemService.updateById(ordemData._id, dadosAtualizados as IOrdemServiceData);
+  
+          // Atualize o estado local com os serviços restantes
+          setOrdemData({ ...ordemData, services: servicosRestantes });
+  
+          console.log('Serviço apagado:', nomeServico);
+          console.log('Resposta da atualização:', resposta);
         } else {
-          alert('Você não tem permissão para excluir este serviço.');
-          console.log('Permissão negada para excluir o serviço.');
+          // Se não houver serviços restantes após a exclusão, exiba um alerta
+          alert('Esse serviço foi criado no inicio da ordem, você não pode excluir.');
+          console.log('Pelo menos um serviço deve permanecer.');
         }
       }
     } catch (error) {
@@ -215,7 +225,6 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
   };
   
   
-
   return (
     <div className="div-externa-ordem-listagem">
       {ordemData ? (
