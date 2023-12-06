@@ -40,7 +40,7 @@ export const OrdemProd: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedOrdem, setSelectedOrdem] = useState<IDetalheOrdem | null>(null);
   const [showDetalhesDialog, setShowDetalhesDialog] = useState(false);
-  const statusPermitidos = ['Pendente', 'Concluido', 'Em andamento', 'Aguardando atendimento'];
+  const statusPermitidos = ['Pendente', 'Concluido', 'Em andamento', 'Aguardando atendimento', 'Dever de recusa'];
   const statusString = statusPermitidos.join(',');
   const [equipeName, setEquipeName] = useState<string | undefined>(undefined); 
   const [setorName, setSetorName] = useState<string | null>(null); 
@@ -53,6 +53,7 @@ export const OrdemProd: React.FC = () => {
     { label: 'Pendente', value: 'opcao2' },
     { label: 'Em andamento', value: 'opcao3' },
     { label: 'Aguardando atendimento', value: 'opcao4' },
+    { label: 'Dever de recusa', value: 'opcao5' },
     { label: 'Todos', value: 'reset' },
   ];
 
@@ -92,6 +93,7 @@ export const OrdemProd: React.FC = () => {
             filter: busca, 
             equipe: equipeNameFromLocalStorage,
             setor: setorNameFromLocalStorage,
+            status: statusPermitidos.join(','),
           });
 
           console.log(setorNameFromLocalStorage)
@@ -198,6 +200,10 @@ export const OrdemProd: React.FC = () => {
   const handleFiltrarAguardando = async () => {
     await handleFiltrar('Aguardando atendimento');
   };
+
+  const handleFiltrarRecusa = async () => {
+    await handleFiltrar('Dever de recusa');
+  };
   
   const handleReset = async () => {
     await handleFiltrar(statusString);
@@ -219,6 +225,10 @@ const filtroFunctions: Record<string, () => void> = {
 
   opcao4: () => {
     handleFiltrarAguardando();
+    // console.log('Opção 2 selecionada');
+  },
+  opcao5: () => {
+    handleFiltrarRecusa();
     // console.log('Opção 2 selecionada');
   },
   reset: () => {

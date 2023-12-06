@@ -67,6 +67,7 @@ const ordemController = {
           'Encerrado': 'Encerrado',
           'Em andamento': 'Em andamento',
           'Pendente': 'Pendente',
+          'Dever de recusa': 'Dever de recusa',
         };
     
         let statusQuery = {};
