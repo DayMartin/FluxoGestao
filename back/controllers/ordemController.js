@@ -104,9 +104,9 @@ const ordemController = {
         totalCountQuery = totalCountQuery.populate(['solicitante', 'sala']);
     
         // Aplicar os mesmos filtros para a contagem de documentos
-        if (filter) {
-          totalCountQuery.where({ ordemId: parseInt(filter) });
-        }
+        // if (filter) {
+        //   totalCountQuery.where({ ordemId: parseInt(filter) });
+        // }
     
         if (setor === msfId || setor === producaoId) {
           totalCountQuery.where({ setor });

@@ -10,7 +10,7 @@ export const Environment = {
     /**
      * Texto exibido quando nenhum registro é encontrado em uma listagem
      */
-    LISTAGEM_VAZIA: 'Nenhum registro encontrado.',
+    LISTAGEM_VAZIA: 'Nenhum registro encontrado. Para o filtro funcionar na tabela toda, esteja na primeira página da paginação numérica',
     /**
      * Url base de consultado dos dados dessa aplicação
      */
