@@ -615,8 +615,9 @@ export const OrdemForms = ( ) => {
             variant="outlined"
             color="error"
             onClick={() => handleRemoveService(index)}
+            style={{ marginLeft: '10px', marginTop: '5px', height: '69px' }} // Adicionei um estilo de margem superior para alinhar verticalmente o botão
           >
-            Excluir
+          <Icon>delete</Icon>
           </Button>
         </div>
       ))}
