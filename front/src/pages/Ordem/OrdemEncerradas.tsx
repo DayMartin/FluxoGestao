@@ -43,7 +43,7 @@ export const OrdemEncerradas: React.FC = () => {
   const msfId = process.env.REACT_APP_SETOR_MSF || 'NULL';
 
   const filterOptions: IFilterOption[] = [
-    { label: 'Mecânica', value: 'opcao1' },
+    { label: 'MSF', value: 'opcao1' },
     { label: 'Produção', value: 'opcao2' },
     { label: 'Todos', value: 'reset' },
   ];
