@@ -116,7 +116,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
     try {
       if (ordemData) {
         const servicosAtualizados = ordemData.services.map((servico) => {
-          if (servico.name === idServico) {
+          if (servico.id_service === idServico) {
             return { ...servico, ...servicoAtualizado };
           }
           return servico;
@@ -179,10 +179,9 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
     setShowDialog(false);
   };
 
-  const apagarServico = async (nomeServico: string) => {
+  const apagarServico = async (idServico: string) => {
     try {
       if (ordemData) {
-        // Consultar o banco para contar quantos serviços existem na ordem atual
         const ordemCompleta = await OrdemService.getById(ordemData._id);
   
         if (ordemCompleta instanceof Error) {
@@ -193,29 +192,30 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
         const quantidadeDeServicos = ordemCompleta.services.length;
   
         if (quantidadeDeServicos === 1) {
-          // Se houver apenas um serviço, exiba um alerta e não remova
           alert('É necessário ter ao menos 1 serviço.');
           return;
         }
   
-        const servicosRestantes = ordemData.services.filter((servico) => servico.name !== nomeServico);
+        const servicosRestantes = ordemData.services.filter(
+          (servico) => servico.id_service !== idServico
+        );
   
-        // Atualize apenas se ainda houver pelo menos um serviço após a exclusão
         if (servicosRestantes.length >= 1) {
           const dadosAtualizados = {
             services: servicosRestantes,
           };
   
-          const resposta = await OrdemService.updateById(ordemData._id, dadosAtualizados as IOrdemServiceData);
+          const resposta = await OrdemService.updateById(
+            ordemData._id,
+            dadosAtualizados as IDetalheOrdem
+          );
   
-          // Atualize o estado local com os serviços restantes
           setOrdemData({ ...ordemData, services: servicosRestantes });
   
-          console.log('Serviço apagado:', nomeServico);
+          console.log('Serviço apagado:', idServico);
           console.log('Resposta da atualização:', resposta);
         } else {
-          // Se não houver serviços restantes após a exclusão, exiba um alerta
-          alert('Esse serviço foi criado no inicio da ordem, você não pode excluir.');
+          alert('Esse serviço foi criado no início da ordem, você não pode excluir.');
           console.log('Pelo menos um serviço deve permanecer.');
         }
       }
@@ -223,6 +223,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
       console.error('Erro ao apagar o serviço:', error);
     }
   };
+  
   
   
   return (
@@ -473,7 +474,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
 
                             setOrdemData(updatedOrdemData);
 
-                            atualizarServico(updatedService, service.name);
+                            atualizarServico(updatedService, service.id_service);
                           }}
                         >
                           <option value="Em andamento">Em andamento</option>
@@ -484,7 +485,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                         </select>
                         <div className="arrowIcon">&#9660;</div>
                         </div>
-                        <button onClick={() => apagarServico(service.name)}><Icon>delete</Icon></button>
+                        <button onClick={() => apagarServico(service.id_service)}><Icon>delete</Icon></button>
                       </div>
                       </div>
                           ))}

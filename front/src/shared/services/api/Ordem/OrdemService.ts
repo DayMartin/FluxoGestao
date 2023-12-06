@@ -29,6 +29,7 @@ export interface IOrdemServiceData {
     description: string;
     status: string;
     solicitante_servico: string;
+    id_service: string;
 
   }[];
   comments: {
@@ -62,10 +63,12 @@ export interface IDetalheOrdem {
   cabeceira: string;
   status: string;
   services: {
+    id_service: string;
     name: string;
     description: string;
     status: string;
     solicitante_servico: string;
+    
   }[];
   comments: {
     usuario: string;
@@ -77,7 +80,6 @@ export interface IDetalheOrdem {
   [key: string]: any;
 
 }
-
 
 export type TOrdemComTotalCount = {
   data: IDetalheOrdem[];

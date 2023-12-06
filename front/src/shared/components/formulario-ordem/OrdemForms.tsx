@@ -2,6 +2,7 @@ import { Box, Button, Icon, Paper, SelectChangeEvent, TextField, useTheme } from
 import { createTheme, ThemeProvider, Theme } from '@mui/material/styles';
 import { Select, MenuItem } from "@mui/material";
 import { outlinedInputClasses } from '@mui/material/OutlinedInput';
+import { v4 as uuidv4 } from 'uuid';
 
 import React, { useEffect, useState, ChangeEvent} from "react";
 
@@ -235,6 +236,7 @@ export const OrdemForms = ( ) => {
         description: "",
         status: "Pendente",
         solicitante_servico: userName || "",
+        id_service: uuidv4(),
       },
     ],
     comments: [
@@ -269,9 +271,12 @@ export const OrdemForms = ( ) => {
     event.preventDefault();
   
     try {
-      const orderId = await OrdemService.create(ordemData);
+      const ordemDataWithoutServiceId = { ...ordemData };
+
+      const orderId = await OrdemService.create(ordemDataWithoutServiceId);
       console.log(`Ordem de serviço criada com ID: ${orderId}`);
       alert(`Ordem de serviço criada com ID: ${orderId}`);
+  
   
       // Limpar todos os campos após o cadastro
       setOrdemData({
@@ -295,6 +300,7 @@ export const OrdemForms = ( ) => {
             description: "",
             status: "Pendente",
             solicitante_servico: userName || "PADRAO",
+            id_service: uuidv4(),
           },
         ],
         comments: [
@@ -327,6 +333,7 @@ export const OrdemForms = ( ) => {
         description: "",
         status: "Pendente",
         solicitante_servico: userName || "ADD",
+        id_service: uuidv4(),
       };
       
       setOrdemData((prevState) => ({

@@ -81,7 +81,7 @@ GET http://localhost:3048/api/ordem
 
 ###
 
-GET http://localhost:3048/api/ordem?page=1&limit=5&ordemId=67
+GET http://localhost:3048/api/ordem?page=1&limit=5&ordemId=145
 
 
 ###
