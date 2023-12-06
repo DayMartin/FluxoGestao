@@ -39,6 +39,8 @@ export const OrdemEncerradas: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedOrdem, setSelectedOrdem] = useState<IDetalheOrdem | null>(null);
   const [showDetalhesDialog, setShowDetalhesDialog] = useState(false);
+  const producaoId = process.env.REACT_APP_SETOR_PRODUCAO || 'NULL' ;
+  const msfId = process.env.REACT_APP_SETOR_MSF || 'NULL';
 
   const filterOptions: IFilterOption[] = [
     { label: 'Mecânica', value: 'opcao1' },
@@ -148,11 +150,11 @@ export const OrdemEncerradas: React.FC = () => {
   };
 
   const handleFiltrarEncerradoProd = async () => {
-    await handleFiltrar('produção', 'Encerrado');
+    await handleFiltrar(producaoId, 'Encerrado');
   };
 
   const handleFiltrarEncerradoMec = async () => {
-    await handleFiltrar('mecânica', 'Encerrado');
+    await handleFiltrar(msfId, 'Encerrado');
   };
 
         // Função para retornar ao estado natural da página
@@ -231,13 +233,21 @@ export const OrdemEncerradas: React.FC = () => {
                   <TableRow key={row.ordemId}>
 
                     <TableCell>{row.ordemId}</TableCell>
-                    <TableCell>{row.solicitante ? row.solicitante : 'N/A'}</TableCell>
+                    <TableCell>{row.solicitante_name}</TableCell>
                     <TableCell>{row.sala && row.sala ? row.sala : 'N/A'}</TableCell>
                     <TableCell>{row.forno}</TableCell>
                     <TableCell>{row.cabeceira}</TableCell>
                     <TableCell>{row.status}</TableCell>
                     <TableCell>{row.urgencia}</TableCell>
-                    <TableCell>{row.setor}</TableCell>
+                    <TableCell>
+                      {row.setor === process.env.REACT_APP_SETOR_PRODUCAO ? (
+                        <p>PRODUÇÃO</p>
+                      ) : row.setor === process.env.REACT_APP_SETOR_MSF ? (
+                        <p>MSF</p>
+                      ) : (
+                        <p>{row.setor}</p>
+                      )}
+                    </TableCell>
                     <TableCell>
                     <IconButton size="small" onClick={() => handleDelete(row._id)}>
                     <Icon>delete</Icon>
