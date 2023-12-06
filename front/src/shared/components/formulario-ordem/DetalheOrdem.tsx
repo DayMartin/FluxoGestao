@@ -388,7 +388,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                         setOrdemData(updatedOrdemData);
 
                         // Chame a função de atualização de status
-                        // atualizarStatus(novoStatus, idOrdem);
+                        atualizarStatus(novoStatus, idOrdem);
                       }}
                     >
                     <option value="Aguardando atendimento">Aguardando atendimento</option>
@@ -400,6 +400,16 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                   </select>
                   <div className="arrowIcon">&#9660;</div>
                   </div>
+                    <button
+                    onClick={() => {
+                      const novoStatus = 'novo status';
+                      const idOrdem = ordemData?._id || '';
+
+                      atualizarStatus(novoStatus, idOrdem);
+                    }}
+                  >
+                  <Icon>refresh</Icon>
+                  </button> 
 
                 </div>
               </div>
@@ -415,7 +425,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                       const novoStatus = 'novo status';
                       const idOrdem = ordemData?._id || '';
 
-                      atualizarStatus(novoStatus, idOrdem);
+                      // atualizarStatus(novoStatus, idOrdem);
 
                       atualizarSetor(novoSetor, idOrdem);
                       atualizarEquipe(novoEquipe, idOrdem);
