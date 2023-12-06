@@ -88,12 +88,12 @@ const ordemController = {
           query.where({ ordemId: parseInt(filter) });
         }
     
-        // Aplicar filtro para o setor "MSF" ou "PRODUCAO"
+        // Aplicar filtro para o setor "MSF" ou "PRODUCAO OU PARA UM NOVO SETOR"
         if (setor === msfId || setor === producaoId) {
           query.where({ setor });
         }
 
-        // Aplicar filtro para o equipe "ELETRICA" ou " GREEN", ou "PRODUCAO"
+        // Aplicar filtro para o equipe "ELETRICA" ou " GREEN", ou "PRODUCAO OU PARA OUTRA EQUIPE"
         if (equipe === '655be3ea08346d6f62ae7a53' || equipe === equipe_greenId || equipe === equipe_producaoId ) {
           query.where({ equipe });
         }
