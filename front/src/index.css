@@ -103,6 +103,20 @@ code {
   justify-content: space-between;
 }
 
+.campos-detalhes-os2 {
+  border: 1px solid #ccc; /* Bordas com um cinza mais suave */
+  height: 40px; /* Aumentei um pouco a altura para melhorar a visibilidade */
+  padding: 14px; /* Aumentei o preenchimento para mais espaçamento interno */
+  font-weight: 400; /* Reforço na espessura da fonte para maior destaque */
+  background-color: #f7f7f7; /* Fundo com um tom mais claro */
+  border-radius: 12px; /* Bordas mais arredondadas para um visual mais suave */
+  margin: 12px 0; /* Margem um pouco maior para melhor espaçamento */
+  transition: border-color 0.3s ease, box-shadow 0.3s ease; /* Transições suaves */
+  display: flex; /* Ajuste para alinhar o conteúdo verticalmente */
+  align-items: center; /* Alinhamento vertical */
+  justify-content: space-between;
+}
+
 .campos-detalhes-os3 {
   border: 1px solid rgba(148, 148, 148, 0.445);
   height: auto;
@@ -197,6 +211,15 @@ h5 {
   position: relative;
   width: 50%; /* Defina a largura desejada */
 }
+
+.selectContainer2 {
+  display: flex;
+  justify-content: flex-end; /* Alinha o conteúdo no final do contêiner */
+  align-items: center; /* Alinha verticalmente ao centro (opcional) */
+  position: relative;
+  width: 70%;
+}
+
 
 .selectsInfo {
   width: 100%;

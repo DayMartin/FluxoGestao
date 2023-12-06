@@ -308,7 +308,7 @@ const filtroFunctions: Record<string, () => void> = {
                       <Icon>edit</Icon>
                     </IconButton>
                     <IconButton size="small" onClick={() => handleOpenDetalhesDialog(row)}>
-                      <Icon>search</Icon>
+                    <Icon>visibility</Icon>
                     </IconButton>
                       </TableCell>
                   </TableRow>

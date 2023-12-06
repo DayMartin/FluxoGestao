@@ -370,9 +370,9 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
 
                   </div>
 
-                  <div className = "campos-detalhes-os">
+                  <div className = "campos-detalhes-os2">
                   <p >Definir status da OS: </p>
-                  <div className="selectContainer">
+                  <div className="selectContainer2">
                   <select
                       className="selectsInfo"
                       value={ordemData?.status || ''}
