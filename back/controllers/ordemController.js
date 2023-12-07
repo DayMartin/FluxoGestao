@@ -42,7 +42,7 @@ const ordemController = {
 
             const response = await OrdemModel.create(ordem)
 
-            res.status(201).json({response, msg: "Ordem de serviço criada com sucesso"});
+            res.status(201).json({ _id: response._id, ordemId: idCounter.count, msg: "Ordem de serviço criada com sucesso" });
             
         }   catch (error) {
             console.log(error);

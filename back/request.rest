@@ -370,3 +370,31 @@ Content-Type: application/json
 {  
     "salaNumber":"4"
 }
+
+#LOG
+###
+
+GET http://localhost:3048/api/log
+
+### 
+POST http://localhost:3048/api/log
+Content-Type: application/json
+
+{  
+    "userId":"6569634528b16fb7838cafdb",
+    "userName":"Dinah",
+    "action":"create",
+    "entity":"Ordem",
+    "entityId":"6570909e48e50345c019588a",
+    "details":"Criado ordem de serviço"
+    
+}
+
+###
+
+GET http://localhost:3048/api/log/entity/6570909e48e50345c019588a
+
+
+###
+
+GET http://localhost:3048/api/log/657103eb65bd225e72c584a4

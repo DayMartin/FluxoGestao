@@ -74,3 +74,12 @@ const equipeRouter = require("./equipe");
 router.use("/", equipeRouter);
 
 module.exports = router;
+
+
+// log routes
+
+const logRouter = require("./log");
+
+router.use("/", logRouter);
+
+module.exports = router;
