@@ -282,8 +282,8 @@ export const OrdemForms = ( ) => {
       // Criar a ordem de serviço e capturar o _id retornado
       const orderId = await OrdemService.create(ordemDataWithoutServiceId);
   
-      // Verifica se o orderId é uma string (ou seja, um _id válido)
-      if (typeof orderId === 'string') {
+      // Verifica se o orderId é um number (ou seja, um ordemId válido)
+      if (typeof orderId === 'number') {
         console.log(`Ordem de serviço criada com ID: ${orderId}`);
         alert(`Ordem de serviço criada com ID: ${orderId}`);
   
@@ -294,7 +294,7 @@ export const OrdemForms = ( ) => {
           userName: userName || '',
           action: 'create',
           entity: 'Ordem',
-          entityId: orderId, // Usando o _id retornado pela criação da ordem
+          entityId: orderId, // Usando o ordemID retornado pela criação da ordem
           details: 'Nova ordem de serviço criada',
         };
   
@@ -303,7 +303,7 @@ export const OrdemForms = ( ) => {
   
         // Limpar todos os campos após o cadastro
         setOrdemData({
-          _id: "", // O _id não será limpo para manter a referência da ordem criada
+          _id: "", 
           ordemId: NaN,
           solicitante: userId || '',
           solicitante_name: userName || "",

@@ -7,7 +7,7 @@ export interface ILog {
   userName: string;
   action: 'create' | 'update' | 'delete';
   entity: 'Ordem';
-  entityId: string;
+  entityId: number;
   details: string;
 }
 

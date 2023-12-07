@@ -42,7 +42,7 @@ const ordemController = {
 
             const response = await OrdemModel.create(ordem)
 
-            res.status(201).json({ _id: response._id, ordemId: idCounter.count, msg: "Ordem de serviço criada com sucesso" });
+            res.status(201).json({ ordemId: response.ordemId, msg: "Ordem de serviço criada com sucesso" });
             
         }   catch (error) {
             console.log(error);
@@ -79,7 +79,7 @@ const ordemController = {
           statusQuery = { status: { $in: validStatusList.map(s => statusMap[s]) } }; // Mapear os status válidos e aplicar na busca
         }
         
-        // Consulta base sem filtros aplicados
+        // Consulta base sem filtros aplicados'
         let query = OrdemModel.find(statusQuery);
         query = query.populate(['solicitante', 'sala']);
     
