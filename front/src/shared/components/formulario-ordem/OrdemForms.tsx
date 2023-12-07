@@ -280,10 +280,11 @@ export const OrdemForms = ( ) => {
       const ordemDataWithoutServiceId = { ...ordemData };
   
       // Criar a ordem de serviço e capturar o _id retornado
-      const orderId = await OrdemService.create(ordemDataWithoutServiceId);
+      const orderIdString = await OrdemService.create(ordemDataWithoutServiceId);
   
       // Verifica se o orderId é um number (ou seja, um ordemId válido)
-      if (typeof orderId === 'number') {
+      if (typeof orderIdString === 'number') {
+        const orderId = orderIdString.toString();
         console.log(`Ordem de serviço criada com ID: ${orderId}`);
         alert(`Ordem de serviço criada com ID: ${orderId}`);
   

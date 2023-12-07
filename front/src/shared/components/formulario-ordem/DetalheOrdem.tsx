@@ -5,6 +5,10 @@ import { formatarData } from '../FormateDate/FormateDate';
 import { Dialog, Icon } from '@mui/material';
 import config from '../../../config';
 import NovoServicoPopup from './NovoServicoModal';
+import { ILog, LogService } from '../../services/api/Log/LogService';
+
+import {ILogWithTimestamp} from './OrdemForms'
+import { IDetalhePessoa, PessoasService } from '../../services/api';
 
 function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: () => void }) {
   const [showDialog, setShowDialog] = useState(false); // Estado para controlar a exibição do dialog
@@ -22,6 +26,19 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
   const equipe_producaoId = process.env.REACT_APP_EQUIPE_PRODUCAO;
   const equipe_greenId = process.env.REACT_APP_EQUIPE_GREEN;
   const servicoInputRef = useRef<HTMLInputElement | null>(null);
+
+  const setorFromLocalStorage = localStorage.getItem('APP_ACCESS_SETOR');
+  const userIdFromStorage = localStorage.getItem('APP_ACCESS_USER_ID');
+  const equipeIdFromStorage = localStorage.getItem('APP_ACCESS_EQUIPE')
+  const [setorName, setSetorName] = useState<string | null>(null);
+  const [setorID, setSetorID] = useState<string | null>(null);
+
+  const [equipeName, setEquipeName] = useState<string | null>(null);
+  const [equipeID, setEquipeID] = useState<string | null>(null);
+
+  const [userName, setUserName] = useState<string | null>(null);
+  const [userId, setUserId] = useState('');
+
 
   useEffect(() => {
     const fetchOrdemData = async () => {
@@ -42,9 +59,23 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
         console.error(error);
       }
     };
+
+    if (userIdFromStorage) {
+      const userId = JSON.parse(userIdFromStorage);
+
+      PessoasService.getById(userId).then((soliciante: IDetalhePessoa | Error) => {
+        if (!(soliciante instanceof Error)) {
+        
+          setUserName(soliciante.name);
+          setUserId(soliciante._id);
+        } else {
+          console.error("Erro ao buscar detalhes do setor:", soliciante.message);
+        }
+      });
+    }
   
     fetchOrdemData();
-  }, [ordemId, showDialog]);
+  }, [ordemId, showDialog, userId, userName, ]);
   /* MUDAR A COR DO BOTÃO AO SER CLICADO */
 
   const handleButtonClick = (botao: string) => {
@@ -72,20 +103,35 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
       const dadosAtualizados: Partial<IOrdemServiceData> = {
         status: novoStatus
       };
-
+  
       // Adicione os valores apenas se eles existirem em ordemData
       if (ordemData?.status) dadosAtualizados.status = ordemData.status;
-
+  
       const resposta = await OrdemService.updateById(idOrdem, dadosAtualizados as IOrdemServiceData);
-
+  
       // Verifique se os dados foram atualizados corretamente
       console.log('Resposta da atualização:', resposta);
-
+  
+      // Criar log após a atualização do status
+      const logData: Omit<ILogWithTimestamp, '_id'> = {
+        timestamp: new Date(),
+        userId: userId || '',
+        userName: userName || '',
+        action: 'update',
+        entity: 'Ordem',
+        entityId: idOrdem, // Usando o ID da ordem atualizada
+        details: `Status atualizado para ${novoStatus}`, // Detalhes da atualização do status
+      };
+  
+      await LogService.createLog(logData);
+      console.log('Log de atualização de status criado com sucesso!');
+  
       // Lógica adicional, como atualizar o estado local, mensagens, etc.
     } catch (error) {
       console.error('Erro ao atualizar o status:', error);
     }
   };
+  
   const atualizarEquipe = async (novoEquipe: string, idOrdem: string) => {
     try {
       const dadosAtualizados: Partial<IOrdemServiceData> = {
@@ -223,6 +269,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
       console.error('Erro ao apagar o serviço:', error);
     }
   };
+  
   
   
   
@@ -388,7 +435,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                         setOrdemData(updatedOrdemData);
 
                         // Chame a função de atualização de status
-                        atualizarStatus(novoStatus, idOrdem);
+                        //atualizarStatus(novoStatus, idOrdem);
                       }}
                     >
                     <option value="Aguardando atendimento">Aguardando atendimento</option>
@@ -400,16 +447,17 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                   </select>
                   <div className="arrowIcon">&#9660;</div>
                   </div>
-                    <button
+                  <button
                     onClick={() => {
-                      const novoStatus = 'novo status';
                       const idOrdem = ordemData?._id || '';
+                      const novoStatus = ordemData?.status || ''; // Usar o mesmo status do estado local
 
                       atualizarStatus(novoStatus, idOrdem);
                     }}
                   >
-                  <Icon>refresh</Icon>
-                  </button> 
+                    <Icon>refresh</Icon>
+                  </button>
+
 
                 </div>
               </div>

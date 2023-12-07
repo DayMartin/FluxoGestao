@@ -21,7 +21,7 @@ const logSchema = new mongoose.Schema({
     enum: ["Ordem"],
   },
   entityId: {
-    type: Number,
+    type: String,
   },
   details: {
     type: String,

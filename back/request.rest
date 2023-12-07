@@ -392,7 +392,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:3048/api/log/entity/6570909e48e50345c019588a
+GET http://localhost:3048/api/log/entity/184
 
 
 ###
