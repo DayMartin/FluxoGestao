@@ -163,7 +163,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
         action: 'update',
         entity: 'Ordem',
         entityId: idOrdem, 
-        details: `Status atualizado para ${valorEquipe}`, 
+        details: `Equipe atualizado para ${valorEquipe}`, 
       };
   
       await LogService.createLog(logData);
@@ -197,7 +197,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
           action: 'update',
           entity: 'Ordem',
           entityId: idOrdem, // Usando o ID da ordem atualizada
-          details: `Status atualizado para ${valorSetor}`, // Detalhes da atualização do status
+          details: `Setor atualizado para ${valorSetor}`, // Detalhes da atualização do status
         };
     
         await LogService.createLog(logData);
@@ -208,6 +208,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
         console.error('Erro ao atualizar a equipe:', error);
       }
   };
+
   const atualizarServico = async (servicoAtualizado: any, idServico: string) => {
     try {
       if (ordemData) {
@@ -233,6 +234,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
       console.error('Erro ao atualizar o serviço:', error);
     }
   };
+
   const adicionarNovoComentario = async () => {
     try {
       const idOrdem = ordemData?._id || '';
@@ -267,6 +269,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
       console.error('Erro ao adicionar o comentário:', error);
     }
   };
+  
   const abrirDialogNovoServico = () => {
     setShowDialog(true); // Configurar o estado para exibir o Dialog
   };
