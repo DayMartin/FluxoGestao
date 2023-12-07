@@ -3,7 +3,6 @@ import { OrdemService, IDetalheOrdem, IOrdemServiceData } from '../../services/a
 import PermissionComponent from '../AuthComponent/AuthComponent';
 import { formatarData } from '../FormateDate/FormateDate';
 import { Dialog, Icon } from '@mui/material';
-import config from '../../../config';
 import NovoServicoPopup from './NovoServicoModal';
 import { ILog, LogService } from '../../services/api/Log/LogService';
 
@@ -18,27 +17,37 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
   const [showComentarios, setShowComentarios] = useState(false);
   const [botaoClicado, setBotaoClicado] = useState('');
   const [novoComentario, setNovoComentario] = useState('');
-  const [mostrarPopupNovoServico, setMostrarPopupNovoServico] = useState(false);
-  const [novoEquipe, setNovoEquipe] = useState(process.env.REACT_APP_EQUIPE_GREEN || 'NULL'); 
-  const [novoSetor, setNovoSetor] = useState(process.env.REACT_APP_SETOR_PRODUCAO || 'NULL');
+
   const producaoId = process.env.REACT_APP_SETOR_PRODUCAO;
   const msfId = process.env.REACT_APP_SETOR_MSF;
   const equipe_producaoId = process.env.REACT_APP_EQUIPE_PRODUCAO;
   const equipe_greenId = process.env.REACT_APP_EQUIPE_GREEN;
   const servicoInputRef = useRef<HTMLInputElement | null>(null);
 
-  const setorFromLocalStorage = localStorage.getItem('APP_ACCESS_SETOR');
   const userIdFromStorage = localStorage.getItem('APP_ACCESS_USER_ID');
-  const equipeIdFromStorage = localStorage.getItem('APP_ACCESS_EQUIPE')
-  const [setorName, setSetorName] = useState<string | null>(null);
-  const [setorID, setSetorID] = useState<string | null>(null);
-
-  const [equipeName, setEquipeName] = useState<string | null>(null);
-  const [equipeID, setEquipeID] = useState<string | null>(null);
 
   const [userName, setUserName] = useState<string | null>(null);
   const [userId, setUserId] = useState('');
 
+  interface Setores {
+    [key: string]: string;
+  }
+
+  const setores: Setores ={
+    [process.env.REACT_APP_SETOR_PRODUCAO || ''] : 'Produção',
+    [process.env.REACT_APP_SETOR_MSF || '']: 'MSF',
+    
+  };
+
+  interface Equipes {
+    [key: string]: string;
+  }
+
+  const equipes: Equipes ={
+    [process.env.REACT_APP_EQUIPE_PRODUCAO || ''] : 'Produção',
+    [process.env.REACT_APP_EQUIPE_GREEN || '']: 'GREEN',
+    
+  };
 
   useEffect(() => {
     const fetchOrdemData = async () => {
@@ -73,9 +82,9 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
         }
       });
     }
-  
+
     fetchOrdemData();
-  }, [ordemId, showDialog, userId, userName, ]);
+  }, [ordemId, showDialog, userId, userName ]);
   /* MUDAR A COR DO BOTÃO AO SER CLICADO */
 
   const handleButtonClick = (botao: string) => {
@@ -109,8 +118,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
   
       const resposta = await OrdemService.updateById(idOrdem, dadosAtualizados as IOrdemServiceData);
   
-      // Verifique se os dados foram atualizados corretamente
-      console.log('Resposta da atualização:', resposta);
+      alert('Status atualizado com sucesso');
   
       // Criar log após a atualização do status
       const logData: Omit<ILogWithTimestamp, '_id'> = {
@@ -137,21 +145,63 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
       const dadosAtualizados: Partial<IOrdemServiceData> = {
         equipe: novoEquipe
       };
-
+  
+      // Atualizar a equipe na ordemData
+      if (ordemData?.equipe) {
+        setOrdemData({ ...ordemData, equipe: novoEquipe });
+      }
+  
       const resposta = await OrdemService.updateById(idOrdem, dadosAtualizados as IOrdemServiceData);
+
+      const valorEquipe = equipes[novoEquipe] || novoEquipe;
+  
+      // Criar log após a atualização do status
+      const logData: Omit<ILogWithTimestamp, '_id'> = {
+        timestamp: new Date(),
+        userId: userId || '',
+        userName: userName || '',
+        action: 'update',
+        entity: 'Ordem',
+        entityId: idOrdem, 
+        details: `Status atualizado para ${valorEquipe}`, 
+      };
+  
+      await LogService.createLog(logData);
+      console.log('Log de atualização de status criado com sucesso!');
 
       console.log('Resposta da atualização:', resposta);
     } catch (error) {
       console.error('Erro ao atualizar a equipe:', error);
     }
   };
+
   const atualizarSetor = async (novoSetor: string, idOrdem: string) => {
       try {
         const dadosAtualizados: Partial<IOrdemServiceData> = {
           setor: novoSetor
         };
+
+      if (ordemData?.setor) {
+        setOrdemData({ ...ordemData, setor: novoSetor });
+      }
   
         const resposta = await OrdemService.updateById(idOrdem, dadosAtualizados as IOrdemServiceData);
+
+        const valorSetor = setores[novoSetor] || novoSetor;
+  
+        // Criar log após a atualização do status
+        const logData: Omit<ILogWithTimestamp, '_id'> = {
+          timestamp: new Date(),
+          userId: userId || '',
+          userName: userName || '',
+          action: 'update',
+          entity: 'Ordem',
+          entityId: idOrdem, // Usando o ID da ordem atualizada
+          details: `Status atualizado para ${valorSetor}`, // Detalhes da atualização do status
+        };
+    
+        await LogService.createLog(logData);
+        console.log('Log de atualização de status criado com sucesso!');
   
         console.log('Resposta da atualização:', resposta);
       } catch (error) {
@@ -269,9 +319,6 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
       console.error('Erro ao apagar o serviço:', error);
     }
   };
-  
-  
-  
   
   return (
     <div className="div-externa-ordem-listagem">
@@ -391,8 +438,19 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                           <div className="selectContainer">
                           <select
                             className="selectsInfo"
-                            value={novoSetor}
-                            onChange={(e) => setNovoSetor(e.target.value)} // Atualiza o estado de novoSetor
+                            value={ordemData?.setor || ''}
+                            onChange={(e) => {
+                              const novoSetor = e.target.value;
+                              const idOrdem = ordemData?._id || '';
+      
+                              // Atualize o estado local após a mudança no select
+                              const updatedOrdemData = {
+                                ...ordemData,
+                                setor: novoSetor,
+                              };
+                              setOrdemData(updatedOrdemData);
+    
+                            }}
                           >
                             <option value={producaoId}>PRODUCAO</option>
                             <option value={msfId}>MSF</option>
@@ -406,8 +464,19 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                           <div className="selectContainer">
                           <select
                           className="selectsInfo"
-                          value={novoEquipe}
-                          onChange={(e) => setNovoEquipe(e.target.value)} // Atualiza o estado de novoEquipe
+                          value={ordemData?.equipe || ''}
+                          onChange={(e) => {
+                            const novoEquipe = e.target.value;
+                            const idOrdem = ordemData?._id || '';
+    
+                            // Atualize o estado local após a mudança no select
+                            const updatedOrdemData = {
+                              ...ordemData,
+                              equipe: novoEquipe,
+                            };
+                            setOrdemData(updatedOrdemData);
+  
+                          }}
                         >
                           <option value={equipe_greenId}>GREEN</option>
                           <option value={equipe_producaoId}>PRODUCAO</option>
@@ -450,7 +519,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                   <button
                     onClick={() => {
                       const idOrdem = ordemData?._id || '';
-                      const novoStatus = ordemData?.status || ''; // Usar o mesmo status do estado local
+                      const novoStatus = ordemData?.status || ''; 
 
                       atualizarStatus(novoStatus, idOrdem);
                     }}
@@ -469,22 +538,28 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
 
                   <button
                     className='botao-detalhes-os'
-                    onClick={(e) => {
-                      const novoStatus = 'novo status';
-                      const idOrdem = ordemData?._id || '';
+                    onClick={async () => {
+                      try {
+                        const idOrdem = ordemData?._id || '';
+                        const novoSetor = ordemData?.setor || '';
+                        const respostaSetor = await atualizarSetor(novoSetor, idOrdem);
 
-                      // atualizarStatus(novoStatus, idOrdem);
+                        const novoEquipe = ordemData?.equipe || ''; // Obtenha a equipe atual
+                        const respostaEquipe = await atualizarEquipe(novoEquipe, idOrdem);
 
-                      atualizarSetor(novoSetor, idOrdem);
-                      atualizarEquipe(novoEquipe, idOrdem);
-            
+                        // Verifique as respostas para confirmação
+                        console.log('Resposta da atualização de status:', respostaSetor);
+                        console.log('Resposta da atualização de equipe:', respostaEquipe);
+                      } catch (error) {
+                        console.error('Erro ao atualizar status ou equipe:', error);
+                      }
                       onClose(); // Chama a função onClose para fechar o pop-up
-                  
                       window.location.reload(); // Atualiza a página
                     }}
                   >
                     Atualizar
                   </button>
+
 
                 </div>
               </div>
