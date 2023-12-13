@@ -2,53 +2,53 @@
 Aplicação para criação de ordem de serviços e gerencimamento
 
 
-# INSTALAÇÕES GLOBAIS
+INSTALAÇÕES GLOBAIS
 
-# npm install uuid --save
+npm install uuid --save
 
-#### nvm install v18.17.1
+nvm install v18.17.1
 
-#### npm install -g npm@latestcl
+npm install -g npm@latestcl
 
-### install axios
+install axios
 
-### npm install axios
+npm install axios
 
 
 # INSTALAÇOES FRONT
 
-#### Para iniciar o projeto é necessário instalar o nvm e o react
+Para iniciar o projeto é necessário instalar o nvm e o react
 
-#### npm install -g react-scripts
+npm install -g react-scripts
 
-#### npm install --save-dev typescript
+npm install --save-dev typescript
 
-#### npm start
+npm start
 
-#### OBS: Por enquanto o eslint está desativado
+OBS: Por enquanto o eslint está desativado
 
 ### BACK
 
-# npm start
+npm start
 
-# npm install bcrypt
+npm install bcrypt
 
-# npm install jsonwebtoken
+npm install jsonwebtoken
 
-# npm install dotenv
+npm install dotenv
 
 # OU EM BACK E FRONT 
 
-## npm install 
+npm install 
 
 
-#### PARA CRIAR UM NOVO SETOR 
+# PARA CRIAR UM NOVO SETOR 
 
-# NO BACK 
+NO BACK 
 
-# Criar Setor na colletion Setor
+Criar Setor na colletion Setor
 
-# .env / Incluir variável de ambiente para Setor com o ID criado no banco de dados  / EXEMPLO: REACT_APP_SETOR_PRODUCAO='655be3fd08346d6f62ae7a56'
+.env / Incluir variável de ambiente para Setor com o ID criado no banco de dados  / EXEMPLO: REACT_APP_SETOR_PRODUCAO='655be3fd08346d6f62ae7a56'
 
 # controllers/ordemController.js 
     # Criar variável para acomodar a variavel criada no .env / exemplo : const equipe_greenId = process.env.REACT_APP_EQUIPE_GREEN;
@@ -61,11 +61,11 @@ Aplicação para criação de ordem de serviços e gerencimamento
           totalCountQuery.where({ setor });
         }    
 
-# FRONT
+FRONT
 
-# crie uma variavel de ambiente para o novo setor / EXEMPLO: REACT_APP_SETOR_PRODUCAO='655be3fd08346d6f62ae7a56'
+crie uma variavel de ambiente para o novo setor / EXEMPLO: REACT_APP_SETOR_PRODUCAO='655be3fd08346d6f62ae7a56'
 
-# deve haver inclusão em: 
+deve haver inclusão em: 
 # OrdemEncerradas: 
     # Criar variável para acomodar a variavel criada no .env / exemplo : const equipe_greenId = process.env.REACT_APP_EQUIPE_GREEN;
     # Deve haver inclusão da variavel na linha 242: 
