@@ -1,4 +1,4 @@
-# conecta
+#### conecta
 Aplicação para criação de ordem de serviços e gerencimamento
 
 
@@ -15,7 +15,7 @@ install axios
 npm install axios
 
 
-# INSTALAÇOES FRONT
+#### INSTALAÇOES FRONT
 
 Para iniciar o projeto é necessário instalar o nvm e o react
 
@@ -27,7 +27,7 @@ npm start
 
 OBS: Por enquanto o eslint está desativado
 
-### BACK
+#### BACK
 
 npm start
 
@@ -37,12 +37,12 @@ npm install jsonwebtoken
 
 npm install dotenv
 
-# OU EM BACK E FRONT 
+#### OU EM BACK E FRONT 
 
 npm install 
 
 
-# PARA CRIAR UM NOVO SETOR 
+#### PARA CRIAR UM NOVO SETOR 
 
 NO BACK 
 
@@ -50,7 +50,7 @@ Criar Setor na colletion Setor
 
 .env / Incluir variável de ambiente para Setor com o ID criado no banco de dados  / EXEMPLO: REACT_APP_SETOR_PRODUCAO='655be3fd08346d6f62ae7a56'
 
-# controllers/ordemController.js 
+#### controllers/ordemController.js 
     # Criar variável para acomodar a variavel criada no .env / exemplo : const equipe_greenId = process.env.REACT_APP_EQUIPE_GREEN;
     # Na linha 91 você terá  // Aplicar filtro para o setor "MSF" ou "PRODUCAO", inclua abaixo disso a variavel com o novo setor nesta linha:
             if (setor === msfId || setor === producaoId) {
@@ -66,7 +66,7 @@ FRONT
 crie uma variavel de ambiente para o novo setor / EXEMPLO: REACT_APP_SETOR_PRODUCAO='655be3fd08346d6f62ae7a56'
 
 deve haver inclusão em: 
-# OrdemEncerradas: 
+#### OrdemEncerradas: 
     # Criar variável para acomodar a variavel criada no .env / exemplo : const equipe_greenId = process.env.REACT_APP_EQUIPE_GREEN;
     # Deve haver inclusão da variavel na linha 242: 
                             <TableCell>
@@ -87,13 +87,13 @@ deve haver inclusão em:
     { label: 'Todos', value: 'reset' },
   ];
 
-  # LINHA 152
+#### LINHA 152
 
           const handleFiltrarEncerradoProd = async () => {
     await handleFiltrar(producaoId, 'Encerrado');
   };
 
-  # LINHA 166
+#### LINHA 166
 
       const filtroFunctions: Record<string, () => void> = {
       opcao1: () => {
@@ -107,7 +107,7 @@ deve haver inclusão em:
       },
     };
 
-# OrdemProd
+#### OrdemProd
     # Criar variável para acomodar a variavel criada no .env / exemplo : const equipe_greenId = process.env.REACT_APP_EQUIPE_GREEN;
    #                    <TableCell>
                       {row.setor === process.env.REACT_APP_SETOR_PRODUCAO ? (
@@ -158,4 +158,4 @@ deve haver inclusão em:
 
 
 
-# PARA CRIAR UMA NOVA EQUIPE DEVE-SE SEGUIR OS MESMOS PASSOS DO CRIAR SETOR MAS EM LINHAS DIFERENTES, NORMALMENTE LOGO ABAIXO
+#### PARA CRIAR UMA NOVA EQUIPE DEVE-SE SEGUIR OS MESMOS PASSOS DO CRIAR SETOR MAS EM LINHAS DIFERENTES
