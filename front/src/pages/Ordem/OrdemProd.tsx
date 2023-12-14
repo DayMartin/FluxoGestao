@@ -20,12 +20,13 @@ import {
 import { styled } from '@mui/material/styles';
 
 import { Environment } from '../../shared/environment';
-import { BarraDeFerramentas, IFilterOption } from '../../shared/components';
+import { BarraDeFerramentas, IFilterOption, ILogWithTimestamp } from '../../shared/components';
 import { LayoutBaseDePagina } from '../../shared/layouts';
-import { OrdemService, IApiResponse } from '../../shared/services/api';
+import { OrdemService, IApiResponse, PessoasService, IDetalhePessoa } from '../../shared/services/api';
 import { useDebounce } from '../../shared/hooks';
 import DetalhesOrdemPopup from '../../shared/components/formulario-ordem/DetalheOrdem';
 import { IDetalheOrdem } from '../../shared/services/api/Ordem/OrdemService';
+import { LogService } from '../../shared/services/api/Log/LogService';
 //import { IOrdemServiceData } from '../../shared/components/formulario-ordem/OrdemForms';
 
 
@@ -44,7 +45,23 @@ export const OrdemProd: React.FC = () => {
   const statusString = statusPermitidos.join(',');
   const [equipeName, setEquipeName] = useState<string | undefined>(undefined); 
   const [setorName, setSetorName] = useState<string | null>(null); 
+  const [userName, setUserName] = useState<string | null>(null);
+  const [userId, setUserId] = useState('');
+  const userIdFromStorage = localStorage.getItem('APP_ACCESS_USER_ID');
 
+  if (userIdFromStorage) {
+    const userId = JSON.parse(userIdFromStorage);
+
+    PessoasService.getById(userId).then((soliciante: IDetalhePessoa | Error) => {
+      if (!(soliciante instanceof Error)) {
+      
+        setUserName(soliciante.name);
+        setUserId(soliciante._id);
+      } else {
+        console.error("Erro ao buscar detalhes do setor:", soliciante.message);
+      }
+    });
+  }
 
   // const [quantidadeAguardando, setQuantidadeAguardando] = useState(0);
   // const [quantidadeConcluido, setQuantidadeConcluido] = useState(0);
@@ -120,19 +137,37 @@ export const OrdemProd: React.FC = () => {
   };
 
 
-  const handleDelete = (id: string) => {
-    if (confirm('Realmente deseja apagar?')) {
-      OrdemService.deleteById(id)
-        .then(result => {
-          if (result instanceof Error) {
-            alert(result.message);
-          } else {
-            setRows(oldRows => [
-              ...oldRows.filter(oldRow => oldRow._id !== id),
-            ]);
-            alert('Registro apagado com sucesso!');
-          }
-        });
+  const handleDelete = async (id: string, ordemId: number) => {
+    try {
+      if (confirm('Realmente deseja apagar?')) {
+        const result = await OrdemService.deleteById(id);
+  
+        if (result instanceof Error) {
+          alert(result.message);
+        } else {
+          setRows((oldRows) => [
+            ...oldRows.filter((oldRow) => oldRow._id !== id),
+          ]);
+  
+          // Criar log após apagar o registro
+          const logData: Omit<ILogWithTimestamp, '_id'> = {
+            timestamp: new Date(),
+            userId: userId || '',
+            userName: userName || '',
+            action: 'delete',
+            entity: 'Ordem',
+            entityId: id,
+            details: `Ordem de serviço apagada - ordemId: ${ordemId}`,
+          };
+  
+          await LogService.createLog(logData);
+          console.log('Log de apagar registro criado com sucesso!');
+  
+          alert('Registro apagado com sucesso!');
+        }
+      }
+    } catch (error) {
+      console.error('Erro ao apagar o registro:', error);
     }
   };
 
@@ -311,7 +346,7 @@ const filtroFunctions: Record<string, () => void> = {
                       )}
                     </TableCell>
                     <TableCell>
-                    <IconButton size="small" onClick={() => handleDelete(row._id)}>
+                    <IconButton size="small" onClick={() => handleDelete(row._id, row.ordemId)}>
                     <Icon>delete</Icon>
                     </IconButton>
                     <IconButton size="small" onClick={() => navigate(`/ordemDetalhe/detalhe/${row._id}`)}>

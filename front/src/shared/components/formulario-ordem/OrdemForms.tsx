@@ -296,7 +296,7 @@ export const OrdemForms = ( ) => {
           action: 'create',
           entity: 'Ordem',
           entityId: orderId, // Usando o ordemID retornado pela criação da ordem
-          details: 'Nova ordem de serviço criada',
+          details: `Nova ordem de serviço criada com o número ${orderId}`,
         };
   
         await LogService.createLog(logData);

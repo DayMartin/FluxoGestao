@@ -128,7 +128,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
         action: 'update',
         entity: 'Ordem',
         entityId: idOrdem, // Usando o ID da ordem atualizada
-        details: `Status atualizado para ${novoStatus}`, // Detalhes da atualização do status
+        details: `Status da ordem ${ordemData?.ordemId} atualizado para ${novoStatus}`, // Detalhes da atualização do status
       };
   
       await LogService.createLog(logData);
@@ -209,7 +209,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
       }
   };
 
-  const atualizarServico = async (servicoAtualizado: any, idServico: string) => {
+  const atualizarServico = async (servicoAtualizado: any, idServico: string, novoStatus: string) => {
     try {
       if (ordemData) {
         const servicosAtualizados = ordemData.services.map((servico) => {
@@ -218,48 +218,76 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
           }
           return servico;
         });
-
+  
         const ordemAtualizada = { ...ordemData, services: servicosAtualizados };
-
+  
         // Atualize o estado local com a ordem atualizada
         setOrdemData(ordemAtualizada);
-
+  
         // Faça a chamada para atualizar a ordem na API
         const resposta = await OrdemService.updateById(ordemAtualizada._id, ordemAtualizada);
         console.log('Serviços atualizados:', ordemAtualizada.services);
         // Verifique se a resposta foi bem-sucedida
         console.log('Resposta da atualização do serviço:', resposta);
+  
+        // Criar log após a atualização do serviço
+        const logData: Omit<ILogWithTimestamp, '_id'> = {
+          timestamp: new Date(),
+          userId: userId || '',
+          userName: userName || '',
+          action: 'update',
+          entity: 'Ordem',
+          entityId: ordemAtualizada._id,
+          details: `Trocou o status do serviço para: ${novoStatus}`, 
+        };
+  
+        await LogService.createLog(logData);
+        console.log('Log de atualização do serviço criado com sucesso!');
       }
     } catch (error) {
       console.error('Erro ao atualizar o serviço:', error);
     }
   };
-
+  
   const adicionarNovoComentario = async () => {
     try {
       const idOrdem = ordemData?._id || '';
       const nomeUsuario = localStorage.getItem('APP_ACCESS_USER') || 'Nome de Usuário Padrão';
-
+  
       // Obter a data atual e formatar para o formato desejado (exemplo: "2023-11-21T12:00:00")
       const dataAtual = new Date().toISOString();
-
+  
       const novoComentarioData = {
         usuario: nomeUsuario,
         description: novoComentario,
-        createdAt: dataAtual, 
+        createdAt: dataAtual,
       };
-
+  
       const comentariosAtuais = ordemData?.comments || [];
       const comentariosAtualizados = [...comentariosAtuais, novoComentarioData];
-
+  
       const dadosAtualizados: Partial<IOrdemServiceData> = {
         comments: comentariosAtualizados,
       };
-
+  
       const resposta = await OrdemService.updateById(idOrdem, dadosAtualizados as IOrdemServiceData);
-
+  
+      // Criar log após adicionar novo comentário
+      const logData: Omit<ILogWithTimestamp, '_id'> = {
+        timestamp: new Date(),
+        userId: userId || '',
+        userName: userName || '',
+        action: 'create',
+        entity: 'Ordem',
+        entityId: idOrdem,
+        details: `Novo comentário adicionado na ordem: ${ordemData?.ordemId}`,
+      };
+  
+      await LogService.createLog(logData);
+      console.log('Log de adicionar novo comentário criado com sucesso!');
+  
       setNovoComentario('');
-      setOrdemData(prevData => {
+      setOrdemData((prevData: any) => {
         if (prevData) {
           return { ...prevData, comments: comentariosAtualizados };
         }
@@ -268,7 +296,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
     } catch (error) {
       console.error('Erro ao adicionar o comentário:', error);
     }
-  };
+  };  
   
   const abrirDialogNovoServico = () => {
     setShowDialog(true); // Configurar o estado para exibir o Dialog
@@ -281,47 +309,75 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
   const apagarServico = async (idServico: string) => {
     try {
       if (ordemData) {
-        const ordemCompleta = await OrdemService.getById(ordemData._id);
-  
-        if (ordemCompleta instanceof Error) {
-          console.error('Erro ao buscar a ordem completa:', ordemCompleta);
-          return;
-        }
-  
-        const quantidadeDeServicos = ordemCompleta.services.length;
-  
-        if (quantidadeDeServicos === 1) {
-          alert('É necessário ter ao menos 1 serviço.');
-          return;
-        }
-  
-        const servicosRestantes = ordemData.services.filter(
-          (servico) => servico.id_service !== idServico
+        const servicoParaExcluir = ordemData.services.find(
+          (servico) => servico.id_service === idServico
         );
   
-        if (servicosRestantes.length >= 1) {
-          const dadosAtualizados = {
-            services: servicosRestantes,
-          };
+        if (!servicoParaExcluir) {
+          console.error('Serviço não encontrado para exclusão.');
+          return;
+        }
   
-          const resposta = await OrdemService.updateById(
-            ordemData._id,
-            dadosAtualizados as IDetalheOrdem
+        const confirmDelete = window.confirm('Realmente deseja apagar o serviço?');
+  
+        if (confirmDelete) {
+          const ordemCompleta = await OrdemService.getById(ordemData._id);
+  
+          if (ordemCompleta instanceof Error) {
+            console.error('Erro ao buscar a ordem completa:', ordemCompleta);
+            return;
+          }
+  
+          const quantidadeDeServicos = ordemCompleta.services.length;
+  
+          if (quantidadeDeServicos === 1) {
+            alert('É necessário ter ao menos 1 serviço.');
+            return;
+          }
+  
+          const servicosRestantes = ordemData.services.filter(
+            (servico) => servico.id_service !== idServico
           );
   
-          setOrdemData({ ...ordemData, services: servicosRestantes });
+          if (servicosRestantes.length >= 1) {
+            const dadosAtualizados = {
+              services: servicosRestantes,
+            };
   
-          console.log('Serviço apagado:', idServico);
-          console.log('Resposta da atualização:', resposta);
-        } else {
-          alert('Esse serviço foi criado no início da ordem, você não pode excluir.');
-          console.log('Pelo menos um serviço deve permanecer.');
+            const resposta = await OrdemService.updateById(
+              ordemData._id,
+              dadosAtualizados as IDetalheOrdem
+            );
+  
+            setOrdemData({ ...ordemData, services: servicosRestantes });
+  
+            console.log('Serviço apagado:', idServico);
+            console.log('Resposta da atualização:', resposta);
+  
+            // Criar log após apagar o serviço
+            const logData: Omit<ILogWithTimestamp, '_id'> = {
+              timestamp: new Date(),
+              userId: userId || '',
+              userName: userName || '',
+              action: 'delete',
+              entity: 'Ordem',
+              entityId: ordemData._id,
+              details: `Serviço ${servicoParaExcluir.name} apagado `,
+            };
+  
+            await LogService.createLog(logData);
+            console.log('Log de apagar serviço criado com sucesso!');
+          } else {
+            alert('Esse serviço foi criado no início da ordem, você não pode excluir.');
+            console.log('Pelo menos um serviço deve permanecer.');
+          }
         }
       }
     } catch (error) {
       console.error('Erro ao apagar o serviço:', error);
     }
   };
+  
   
   return (
     <div className="div-externa-ordem-listagem">
@@ -594,23 +650,24 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                           value={service.status}
                           onChange={(e) => {
                             const novoStatus = e.target.value;
-
+                          
                             const updatedService = {
                               ...service,
                               status: novoStatus,
                             };
-
+                          
                             const updatedServices = [...ordemData.services];
                             updatedServices[index] = updatedService;
-
+                          
                             const updatedOrdemData = {
                               ...ordemData,
                               services: updatedServices,
                             };
-
+                          
                             setOrdemData(updatedOrdemData);
-
-                            atualizarServico(updatedService, service.id_service);
+                          
+                            // Chame a função atualizarServico com o novo status
+                            atualizarServico(updatedService, service.id_service, novoStatus);
                           }}
                         >
                           <option value="Em andamento">Em andamento</option>
