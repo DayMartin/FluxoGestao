@@ -48,12 +48,26 @@ const logController = {
         return;
       }
   
-      res.status(200).json(logs);
+      // Mapeando os logs para um novo formato mais adequado para exibição no front-end
+      const formattedLogs = logs.map(log => ({
+        _id: log._id,
+        timestamp: log.timestamp,
+        userId: log.userId,
+        userName: log.userName,
+        action: log.action,
+        entity: log.entity,
+        entityId: log.entityId,
+        details: log.details
+        // Adicione outros campos do seu modelo, se necessário
+      }));
+  
+      res.status(200).json(formattedLogs);
     } catch (error) {
       console.log(error);
       res.status(500).json({ error: "Erro ao buscar os logs" });
     }
   },
+  
   
 };
 

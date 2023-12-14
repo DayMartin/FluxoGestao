@@ -397,4 +397,4 @@ GET http://localhost:3048/api/log/entity/184
 
 ###
 
-GET http://localhost:3048/api/log/657103eb65bd225e72c584a4
+GET http://localhost:3048/api/log/entity/65715ec3d05eb6a79f92bf7f

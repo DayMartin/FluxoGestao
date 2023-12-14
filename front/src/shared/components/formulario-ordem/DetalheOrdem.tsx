@@ -15,8 +15,10 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
   const [showDadosGerais, setShowDadosGerais] = useState(true);
   const [showServicos, setShowServicos] = useState(false);
   const [showComentarios, setShowComentarios] = useState(false);
+  const [showLogs, setShowLogs] = useState(false);
   const [botaoClicado, setBotaoClicado] = useState('');
   const [novoComentario, setNovoComentario] = useState('');
+  const [logs, setLogs] = useState<ILog[]>([]);
 
   const producaoId = process.env.REACT_APP_SETOR_PRODUCAO;
   const msfId = process.env.REACT_APP_SETOR_MSF;
@@ -87,6 +89,35 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
   }, [ordemId, showDialog, userId, userName ]);
   /* MUDAR A COR DO BOTÃO AO SER CLICADO */
 
+  useEffect(() => {
+    const fetchLogs = async () => {
+      try {
+        console.log('Ordem ID recebido:', ordemId);
+        const logsResponse = await LogService.getByEntityId(ordemId);
+        console.log('Resposta dos logs:', logsResponse);
+  
+        if (!(logsResponse instanceof Error)) {
+          if (Array.isArray(logsResponse) && logsResponse.length > 0) {
+            setLogs(logsResponse);
+          } else {
+            // Configurar o estado de logs como vazio quando não há logs disponíveis
+            setLogs([]);
+          }
+        } else {
+          console.error(logsResponse.message);
+        }
+      } catch (error) {
+        console.error('Erro ao buscar os logs:', error);
+      }
+    };
+  
+    if (showLogs) {
+      fetchLogs();
+    }
+  }, [ordemId, showLogs]);
+  
+  
+
   const handleButtonClick = (botao: string) => {
     if (botao === 'dadosGerais') {
       setShowDadosGerais(true);
@@ -103,6 +134,12 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
       setShowServicos(false);
       setShowComentarios(true);
       setBotaoClicado('comentarios');
+    } else if (botao === 'logs') {
+      setShowDadosGerais(false);
+      setShowServicos(false);
+      setShowComentarios(false);
+      setShowLogs(true);
+      setBotaoClicado('logs');
     }
 
   };
@@ -402,7 +439,15 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
         >
           Comentários
         </button>
+
+          <button
+          className={`botao-detalhes-os ${botaoClicado === 'logs' ? 'botao-clicado' : ''}`}
+          onClick={() => handleButtonClick('logs')}
+        >
+          Logs
+        </button>
           </div>
+
           {showDadosGerais && (
             <div className="div-interna-detalhes-os">
               <div className="div-detalhes-os">
@@ -718,6 +763,22 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
 
             </div>
           )}
+
+            {logs && logs.length > 0 ? (
+              <div className="comments-container">
+                {logs.map((log) => (
+                  <div key={log._id} className="comment-box">
+                    <p>ID: {log._id}</p>
+                    <p>Usuário: {log.userName}</p>
+                    <p>Descrição: {log.details}</p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p>Nenhum log encontrado.</p>
+            )}
+
+
 
         </div>
       ) : (
