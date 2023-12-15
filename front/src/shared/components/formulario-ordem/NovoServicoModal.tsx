@@ -1,6 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { OrdemService, IOrdemServiceData } from '../../services/api/Ordem/OrdemService';
-import { IDetalhePessoa, PessoasService } from '../../services/api';
+import { EquipeService, IDetalheEquipe, IDetalhePessoa, IDetalheSetor, PessoasService, SetorService } from '../../services/api';
 import { ILogWithTimestamp } from './OrdemForms';
 import { LogService } from '../../services/api/Log/LogService';
 
@@ -11,8 +11,14 @@ const NovoServicoPopup = ({ ordemData, onClose }: { ordemData: any; onClose: () 
   const servicoInputRef = useRef<HTMLInputElement | null>(null);
   const statusInputRef = useRef<HTMLInputElement | null>(null);
   const [userName, setUserName] = useState<string | null>(null);
+
   const [userId, setUserId] = useState('');
+  const [setorName, setSetorName] = useState<string | null>(null);
+  const [equipeName, setEquipeName] = useState<string | null>(null);
+
   const userIdFromStorage = localStorage.getItem('APP_ACCESS_USER_ID');
+  const setorFromLocalStorage = localStorage.getItem('APP_ACCESS_SETOR');
+  const equipeIdFromStorage = localStorage.getItem('APP_ACCESS_EQUIPE')
 
 
   if (userIdFromStorage) {
@@ -25,6 +31,30 @@ const NovoServicoPopup = ({ ordemData, onClose }: { ordemData: any; onClose: () 
         setUserId(soliciante._id);
       } else {
         console.error("Erro ao buscar detalhes do setor:", soliciante.message);
+      }
+    });
+  }
+
+  if (setorFromLocalStorage) {
+    const setorId = JSON.parse(setorFromLocalStorage);
+
+    SetorService.getById(setorId).then((setor: IDetalheSetor | Error) => {
+      if (!(setor instanceof Error)) {
+        setSetorName(setor.name);
+      } else {
+        console.error("Erro ao buscar detalhes do setor:", setor.message);
+      }
+    });
+  }
+
+  if (equipeIdFromStorage) {
+    const equipeID = JSON.parse(equipeIdFromStorage);
+
+    EquipeService.getById(equipeID).then((equipe: IDetalheEquipe | Error) => {
+      if (!(equipe instanceof Error)) {
+        setEquipeName(equipe.equipeName);
+      } else {
+        console.error("Erro ao buscar detalhes do equipe:", equipe.message);
       }
     });
   }
@@ -58,6 +88,8 @@ const NovoServicoPopup = ({ ordemData, onClose }: { ordemData: any; onClose: () 
         timestamp: new Date(),
         userId: userId || '',
         userName: userName || '',
+        userEquipe: equipeName || '',
+        userSetor: setorName || '',
         action: 'create',
         entity: 'Ordem',
         entityId: ordemData._id, 

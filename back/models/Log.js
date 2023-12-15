@@ -12,6 +12,12 @@ const logSchema = new mongoose.Schema({
   userName: {
     type: String,
   },
+  userEquipe: {
+    type: String,
+  },
+  userSetor: {
+    type: String,
+  },
   action: {
     type: String,
     enum: ["create", "update", "delete"],

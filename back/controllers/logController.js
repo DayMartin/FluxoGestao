@@ -7,7 +7,7 @@ const logController = {
       res.status(201).json({ log: newLog, msg: "Log criado com sucesso" });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ error: "Erro ao criar o log" });
+      res.status(501).json({ error: "Erro ao criar o log" });
     }
   },
 
@@ -17,7 +17,7 @@ const logController = {
       res.status(200).json(logs);
     } catch (error) {
       console.log(error);
-      res.status(500).json({ error: "Erro ao buscar os logs" });
+      res.status(501).json({ error: "Erro ao buscar os logs" });
     }
   },
 
@@ -34,7 +34,7 @@ const logController = {
       res.status(200).json(log);
     } catch (error) {
       console.log(error);
-      res.status(500).json({ error: "Erro ao buscar o log" });
+      res.status(501).json({ error: "Erro ao buscar o log" });
     }
   },
 
@@ -44,7 +44,7 @@ const logController = {
       const logs = await Log.find({ entityId }); // Usando find para buscar todos os registros
   
       if (logs.length === 0) {
-        res.status(404).json({ msg: "Logs não encontrados para este entityId" });
+        res.status(501).json({ msg: "Logs não encontrados para este entityId" });
         return;
       }
   
@@ -54,6 +54,8 @@ const logController = {
         timestamp: log.timestamp,
         userId: log.userId,
         userName: log.userName,
+        userEquipe: log.userEquipe,
+        userSetor: log.userSetor,
         action: log.action,
         entity: log.entity,
         entityId: log.entityId,
@@ -64,7 +66,7 @@ const logController = {
       res.status(200).json(formattedLogs);
     } catch (error) {
       console.log(error);
-      res.status(500).json({ error: "Erro ao buscar os logs" });
+      res.status(501).json({ error: "Erro ao buscar os logs" });
     }
   },
   

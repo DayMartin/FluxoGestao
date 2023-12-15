@@ -29,6 +29,13 @@ export const errorInterceptor = (error: AxiosError) => {
     return Promise.reject(new Error('Erro 422: Por favor, utilize outro e-mail!'));
   }
 
+  if (error.response?.status === 501) {
+    // Trate o erro 501 aqui
+    alert("Erro 501: Não encontrado Log para essa ordem de serviço!'");
+    // Retorne uma promessa rejeitada com uma mensagem personalizada
+    return Promise.reject(new Error('Erro 501: Não encontrado Log!!'));
+  }
+
   // Se nenhum tratamento específico foi aplicado, apenas rejeite o erro original
   return Promise.reject(error);
 };

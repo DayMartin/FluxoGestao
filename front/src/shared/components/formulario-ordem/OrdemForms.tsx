@@ -293,6 +293,8 @@ export const OrdemForms = ( ) => {
           timestamp: new Date(),
           userId: userId || '',
           userName: userName || '',
+          userEquipe: equipeName || '',
+          userSetor: setorName || '',
           action: 'create',
           entity: 'Ordem',
           entityId: orderId, // Usando o ordemID retornado pela criação da ordem

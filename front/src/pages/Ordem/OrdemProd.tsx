@@ -22,7 +22,7 @@ import { styled } from '@mui/material/styles';
 import { Environment } from '../../shared/environment';
 import { BarraDeFerramentas, IFilterOption, ILogWithTimestamp } from '../../shared/components';
 import { LayoutBaseDePagina } from '../../shared/layouts';
-import { OrdemService, IApiResponse, PessoasService, IDetalhePessoa } from '../../shared/services/api';
+import { OrdemService, IApiResponse, PessoasService, IDetalhePessoa, SetorService, IDetalheSetor, EquipeService, IDetalheEquipe } from '../../shared/services/api';
 import { useDebounce } from '../../shared/hooks';
 import DetalhesOrdemPopup from '../../shared/components/formulario-ordem/DetalheOrdem';
 import { IDetalheOrdem } from '../../shared/services/api/Ordem/OrdemService';
@@ -43,11 +43,15 @@ export const OrdemProd: React.FC = () => {
   const [showDetalhesDialog, setShowDetalhesDialog] = useState(false);
   const statusPermitidos = ['Pendente', 'Concluido', 'Em andamento', 'Aguardando atendimento', 'Dever de recusa'];
   const statusString = statusPermitidos.join(',');
+
   const [equipeName, setEquipeName] = useState<string | undefined>(undefined); 
   const [setorName, setSetorName] = useState<string | null>(null); 
   const [userName, setUserName] = useState<string | null>(null);
   const [userId, setUserId] = useState('');
+
+  const setorFromLocalStorage = localStorage.getItem('APP_ACCESS_SETOR');
   const userIdFromStorage = localStorage.getItem('APP_ACCESS_USER_ID');
+  const equipeIdFromStorage = localStorage.getItem('APP_ACCESS_EQUIPE')
 
   if (userIdFromStorage) {
     const userId = JSON.parse(userIdFromStorage);
@@ -59,6 +63,30 @@ export const OrdemProd: React.FC = () => {
         setUserId(soliciante._id);
       } else {
         console.error("Erro ao buscar detalhes do setor:", soliciante.message);
+      }
+    });
+  }
+
+  if (setorFromLocalStorage) {
+    const setorId = JSON.parse(setorFromLocalStorage);
+
+    SetorService.getById(setorId).then((setor: IDetalheSetor | Error) => {
+      if (!(setor instanceof Error)) {
+        setSetorName(setor.name);
+      } else {
+        console.error("Erro ao buscar detalhes do setor:", setor.message);
+      }
+    });
+  }
+
+  if (equipeIdFromStorage) {
+    const equipeID = JSON.parse(equipeIdFromStorage);
+
+    EquipeService.getById(equipeID).then((equipe: IDetalheEquipe | Error) => {
+      if (!(equipe instanceof Error)) {
+        setEquipeName(equipe.equipeName);
+      } else {
+        console.error("Erro ao buscar detalhes do equipe:", equipe.message);
       }
     });
   }
@@ -154,6 +182,8 @@ export const OrdemProd: React.FC = () => {
             timestamp: new Date(),
             userId: userId || '',
             userName: userName || '',
+            userEquipe: equipeName || '',
+            userSetor: setorName || '',
             action: 'delete',
             entity: 'Ordem',
             entityId: id,

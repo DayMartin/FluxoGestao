@@ -5,6 +5,8 @@ export interface ILog {
   timestamp: Date;
   userId: string;
   userName: string;
+  userEquipe: string;
+  userSetor: string;
   action: 'create' | 'update' | 'delete';
   entity: 'Ordem';
   entityId: string;

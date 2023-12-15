@@ -7,7 +7,7 @@ import NovoServicoPopup from './NovoServicoModal';
 import { ILog, LogService } from '../../services/api/Log/LogService';
 
 import {ILogWithTimestamp} from './OrdemForms'
-import { IDetalhePessoa, PessoasService } from '../../services/api';
+import { EquipeService, IDetalheEquipe, IDetalhePessoa, IDetalheSetor, PessoasService, SetorService } from '../../services/api';
 
 function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: () => void }) {
   const [showDialog, setShowDialog] = useState(false); // Estado para controlar a exibição do dialog
@@ -26,10 +26,16 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
   const equipe_greenId = process.env.REACT_APP_EQUIPE_GREEN;
   const servicoInputRef = useRef<HTMLInputElement | null>(null);
 
+  const setorFromLocalStorage = localStorage.getItem('APP_ACCESS_SETOR');
   const userIdFromStorage = localStorage.getItem('APP_ACCESS_USER_ID');
+  const equipeIdFromStorage = localStorage.getItem('APP_ACCESS_EQUIPE')
 
   const [userName, setUserName] = useState<string | null>(null);
   const [userId, setUserId] = useState('');
+  const [setorName, setSetorName] = useState<string | null>(null);
+  const [setorID, setSetorID] = useState<string | null>(null);
+  const [equipeName, setEquipeName] = useState<string | null>(null);
+  const [equipeID, setEquipeID] = useState<string | null>(null);
 
   interface Setores {
     [key: string]: string;
@@ -85,8 +91,34 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
       });
     }
 
+    if (setorFromLocalStorage) {
+      const setorId = JSON.parse(setorFromLocalStorage);
+
+      SetorService.getById(setorId).then((setor: IDetalheSetor | Error) => {
+        if (!(setor instanceof Error)) {
+          setSetorName(setor.name);
+          setSetorID(setor._id);
+        } else {
+          console.error("Erro ao buscar detalhes do setor:", setor.message);
+        }
+      });
+    }
+
+    if (equipeIdFromStorage) {
+      const equipeID = JSON.parse(equipeIdFromStorage);
+
+      EquipeService.getById(equipeID).then((equipe: IDetalheEquipe | Error) => {
+        if (!(equipe instanceof Error)) {
+          setEquipeName(equipe.equipeName);
+          setEquipeID(equipe._id);
+        } else {
+          console.error("Erro ao buscar detalhes do equipe:", equipe.message);
+        }
+      });
+    }
+
     fetchOrdemData();
-  }, [ordemId, showDialog, userId, userName ]);
+  }, [ordemId, showDialog, setorID, setorName, userId, userName, equipeName, equipeID ]);
   /* MUDAR A COR DO BOTÃO AO SER CLICADO */
 
   useEffect(() => {
@@ -123,16 +155,19 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
       setShowDadosGerais(true);
       setShowServicos(false);
       setShowComentarios(false);
+      setShowLogs(false);
       setBotaoClicado('dadosGerais');
     } else if (botao === 'servicos') {
       setShowDadosGerais(false);
       setShowServicos(true);
       setShowComentarios(false);
+      setShowLogs(false);
       setBotaoClicado('servicos');
     }  else if (botao === 'comentarios') {
       setShowDadosGerais(false);
       setShowServicos(false);
       setShowComentarios(true);
+      setShowLogs(false);
       setBotaoClicado('comentarios');
     } else if (botao === 'logs') {
       setShowDadosGerais(false);
@@ -162,6 +197,8 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
         timestamp: new Date(),
         userId: userId || '',
         userName: userName || '',
+        userEquipe: equipeName || '',
+        userSetor: setorName || '',
         action: 'update',
         entity: 'Ordem',
         entityId: idOrdem, // Usando o ID da ordem atualizada
@@ -197,6 +234,8 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
         timestamp: new Date(),
         userId: userId || '',
         userName: userName || '',
+        userEquipe: equipeName || '',
+        userSetor: setorName || '',
         action: 'update',
         entity: 'Ordem',
         entityId: idOrdem, 
@@ -231,6 +270,8 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
           timestamp: new Date(),
           userId: userId || '',
           userName: userName || '',
+          userEquipe: equipeName || '',
+          userSetor: setorName || '',
           action: 'update',
           entity: 'Ordem',
           entityId: idOrdem, // Usando o ID da ordem atualizada
@@ -272,6 +313,8 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
           timestamp: new Date(),
           userId: userId || '',
           userName: userName || '',
+          userEquipe: equipeName || '',
+          userSetor: setorName || '',
           action: 'update',
           entity: 'Ordem',
           entityId: ordemAtualizada._id,
@@ -314,6 +357,8 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
         timestamp: new Date(),
         userId: userId || '',
         userName: userName || '',
+        userEquipe: equipeName || '',
+        userSetor: setorName || '',
         action: 'create',
         entity: 'Ordem',
         entityId: idOrdem,
@@ -396,6 +441,8 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
               timestamp: new Date(),
               userId: userId || '',
               userName: userName || '',
+              userEquipe: equipeName || '',
+              userSetor: setorName || '',
               action: 'delete',
               entity: 'Ordem',
               entityId: ordemData._id,
@@ -669,78 +716,73 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
               </div>
           )}
 
-      {showServicos && (
-        <div className="div-interna-detalhes-os">
-          <div className="div-detalhes-os">
-              
-              <h4>Serviços <button onClick={abrirDialogNovoServico}><Icon>add_circle</Icon></button></h4>
-              <div className = "campos-detalhes-os4">
-              <Dialog open={showDialog} onClose={fecharDialog} maxWidth="sm">
-                {showDialog && (
-                  <NovoServicoPopup ordemData={ordemData} onClose={() => { fecharDialog(); }} />
-                )}
-               </Dialog>
-
+        {showServicos && (
+          <div className="div-interna-detalhes-os">
+            <div className="div-detalhes-os">
+              <h4>
+                Serviços <button onClick={abrirDialogNovoServico}><Icon>add_circle</Icon></button>
+              </h4>
+              <div className="campos-detalhes-os4">
+                <Dialog open={showDialog} onClose={fecharDialog} maxWidth="sm">
+                  {showDialog && <NovoServicoPopup ordemData={ordemData} onClose={() => { fecharDialog(); }} />}
+                </Dialog>
                 <ul>
                   {ordemData.services.map((service, index) => (
                     <div key={index} className="comments-container">
                       <p>Nome: {service.name}</p>
                       <p>Descrição: {service.description}</p>
                       <p>Status: {service.status}</p>
-                      <div className = "campos-detalhes-os">
-                      <p>Atualize o status do serviço</p>
-                      <div className="selectContainer">
-                        <select
-                         className="selectsInfo"
-                          value={service.status}
-                          onChange={(e) => {
-                            const novoStatus = e.target.value;
-                          
-                            const updatedService = {
-                              ...service,
-                              status: novoStatus,
-                            };
-                          
-                            const updatedServices = [...ordemData.services];
-                            updatedServices[index] = updatedService;
-                          
-                            const updatedOrdemData = {
-                              ...ordemData,
-                              services: updatedServices,
-                            };
-                          
-                            setOrdemData(updatedOrdemData);
-                          
-                            // Chame a função atualizarServico com o novo status
-                            atualizarServico(updatedService, service.id_service, novoStatus);
-                          }}
-                        >
-                          <option value="Em andamento">Em andamento</option>
-                          <option value="Concluído">Concluído</option>
-                          <option value="Pendente">Pendente</option>
-                          <option value="Dever de recusa">Dever de recusa</option>
-                          {/* Adicione outras opções conforme necessário */}
-                        </select>
-                        <div className="arrowIcon">&#9660;</div>
+                      <div className="campos-detalhes-os">
+                        <p>Atualize o status do serviço</p>
+                        <div className="selectContainer">
+                          <select
+                            className="selectsInfo"
+                            value={service.status}
+                            onChange={(e) => {
+                              const novoStatus = e.target.value;
+
+                              const updatedService = {
+                                ...service,
+                                status: novoStatus,
+                              };
+
+                              const updatedServices = [...ordemData.services];
+                              updatedServices[index] = updatedService;
+
+                              const updatedOrdemData = {
+                                ...ordemData,
+                                services: updatedServices,
+                              };
+
+                              setOrdemData(updatedOrdemData);
+
+                              // Chame a função atualizarServico com o novo status
+                              atualizarServico(updatedService, service.id_service, novoStatus);
+                            }}
+                          >
+                            <option value="Em andamento">Em andamento</option>
+                            <option value="Concluído">Concluído</option>
+                            <option value="Pendente">Pendente</option>
+                            <option value="Dever de recusa">Dever de recusa</option>
+                            {/* Adicione outras opções conforme necessário */}
+                          </select>
+                          <div className="arrowIcon">&#9660;</div>
                         </div>
                         <button onClick={() => apagarServico(service.id_service)}><Icon>delete</Icon></button>
                       </div>
-                      </div>
-                          ))}
-                        </ul>
-                        </div>
-                      </div>
-
-
                     </div>
-                  )}
+                  ))}
+                </ul>
+              </div>
+            </div>
+          </div>
+        )}
 
-          {showComentarios && (
-            <div className="div-interna-detalhes-os">
-              <div className="div-detalhes-os">
-
-                <h4>Comentários</h4>
-                <div className = "campos-detalhes-os4">
+        {showComentarios && (
+          <div className="div-interna-detalhes-os">
+            <div className="div-detalhes-os">
+              <h4>Comentários</h4>
+              <div className="campos-detalhes-os4">
                 <div className="comments-container">
                   {ordemData.comments.map((comment, index) => (
                     <div key={index} className="comment-box">
@@ -750,42 +792,46 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                     </div>
                   ))}
                 </div>
-                </div>
                 <textarea
                   value={novoComentario}
                   onChange={(e) => setNovoComentario(e.target.value)}
                   className="comment-input"
                   placeholder="Adicionar novo comentário..."
                 ></textarea>
-
-              <button className='botao-detalhes-os' onClick={adicionarNovoComentario}>Adicionar novo comentário</button>
+                <button className='botao-detalhes-os' onClick={adicionarNovoComentario}>Adicionar novo comentário</button>
               </div>
-
             </div>
-          )}
+          </div>
+        )}
 
-            {logs && logs.length > 0 ? (
-              <div className="comments-container">
-                {logs.map((log) => (
-                  <div key={log._id} className="comment-box">
-                    <p>ID: {log._id}</p>
-                    <p>Usuário: {log.userName}</p>
-                    <p>Descrição: {log.details}</p>
+        {showLogs && (
+                  <div className="div-interna-detalhes-os">
+                    <div className="div-detalhes-os">
+                      <h4>Logs</h4>
+                      {logs.length > 0 ? (
+                        <div className="comments-container">
+                          {logs.map((log) => (
+                            <div key={log._id} className="comment-box">
+                              <p>Usuário: {log.userName}</p>
+                              <p>Setor do Usuário: {log.userSetor}</p>
+                              <p>Equipe do Usuário: {log.userEquipe}</p>
+                              <p>Descrição: {log.details}</p>
+                              <p>Data: {formatarData(log.timestamp)}</p>
+                            </div>
+                          ))}
+                        </div>
+                      ) : (
+                        <p>Nenhum log encontrado.</p>
+                      )}
+                    </div>
                   </div>
-                ))}
+          )}
               </div>
             ) : (
-              <p>Nenhum log encontrado.</p>
+              <p>Carregando os detalhes da ordem...</p>
             )}
-
-
-
-        </div>
-      ) : (
-        <p>Carregando os detalhes da ordem...</p>
-      )}
-    </div>
-  );
+          </div>
+        );
 }
 
 export default DetalhesOrdemPopup;
