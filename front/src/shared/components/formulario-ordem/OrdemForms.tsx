@@ -279,78 +279,70 @@ export const OrdemForms = ( ) => {
     try {
       const ordemDataWithoutServiceId = { ...ordemData };
   
-      // Criar a ordem de serviço e capturar o _id retornado
-      const orderIdString = await OrdemService.create(ordemDataWithoutServiceId);
+      // Criar a ordem de serviço e capturar o _id e ordemId retornados
+      const { ordemId, _id } = await OrdemService.create(ordemDataWithoutServiceId);
   
-      // Verifica se o orderId é um number (ou seja, um ordemId válido)
-      if (typeof orderIdString === 'number') {
-        const orderId = orderIdString.toString();
-        console.log(`Ordem de serviço criada com ID: ${orderId}`);
-        alert(`Ordem de serviço criada com ID: ${orderId}`);
+      console.log(`Ordem de serviço criada com ID: ${_id}`);
+      alert(`Ordem de serviço criada com ID: ${ordemId}`);
   
-        // Criar log após a criação da ordem de serviço
-        const logData: Omit<ILogWithTimestamp, '_id'> = {
-          timestamp: new Date(),
-          userId: userId || '',
-          userName: userName || '',
-          userEquipe: equipeName || '',
-          userSetor: setorName || '',
-          action: 'create',
-          entity: 'Ordem',
-          entityId: orderId, // Usando o ordemID retornado pela criação da ordem
-          details: `Nova ordem de serviço criada com o número ${orderId}`,
-        };
+      // Criar log após a criação da ordem de serviço
+      const logData: Omit<ILogWithTimestamp, '_id'> = {
+        timestamp: new Date(),
+        userId: userId || '',
+        userName: userName || '',
+        userEquipe: equipeName || '',
+        userSetor: setorName || '',
+        action: 'create',
+        entity: 'Ordem',
+        entityId: _id.toString(), // Usando o ordemId retornado pela criação da ordem
+        details: `Nova ordem de serviço criada com o número ${ordemId}`,
+      };
   
-        await LogService.createLog(logData);
-        console.log('Log de criação de ordem criado com sucesso!');
+      await LogService.createLog(logData);
+      console.log('Log de criação de ordem criado com sucesso!');
   
-        // Limpar todos os campos após o cadastro
-        setOrdemData({
-          _id: "", 
-          ordemId: NaN,
-          solicitante: userId || '',
-          solicitante_name: userName || "",
-          setor_solicitante: setorID || '',
-          name_setor_solicitante: setorName || "",
-          name_equipe_solicitante: equipeName || "",
-          equipe_solicitante: equipeID || "",
-          setor: process.env.REACT_APP_SETOR_PRODUCAO || "NULL",
-          equipe: process.env.REACT_APP_EQUIPE_GREEN || "NULL",
-          sala: 1,
-          forno: NaN,
-          cabeceira: "",
-          status: "Aguardando atendimento",
-          services: [
-            {
-              name: "",
-              description: "",
-              status: "Pendente",
-              solicitante_servico: userName || "PADRAO",
-              id_service: uuidv4(),
-            },
-          ],
-          comments: [
-            {
-              usuario: userName || "",
-              description: "Criou Nova OS",
-              createdAt: "",
-            },
-          ],
-          urgencia: "Não Urgente",
-          createdAt: ''
-        });
+      // Limpar todos os campos após o cadastro
+      setOrdemData({
+        _id: "", 
+        ordemId: NaN,
+        solicitante: userId || '',
+        solicitante_name: userName || "",
+        setor_solicitante: setorID || '',
+        name_setor_solicitante: setorName || "",
+        name_equipe_solicitante: equipeName || "",
+        equipe_solicitante: equipeID || "",
+        setor: process.env.REACT_APP_SETOR_PRODUCAO || "NULL",
+        equipe: process.env.REACT_APP_EQUIPE_GREEN || "NULL",
+        sala: 1,
+        forno: NaN,
+        cabeceira: "",
+        status: "Aguardando atendimento",
+        services: [
+          {
+            name: "",
+            description: "",
+            status: "Pendente",
+            solicitante_servico: userName || "PADRAO",
+            id_service: uuidv4(),
+          },
+        ],
+        comments: [
+          {
+            usuario: userName || "",
+            description: "Criou Nova OS",
+            createdAt: "",
+          },
+        ],
+        urgencia: "Não Urgente",
+        createdAt: ''
+      });
   
-        event.currentTarget?.reset();
-      } else {
-        // Se o orderId não for uma string (ou seja, um _id inválido), exibir um erro
-        throw new Error('Erro ao criar a ordem de serviço');
-      }
+      event.currentTarget?.reset();
     } catch (error) {
       alert("Erro ao criar a ordem de serviço");
       console.error("Erro ao criar a ordem de serviço", (error as Error).message);
     }
   };
-  
   
   const handleAddService = () => {
     // Se já houver pelo menos um serviço na lista, adicione um novo serviço vazio

@@ -191,12 +191,13 @@ const getById = async (identifier: string): Promise<IDetalheOrdem | Error> => {
 const isMongoId = (str: string) => /^[0-9a-fA-F]{24}$/.test(str);
 
 
-const create = async (dados: IOrdemServiceData): Promise<number> => {
+const create = async (dados: IOrdemServiceData): Promise<{ ordemId: number; _id: string }> => {
   try {
     const { data } = await Api.post<IDetalheOrdem>('/ordem', dados);
 
     if (data) {
-      return data.ordemId;
+      const { ordemId, _id } = data;
+      return { ordemId, _id }; // Retorna _id e ordemId
     }
 
     throw new Error('Erro ao criar o registro.');
@@ -205,6 +206,7 @@ const create = async (dados: IOrdemServiceData): Promise<number> => {
     throw new Error((error as { message: string }).message || 'Erro ao criar o registro.');
   }
 };
+
 
 const updateById = async (_id: string, dados: IOrdemServiceData): Promise<void | Error> => {
   try {
