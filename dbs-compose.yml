@@ -1,0 +1,21 @@
+version: '3.4'
+
+services:
+  mongo:
+    container_name: mongo
+    image: mongo:4
+    restart: always
+    ports:
+      - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: negociosdinah
+      MONGO_INITDB_ROOT_PASSWORD: IKxKACgqYePR9T3m
+    volumes:
+      - /mnt/os-mongo:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
+    networks:
+      - dbs
+
+networks:
+  dbs:
+    driver: bridge
