@@ -8,8 +8,11 @@
 #### conecta
 Aplicação para criação de ordem de serviços e gerencimamento
 
+###### Subir container mongodb
 
-INSTALAÇÕES GLOBAIS
+docker-compose -f dbs-compose.yml up
+
+##### INSTALAÇÕES GLOBAIS
 
 npm install uuid --save
 
