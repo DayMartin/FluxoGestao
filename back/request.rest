@@ -161,13 +161,13 @@ Content-Type: application/json
 {
     "name": "dinah doria",
     "matricula":"1234",
-    "setor":"655be3fd08346d6f62ae7a56",
+    "setor":"655be5c6585d76b1ab1ca7e5",
     "turno":"manha",
-    "equipe":"6569783744abf5a3198e2de0",
-    "email":"dinahprod@gmail.com",
+    "equipe":"655bece8f2da4148eba30981",
+    "email":"dinahmec@gmail.com",
     "senha":"outrasenha",
     "situacao":"pendente",
-    "roles": "655fa4283cd09a126e61f95e"
+    "roles": "655fa44c3cd09a126e61f961"
     
 }
 

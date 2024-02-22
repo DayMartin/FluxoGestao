@@ -67,6 +67,7 @@ const NovoServicoPopup = ({ ordemData, onClose }: { ordemData: any; onClose: () 
         name: novoServico,
         description: novoServicoDescricao,
         status: novoServicoStatus,
+        solicitante: userName,
       };
   
       const servicesAtuais = ordemData?.services || [];
@@ -139,6 +140,15 @@ const NovoServicoPopup = ({ ordemData, onClose }: { ordemData: any; onClose: () 
         />
         <label htmlFor="status">Status do Serviço:</label>
         <input
+          className='input1'
+          id="status"
+          type="text"
+          value={novoServicoStatus}
+          onChange={(e) => setNovoServicoStatus(e.target.value)}
+          ref={statusInputRef}
+          disabled
+        />
+          <input
           className='input1'
           id="status"
           type="text"

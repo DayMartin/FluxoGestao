@@ -3,7 +3,9 @@
     "bcrypt": "^5.1.1",
     "dotenv": "^16.3.1",
     "jsonwebtoken": "^9.0.2",
+    "pdfmake": "^0.2.9",
     "react-router-dom": "^6.19.0",
+    "svg-to-pdfkit": "^0.1.8",
     "uuid": "^9.0.1"
   },
   "devDependencies": {

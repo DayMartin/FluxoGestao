@@ -252,9 +252,9 @@ export const OrdemEncerradas: React.FC = () => {
                     <IconButton size="small" onClick={() => handleDelete(row._id)}>
                     <Icon>delete</Icon>
                     </IconButton>
-                    <IconButton size="small" onClick={() => navigate(`/ordemDetalhe/detalhe/${row._id}`)}>
+                    {/* <IconButton size="small" onClick={() => navigate(`/ordemDetalhe/detalhe/${row._id}`)}>
                       <Icon>edit</Icon>
-                    </IconButton>
+                    </IconButton> */}
                     <IconButton size="small" onClick={() => handleOpenDetalhesDialog(row)}>
                       <Icon>search</Icon>
                     </IconButton>

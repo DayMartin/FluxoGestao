@@ -303,7 +303,7 @@ const filtroFunctions: Record<string, () => void> = {
 };
 
   return (
-    <LayoutBaseDePagina titulo='Listagem de Ordem de serviços de Produção'
+    <LayoutBaseDePagina titulo='Listagem'
 
     >
       <BarraDeFerramentas
@@ -379,9 +379,9 @@ const filtroFunctions: Record<string, () => void> = {
                     <IconButton size="small" onClick={() => handleDelete(row._id, row.ordemId)}>
                     <Icon>delete</Icon>
                     </IconButton>
-                    <IconButton size="small" onClick={() => navigate(`/ordemDetalhe/detalhe/${row._id}`)}>
+                    {/* <IconButton size="small" onClick={() => navigate(`/ordemDetalhe/detalhe/${row._id}`)}>
                       <Icon>edit</Icon>
-                    </IconButton>
+                    </IconButton> */}
                     <IconButton size="small" onClick={() => handleOpenDetalhesDialog(row)}>
                     <Icon>visibility</Icon>
                     </IconButton>

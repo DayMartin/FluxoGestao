@@ -6,8 +6,13 @@ import { Dialog, Icon } from '@mui/material';
 import NovoServicoPopup from './NovoServicoModal';
 import { ILog, LogService } from '../../services/api/Log/LogService';
 
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+
 import {ILogWithTimestamp} from './OrdemForms'
 import { EquipeService, IDetalheEquipe, IDetalhePessoa, IDetalheSetor, PessoasService, SetorService } from '../../services/api';
+import { Alignment, TDocumentDefinitions, Style } from 'pdfmake/interfaces';
+
 
 function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: () => void }) {
   const [showDialog, setShowDialog] = useState(false); // Estado para controlar a exibição do dialog
@@ -19,6 +24,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
   const [botaoClicado, setBotaoClicado] = useState('');
   const [novoComentario, setNovoComentario] = useState('');
   const [logs, setLogs] = useState<ILog[]>([]);
+  
 
   const producaoId = process.env.REACT_APP_SETOR_PRODUCAO;
   const msfId = process.env.REACT_APP_SETOR_MSF;
@@ -47,6 +53,85 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
     
   };
 
+
+  pdfMake.vfs = pdfFonts.pdfMake.vfs;
+
+  const gerarPdfPorId = async (ordemId: string) => {
+    try {
+      // Busca os dados da ordem pelo ID
+      const ordemData = await OrdemService.getById(ordemId);
+  
+      if (ordemData instanceof Error) {
+        console.error('Erro ao buscar os dados da ordem:', ordemData);
+        return;
+      }
+  
+      // Formata os serviços para o PDF
+      const servicos = ordemData.services.map((servico) => ({
+        text: `Serviço: ${servico.name}\nDescrição: ${servico.description}\nStatus: ${servico.status}\nSolicitante: ${servico.solicitante_servico}`,
+        style: 'textoServico',
+      }));      
+  
+      // Define os estilos
+      const styles: { [key: string]: Style } = {
+        textoServico: {
+          margin: [0, 5],
+          fontSize: 12,
+          lineHeight: 1.5,
+        },
+        textoPadrao: {
+          margin: [0, 5],
+          fontSize: 12,
+          lineHeight: 1.5,
+        },
+        textoId: {
+          margin: [0, 5],
+          fontSize: 16,
+          lineHeight: 1.5,
+          alignment: 'center',
+          bold: true,
+        },
+        titulo: {
+          margin: [0, 5],
+          fontSize: 16,
+          lineHeight: 1.5,
+          bold: true,
+          
+        },
+      };
+  
+      // Formata os dados para o PDF
+      const conteudo = [
+        { text: `-- ID da ordem: ${ordemData.ordemId} -- `, style: 'textoId' },
+        { text: 'Dados Solicitante', style: 'titulo' },
+        { text: `Solicitante: ${ordemData.solicitante_name}`, style: 'textoPadrao' },
+        { text: `Setor Solicitante: ${ordemData.name_setor_solicitante}`, style: 'textoPadrao' },
+        { text: `Equipe Solicitante: ${ordemData.name_equipe_solicitante}`, style: 'textoPadrao' },
+        { text: 'Dados do local', style: 'titulo' },
+        { text: `Sala: ${ordemData.sala}`, style: 'textoPadrao' },
+        { text: `Forno: ${ordemData.forno}`, style: 'textoPadrao' },
+        { text: `Cabeceira: ${ordemData.cabeceira}`, style: 'textoPadrao' },
+        { text: 'Serviços', style: 'titulo' },
+        ...servicos,
+      ];
+  
+      // Define a definição do documento PDF
+      const documentDefinition: TDocumentDefinitions = {
+        content: conteudo,
+        styles: styles,
+      };
+  
+      // Gera o PDF
+      pdfMake.createPdf(documentDefinition).open(); // Abre o PDF em uma nova janela
+    } catch (error) {
+      console.error('Erro ao gerar PDF:', error);
+    }
+  };
+  
+  
+  const handleGerarPDF = async (ordemId: string) => {
+    await gerarPdfPorId(ordemId);
+  };
   interface Equipes {
     [key: string]: string;
   }
@@ -710,7 +795,7 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                   >
                     Atualizar
                   </button>
-
+                  <button onClick={() => handleGerarPDF(ordemId)}><Icon> print </Icon></button>
 
                 </div>
               </div>
@@ -732,6 +817,8 @@ function DetalhesOrdemPopup({ ordemId, onClose }: { ordemId: string, onClose: ()
                       <p>Nome: {service.name}</p>
                       <p>Descrição: {service.description}</p>
                       <p>Status: {service.status}</p>
+                      <p>Solicitante: {service.solicitante_servico}</p>
+
                       <div className="campos-detalhes-os">
                         <p>Atualize o status do serviço</p>
                         <div className="selectContainer">
