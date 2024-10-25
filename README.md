@@ -1,3 +1,6 @@
+Software para criação de ordens de serviços e gerenciamento da mesma. 
+Conta com gerenciamento usuários, departamentos, serviços e comentários.
+
 ![OS](https://github.com/DayMartin/conecta/assets/69700069/8671eebe-74ee-4ab5-8845-5a4438aae546)
 ![OS2](https://github.com/DayMartin/conecta/assets/69700069/793d156d-6899-48d6-b694-cab460c8f007)
 ![os3](https://github.com/DayMartin/conecta/assets/69700069/d1232393-2bab-4fe7-9890-8066b088a435)
